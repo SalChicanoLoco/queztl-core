@@ -31,12 +31,17 @@ metrics = requests.get('http://localhost:8000/api/metrics').json()
 **NEW!** Flex and measure Queztl-Core's capabilities:
 
 ```bash
+# Start backend locally
+./start.sh
+
 # Run the power demo
 ./demo-power.sh
 
 # Or try directly:
 curl -X POST "http://localhost:8000/api/power/stress-test?intensity=medium&duration=15"
 ```
+
+**🌐 Live Demo:** The dashboard at https://senzeni.netlify.app shows the UI. To use all features, run the backend locally with `./start.sh`
 
 **Features:**
 - 🔥 **Stress Testing** - Light, Medium, Heavy, Extreme (up to 10,000+ ops/sec)
