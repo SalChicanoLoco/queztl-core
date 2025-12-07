@@ -1,0 +1,66 @@
+2025-12-05 13:43:40,432 - SECURITY - INFO - 🚀 Auto-scaler started
+2025-12-05 13:48:56,151 - SECURITY - WARNING - FORCE CLEANUP initiated
+2025-12-05 13:49:03,602 - SECURITY - INFO - 🚀 Auto-scaler started
+2025-12-05 13:50:42,886 - SECURITY - WARNING - FORCE CLEANUP initiated
+2025-12-05 13:50:50,314 - SECURITY - INFO - 🚀 Auto-scaler started
+2025-12-05 13:59:34,078 - SECURITY - INFO - ⬆️ Scaling UP: Adding 2 nodes...
+2025-12-05 13:59:34,078 - SECURITY - INFO - Launched Docker container: docker-354604e6
+2025-12-05 13:59:36,079 - SECURITY - INFO - ✅ Node docker-354604e6 launched successfully
+2025-12-05 13:59:36,081 - SECURITY - INFO - Launched Docker container: docker-7e093361
+2025-12-05 13:59:38,082 - SECURITY - INFO - ✅ Node docker-7e093361 launched successfully
+2025-12-06 21:19:10,405 - SECURITY - INFO - Gen3D Workload Manager initialized
+2025-12-06 21:19:10,446 - SECURITY - INFO - 🚀 Auto-scaler started
+2025-12-06 21:19:10,446 - SECURITY - INFO - Gen3D task processor started
+2025-12-06 21:19:37,296 - SECURITY - INFO - Gen3D Workload Manager initialized
+2025-12-06 21:19:37,386 - SECURITY - INFO - 🚀 Auto-scaler started
+2025-12-06 21:19:37,387 - SECURITY - INFO - Gen3D task processor started
+2025-12-07 10:25:36,155 - SECURITY - INFO - Loading trained 3D model from /workspace/models/fast_3d_model.pt
+2025-12-07 10:25:36,173 - SECURITY - ERROR - Failed to load trained model: [Errno 2] No such file or directory: '/workspace/models/fast_3d_model.pt'
+2025-12-07 10:27:00,347 - SECURITY - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-32' coro=<TrainingEngine.start_continuous_training() done, defined at /Users/xavasena/hive/backend/training_engine.py:109> exception=KeyError('request_rate')>
+Traceback (most recent call last):
+  File "/Users/xavasena/hive/backend/training_engine.py", line 116, in start_continuous_training
+    scenario = await self.problem_generator.generate_scenario(self.current_difficulty)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/xavasena/hive/backend/problem_generator.py", line 36, in generate_scenario
+    description = self._generate_description(scenario_type, difficulty, parameters)
+  File "/Users/xavasena/hive/backend/problem_generator.py", line 119, in _generate_description
+    "load_balancing": f"Balance {parameters['request_rate']} req/s across {parameters['target_nodes']} nodes",
+                                 ~~~~~~~~~~^^^^^^^^^^^^^^^^
+KeyError: 'request_rate'
+2025-12-07 10:28:09,381 - SECURITY - INFO - SECURE START: stress_test
+2025-12-07 10:28:32,435 - SECURITY - INFO - SECURE COMPLETE: stress_test (23.053s)
+2025-12-07 10:29:21,530 - SECURITY - INFO - SECURE START: stress_test
+2025-12-07 10:29:57,939 - SECURITY - INFO - SECURE COMPLETE: stress_test (36.408s)
+2025-12-07 10:31:12,046 - SECURITY - INFO - SECURE START: stress_test
+2025-12-07 10:33:15,652 - SECURITY - INFO - SECURE COMPLETE: stress_test (123.605s)
+2025-12-07 10:33:48,761 - SECURITY - INFO - SECURE START: benchmark_suite
+2025-12-07 10:33:48,762 - SECURITY - INFO - START: benchmark_suite
+2025-12-07 10:33:53,866 - SECURITY - INFO - COMPLETE: benchmark_suite (5.103s)
+2025-12-07 10:33:53,915 - SECURITY - INFO - SECURE COMPLETE: benchmark_suite (5.153s)
+2025-12-07 10:35:08,968 - SECURITY - INFO - SECURE START: stress_test
+2025-12-07 10:35:28,383 - SECURITY - INFO - SECURE COMPLETE: stress_test (19.413s)
+2025-12-07 10:52:27,136 - SECURITY - INFO - SECURE START: benchmark_suite
+2025-12-07 10:52:27,137 - SECURITY - INFO - START: benchmark_suite
+2025-12-07 10:52:32,238 - SECURITY - INFO - COMPLETE: benchmark_suite (5.101s)
+2025-12-07 10:52:32,282 - SECURITY - INFO - SECURE COMPLETE: benchmark_suite (5.145s)
+2025-12-07 11:27:10,332 - SECURITY - INFO - SECURE START: benchmark_suite
+2025-12-07 11:27:10,333 - SECURITY - INFO - START: benchmark_suite
+2025-12-07 11:27:15,435 - SECURITY - INFO - COMPLETE: benchmark_suite (5.101s)
+2025-12-07 11:27:15,481 - SECURITY - INFO - SECURE COMPLETE: benchmark_suite (5.147s)
+2025-12-07 11:48:05,952 - SECURITY - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-500' coro=<TrainingEngine.start_continuous_training() done, defined at /Users/xavasena/hive/backend/training_engine.py:109> exception=KeyError('request_rate')>
+Traceback (most recent call last):
+  File "/Users/xavasena/hive/backend/training_engine.py", line 116, in start_continuous_training
+    scenario = await self.problem_generator.generate_scenario(self.current_difficulty)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/xavasena/hive/backend/problem_generator.py", line 36, in generate_scenario
+    description = self._generate_description(scenario_type, difficulty, parameters)
+  File "/Users/xavasena/hive/backend/problem_generator.py", line 119, in _generate_description
+    "load_balancing": f"Balance {parameters['request_rate']} req/s across {parameters['target_nodes']} nodes",
+                                 ~~~~~~~~~~^^^^^^^^^^^^^^^^
+KeyError: 'request_rate'
+2025-12-07 11:48:18,718 - SECURITY - INFO - SECURE START: benchmark_suite
+2025-12-07 11:48:18,720 - SECURITY - INFO - START: benchmark_suite
+2025-12-07 11:48:23,844 - SECURITY - INFO - COMPLETE: benchmark_suite (5.125s)
+2025-12-07 11:48:23,887 - SECURITY - INFO - SECURE COMPLETE: benchmark_suite (5.167s)

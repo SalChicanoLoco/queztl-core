@@ -8,11 +8,11 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 import numpy as np
 
-from models import (
+from .models import (
     PerformanceMetric, ScenarioResult, TrainingStatus, 
     MetricsSummary, MetricType, DifficultyLevel
 )
-from problem_generator import ProblemGenerator
+from .problem_generator import ProblemGenerator
 
 class TrainingEngine:
     def __init__(self):

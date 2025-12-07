@@ -1,0 +1,29 @@
+{
+  "test_name": "Autonomous Load Test",
+  "start_time": "2025-12-06T21:21:56.051265",
+  "end_time": "2025-12-06T21:22:27.158491",
+  "duration_seconds": 31.10722589492798,
+  "total_requests": 26500,
+  "successful_requests": 26230,
+  "failed_requests": 270,
+  "avg_latency_ms": 7.2180582738040835,
+  "p50_latency_ms": 6.882190704345703,
+  "p95_latency_ms": 9.550809860229492,
+  "p99_latency_ms": 10.951042175292969,
+  "requests_per_second": 851.8921002313105,
+  "workers_spawned": 2,
+  "peak_cpu_percent": 9.9,
+  "peak_memory_mb": 7184.6875,
+  "errors_encountered": [
+    "Simulated error",
+    "Simulated error",
+    "Simulated error",
+    "Simulated error",
+    "Simulated error",
+    "Simulated error",
+    "Simulated error",
+    "Simulated error",
+    "Simulated error",
+    "Simulated error"
+  ]
+}

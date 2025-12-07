@@ -7,6 +7,7 @@ import TrainingControls from '@/components/TrainingControls';
 import RecentProblems from '@/components/RecentProblems';
 import PowerMeter from '@/components/PowerMeter';
 import CreativeTraining from '@/components/CreativeTraining';
+import AdvancedWorkloads from '@/components/AdvancedWorkloads';
 import { Activity, Zap, AlertCircle, TrendingUp } from 'lucide-react';
 
 interface MetricsSummary {
@@ -83,11 +84,22 @@ export default function Home() {
         };
 
         ws.onmessage = (event) => {
-            const message = JSON.parse(event.data);
-            console.log('Received:', message);
+            // Handle plain text messages (like "pong")
+            if (typeof event.data === 'string' && event.data === 'pong') {
+                console.log('Received: pong');
+                return;
+            }
 
-            if (message.type === 'training_update' || message.type === 'scenario_completed') {
-                fetchData();
+            // Try to parse JSON messages
+            try {
+                const message = JSON.parse(event.data);
+                console.log('Received:', message);
+
+                if (message.type === 'training_update' || message.type === 'scenario_completed') {
+                    fetchData();
+                }
+            } catch (error) {
+                console.error('Failed to parse WebSocket message:', error, 'Data:', event.data);
             }
         };
 
@@ -230,6 +242,9 @@ export default function Home() {
                     <PowerMeter />
                     <CreativeTraining />
                 </div>
+
+                {/* Advanced Workloads - 3D Graphics & Crypto Mining */}
+                <AdvancedWorkloads />
             </div>
         </main>
     );

@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  # Training Orchestrator - Manages training runners
+  training-orchestrator:
+    build:
+      context: ./training-runner
+      dockerfile: Dockerfile.orchestrator
+    container_name: queztl-orchestrator
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./models:/models
+      - ./training_logs:/training_logs
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - MAX_RUNNERS=4
+      - AUTO_SCALE=true
+      - RUNNER_IMAGE=queztl-training-runner:latest
+    networks:
+      - training-network
+    restart: unless-stopped
+
+  # Training Runner Template (scales 0-N)
+  training-runner-1:
+    build:
+      context: ./training-runner
+      dockerfile: Dockerfile.runner
+    container_name: queztl-runner-1
+    volumes:
+      - ./models:/models:rw
+      - ./training_logs:/training_logs:rw
+      - ./data:/data:ro
+    environment:
+      - RUNNER_ID=1
+      - GPU_ENABLED=false
+      - MAX_MEMORY=4G
+      - ORCHESTRATOR_URL=http://training-orchestrator:9000
+    networks:
+      - training-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+    restart: unless-stopped
+    profiles:
+      - runner
+
+  training-runner-2:
+    build:
+      context: ./training-runner
+      dockerfile: Dockerfile.runner
+    container_name: queztl-runner-2
+    volumes:
+      - ./models:/models:rw
+      - ./training_logs:/training_logs:rw
+      - ./data:/data:ro
+    environment:
+      - RUNNER_ID=2
+      - GPU_ENABLED=false
+      - MAX_MEMORY=4G
+      - ORCHESTRATOR_URL=http://training-orchestrator:9000
+    networks:
+      - training-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+    restart: unless-stopped
+    profiles:
+      - runner
+
+  training-runner-3:
+    build:
+      context: ./training-runner
+      dockerfile: Dockerfile.runner
+    container_name: queztl-runner-3
+    volumes:
+      - ./models:/models:rw
+      - ./training_logs:/training_logs:rw
+      - ./data:/data:ro
+    environment:
+      - RUNNER_ID=3
+      - GPU_ENABLED=false
+      - MAX_MEMORY=4G
+      - ORCHESTRATOR_URL=http://training-orchestrator:9000
+    networks:
+      - training-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+    restart: unless-stopped
+    profiles:
+      - runner
+
+  training-runner-4:
+    build:
+      context: ./training-runner
+      dockerfile: Dockerfile.runner
+    container_name: queztl-runner-4
+    volumes:
+      - ./models:/models:rw
+      - ./training_logs:/training_logs:rw
+      - ./data:/data:ro
+    environment:
+      - RUNNER_ID=4
+      - GPU_ENABLED=false
+      - MAX_MEMORY=4G
+      - ORCHESTRATOR_URL=http://training-orchestrator:9000
+    networks:
+      - training-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+    restart: unless-stopped
+    profiles:
+      - runner
+
+networks:
+  training-network:
+    driver: bridge

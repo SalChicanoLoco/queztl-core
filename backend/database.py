@@ -57,8 +57,12 @@ class TrainingSessionDB(Base):
 
 async def init_db():
     """Initialize database tables"""
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+    except Exception as e:
+        print(f"⚠️  Database not available: {e}")
+        print("📝 Continuing without database (metrics will not be persisted)")
 
 async def get_db():
     """Get database session"""

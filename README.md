@@ -1,5 +1,7 @@
 # 🦅 Queztl-Core Testing & Monitoring System
 
+**English | [Español](README.es.md)**
+
 A comprehensive real-time testing and monitoring system with dynamic problem generation, adaptive learning, and performance analytics. Connect any app for intelligent performance monitoring and optimization.
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start)

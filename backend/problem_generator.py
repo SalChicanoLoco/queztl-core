@@ -8,7 +8,7 @@ from typing import List, Dict, Any
 from datetime import datetime, timedelta
 import numpy as np
 
-from models import TestScenario, DifficultyLevel
+from .models import TestScenario, DifficultyLevel
 
 class ProblemGenerator:
     def __init__(self):
