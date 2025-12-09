@@ -1,5 +1,5 @@
 """
-⚡ DYNAMIC AUTO-SCALER FOR QUEZTL DISTRIBUTED NETWORK
+⚡ DYNAMIC AUTO-SCALER FOR QUETZALCORE DISTRIBUTED NETWORK
 Automatically scales nodes up/down based on load
 
 Features:
@@ -11,7 +11,7 @@ Features:
 - Health monitoring and auto-healing
 
 ================================================================================
-Copyright (c) 2025 Queztl-Core Project
+Copyright (c) 2025 QuetzalCore-Core Project
 Patent Pending
 ================================================================================
 """
@@ -170,7 +170,7 @@ class LocalDockerAdapter(CloudProviderAdapter):
         # import docker
         # client = docker.from_env()
         # container = client.containers.run(
-        #     image="queztl-worker:latest",
+        #     image="quetzalcore-worker:latest",
         #     detach=True,
         #     environment={
         #         "COORDINATOR_URL": "http://master:8000",
@@ -469,7 +469,7 @@ class AutoScaler:
             template = NodeTemplate(
                 provider=CloudProvider.DOCKER,
                 instance_type="standard",
-                image_id="queztl-worker:latest",
+                image_id="quetzalcore-worker:latest",
                 region="local",
                 cpu_cores=4,
                 ram_gb=8.0,
@@ -670,7 +670,7 @@ class GeoDistributedScaler(AutoScaler):
             template = NodeTemplate(
                 provider=region.provider,
                 instance_type="standard",
-                image_id="queztl-worker:latest",
+                image_id="quetzalcore-worker:latest",
                 region=region.name,
                 zone=region.available_zones[0],
                 cpu_cores=4,

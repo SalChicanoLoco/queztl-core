@@ -10,7 +10,7 @@ Features:
 - Shap-E model distribution
 
 ================================================================================
-Copyright (c) 2025 Queztl-Core Project
+Copyright (c) 2025 QuetzalCore-Core Project
 ================================================================================
 """
 

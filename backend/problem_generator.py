@@ -1,5 +1,5 @@
 """
-Dynamic problem generator for Queztl-Core training
+Dynamic problem generator for QuetzalCore-Core training
 Generates realistic scenarios with varying complexity
 """
 import random

@@ -1,9 +1,9 @@
 """
-🔒 QUEZTL-CORE SECURITY LAYER
+🔒 QUETZALCORE-CORE SECURITY LAYER
 Zero-trust security with memory sanitization and data protection
 
 ================================================================================
-Copyright (c) 2025 Queztl-Core Project
+Copyright (c) 2025 QuetzalCore-Core Project
 All Rights Reserved - Patent Pending
 
 SECURITY INNOVATIONS:

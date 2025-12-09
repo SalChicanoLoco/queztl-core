@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🚀 Queztl Email Service - Faster than ProtonMail
+🚀 QuetzalCore Email Service - Faster than ProtonMail
 Real-time, encrypted, lightning-fast email delivery with QHP protocol
 """
 
@@ -25,7 +25,7 @@ try:
 except ImportError:
     SENDGRID_AVAILABLE = False
 
-app = FastAPI(title="Queztl Email Service", version="1.0.0")
+app = FastAPI(title="QuetzalCore Email Service", version="1.0.0")
 
 # CORS for frontend
 app.add_middleware(
@@ -43,7 +43,7 @@ users_db: Dict[str, Dict] = {}
 # Email Configuration - Use SendGrid with your domain
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL = os.getenv("FROM_EMAIL", "salvador@senasaitech.com")
-FROM_NAME = os.getenv("FROM_NAME", "Salvador Sena - Queztl")
+FROM_NAME = os.getenv("FROM_NAME", "Salvador Sena - QuetzalCore")
 USE_SENDGRID = SENDGRID_AVAILABLE and bool(SENDGRID_API_KEY)
 
 # Fallback SMTP (if SendGrid not configured)
@@ -82,7 +82,7 @@ class BulkEmailRequest(BaseModel):
 @app.get("/")
 async def root():
     return {
-        "service": "Queztl Email",
+        "service": "QuetzalCore Email",
         "status": "operational",
         "performance": {
             "avg_delivery_ms": 2.5,

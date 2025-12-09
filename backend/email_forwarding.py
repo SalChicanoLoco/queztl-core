@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Email Forwarding Configuration for Queztl Email
+Email Forwarding Configuration for QuetzalCore Email
 Forward all emails to salvadorsena@live.com until desktop app is ready
 """
 

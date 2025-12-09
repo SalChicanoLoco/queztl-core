@@ -1,10 +1,10 @@
 """
-🦅 QUEZTL-CORE WEB GPU DRIVER
+🦅 QUETZALCORE-CORE WEB GPU DRIVER
 Virtual GPU driver for web-based applications
 Compatible with WebGL, WebGPU, and existing GPU software!
 
 ================================================================================
-Copyright (c) 2025 Queztl-Core Project
+Copyright (c) 2025 QuetzalCore-Core Project
 All Rights Reserved.
 
 CONFIDENTIAL AND PROPRIETARY
@@ -23,7 +23,7 @@ PATENT-PENDING INNOVATIONS IN THIS FILE:
 UNAUTHORIZED COPYING, DISTRIBUTION, OR USE IS STRICTLY PROHIBITED.
 Violations will result in civil and criminal prosecution.
 
-For licensing inquiries: legal@queztl-core.com
+For licensing inquiries: legal@quetzalcore-core.com
 ================================================================================
 """
 

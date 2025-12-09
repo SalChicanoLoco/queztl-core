@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Queztl Protocol Demo</title>
+    <title>QuetzalCore Protocol Demo</title>
     <style>
         * {
             margin: 0;
@@ -205,7 +205,7 @@
 
 <body>
     <div class="container">
-        <h1>⚡ Queztl Protocol Demo</h1>
+        <h1>⚡ QuetzalCore Protocol Demo</h1>
         <p class="subtitle">Binary WebSocket protocol - 10-20x faster than REST</p>
 
         <div class="status disconnected" id="status">Disconnected</div>
@@ -274,7 +274,7 @@
         </div>
     </div>
 
-    <script src="queztl_client.js"></script>
+    <script src="quetzalcore_client.js"></script>
     <script>
         let qp = null;
 
@@ -285,7 +285,7 @@
 
             try {
                 // Connect to local server (change for production)
-                qp = new QueztlProtocol('ws://localhost:9999');
+                qp = new QuetzalCoreProtocol('ws://localhost:9999');
 
                 // Set up progress handler
                 qp.onProgress = (progress, data) => {

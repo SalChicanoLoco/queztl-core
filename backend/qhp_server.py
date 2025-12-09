@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Queztl Protocol Server (QPS)
+QuetzalCore Protocol Server (QPS)
 Binary WebSocket protocol for high-performance AI operations
 10-20x faster than REST
 With ML-driven monitoring and auto-optimization
@@ -18,17 +18,17 @@ from datetime import datetime
 
 # Import monitoring system
 try:
-    from queztl_monitor import QueztlMonitor, ProtocolAnalyzer
+    from quetzalcore_monitor import QuetzalCoreMonitor, ProtocolAnalyzer
     MONITORING_ENABLED = True
 except ImportError:
     MONITORING_ENABLED = False
-    logger.warning("Monitoring disabled: queztl_monitor not found")
+    logger.warning("Monitoring disabled: quetzalcore_monitor not found")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class QueztlProtocol:
-    """Queztl Protocol implementation"""
+class QuetzalCoreProtocol:
+    """QuetzalCore Protocol implementation"""
     
     # Magic bytes: "QP"
     MAGIC = b'QP'
@@ -49,7 +49,7 @@ class QueztlProtocol:
         Format: [Magic(2) | Type(1) | Length(4) | Payload(N)]
         """
         header = struct.pack('!2sBL',
-            QueztlProtocol.MAGIC,
+            QuetzalCoreProtocol.MAGIC,
             msg_type,
             len(payload)
         )
@@ -63,7 +63,7 @@ class QueztlProtocol:
         
         magic, msg_type, length = struct.unpack('!2sBL', data[:7])
         
-        if magic != QueztlProtocol.MAGIC:
+        if magic != QuetzalCoreProtocol.MAGIC:
             raise ValueError(f"Invalid magic bytes: {magic.hex()}")
         
         if len(data) < 7 + length:
@@ -76,18 +76,18 @@ class QueztlProtocol:
     def pack_json(msg_type: int, data: dict) -> bytes:
         """Pack JSON data into message"""
         payload = json.dumps(data).encode('utf-8')
-        return QueztlProtocol.pack(msg_type, payload)
+        return QuetzalCoreProtocol.pack(msg_type, payload)
     
     @staticmethod
     def unpack_json(data: bytes) -> tuple:
         """Unpack message and decode JSON"""
-        msg_type, payload = QueztlProtocol.unpack(data)
+        msg_type, payload = QuetzalCoreProtocol.unpack(data)
         data = json.loads(payload.decode('utf-8'))
         return msg_type, data
 
 
-class QueztlServer:
-    """WebSocket server implementing Queztl Protocol with ML monitoring"""
+class QuetzalCoreServer:
+    """WebSocket server implementing QuetzalCore Protocol with ML monitoring"""
     
     def __init__(self, host='0.0.0.0', port=9999):
         self.host = host
@@ -102,7 +102,7 @@ class QueztlServer:
         }
         
         # Initialize monitoring
-        self.monitor = QueztlMonitor() if MONITORING_ENABLED else None
+        self.monitor = QuetzalCoreMonitor() if MONITORING_ENABLED else None
         self.analyzer = ProtocolAnalyzer(self.monitor) if MONITORING_ENABLED else None
         self.last_optimization = time.time()
         self.optimization_interval = 300  # Run optimization every 5 minutes
@@ -130,7 +130,7 @@ class QueztlServer:
                 self.stats['bytes_received'] += len(message)
                 
                 try:
-                    msg_type, payload = QueztlProtocol.unpack(message)
+                    msg_type, payload = QuetzalCoreProtocol.unpack(message)
                     
                     # Handle message
                     if msg_type in self.handlers:
@@ -143,16 +143,16 @@ class QueztlServer:
                             self.stats['bytes_sent'] += len(response)
                     else:
                         # Unknown message type
-                        error = QueztlProtocol.pack_json(
-                            QueztlProtocol.ERROR,
+                        error = QuetzalCoreProtocol.pack_json(
+                            QuetzalCoreProtocol.ERROR,
                             {"error": f"Unknown message type: 0x{msg_type:02x}"}
                         )
                         await websocket.send(error)
                 
                 except Exception as e:
                     logger.error(f"Error processing message: {e}")
-                    error = QueztlProtocol.pack_json(
-                        QueztlProtocol.ERROR,
+                    error = QuetzalCoreProtocol.pack_json(
+                        QuetzalCoreProtocol.ERROR,
                         {"error": str(e)}
                     )
                     await websocket.send(error)
@@ -163,7 +163,7 @@ class QueztlServer:
     
     async def start(self):
         """Start WebSocket server"""
-        logger.info(f"Starting Queztl Protocol Server on {self.host}:{self.port}")
+        logger.info(f"Starting QuetzalCore Protocol Server on {self.host}:{self.port}")
         
         async with websockets.serve(
             self.handle_client,
@@ -196,8 +196,8 @@ async def handle_auth(websocket, client_id, payload):
         # TODO: Verify token (integrate with AIOSC auth)
         logger.info(f"Auth request from {client_id}")
         
-        response = QueztlProtocol.pack_json(
-            QueztlProtocol.ACK,
+        response = QuetzalCoreProtocol.pack_json(
+            QuetzalCoreProtocol.ACK,
             {
                 "status": "authenticated",
                 "client_id": client_id,
@@ -207,8 +207,8 @@ async def handle_auth(websocket, client_id, payload):
         return response
     
     except Exception as e:
-        return QueztlProtocol.pack_json(
-            QueztlProtocol.ERROR,
+        return QuetzalCoreProtocol.pack_json(
+            QuetzalCoreProtocol.ERROR,
             {"error": f"Auth failed: {str(e)}"}
         )
 
@@ -223,8 +223,8 @@ async def handle_command(websocket, client_id, payload):
         logger.info(f"Execute command: {capability} from {client_id}")
         
         # Send ACK
-        ack = QueztlProtocol.pack_json(
-            QueztlProtocol.ACK,
+        ack = QuetzalCoreProtocol.pack_json(
+            QuetzalCoreProtocol.ACK,
             {
                 "status": "processing",
                 "capability": capability,
@@ -237,8 +237,8 @@ async def handle_command(websocket, client_id, payload):
         for progress in [25, 50, 75, 100]:
             await asyncio.sleep(0.5)  # Simulate work
             
-            stream = QueztlProtocol.pack_json(
-                QueztlProtocol.STREAM,
+            stream = QuetzalCoreProtocol.pack_json(
+                QuetzalCoreProtocol.STREAM,
                 {
                     "progress": progress,
                     "status": "processing" if progress < 100 else "complete"
@@ -247,8 +247,8 @@ async def handle_command(websocket, client_id, payload):
             await websocket.send(stream)
         
         # Send final result
-        result = QueztlProtocol.pack_json(
-            QueztlProtocol.DATA,
+        result = QuetzalCoreProtocol.pack_json(
+            QuetzalCoreProtocol.DATA,
             {
                 "capability": capability,
                 "result": {
@@ -262,28 +262,28 @@ async def handle_command(websocket, client_id, payload):
         return result
     
     except Exception as e:
-        return QueztlProtocol.pack_json(
-            QueztlProtocol.ERROR,
+        return QuetzalCoreProtocol.pack_json(
+            QuetzalCoreProtocol.ERROR,
             {"error": f"Command failed: {str(e)}"}
         )
 
 
 async def handle_heartbeat(websocket, client_id, payload):
     """Handle heartbeat/keepalive"""
-    return QueztlProtocol.pack_json(
-        QueztlProtocol.HEARTBEAT,
+    return QuetzalCoreProtocol.pack_json(
+        QuetzalCoreProtocol.HEARTBEAT,
         {"status": "alive", "timestamp": datetime.now().isoformat()}
     )
 
 
 async def main():
     """Main server entry point"""
-    server = QueztlServer(host='0.0.0.0', port=9999)
+    server = QuetzalCoreServer(host='0.0.0.0', port=9999)
     
     # Register handlers
-    server.register_handler(QueztlProtocol.AUTH, handle_auth)
-    server.register_handler(QueztlProtocol.COMMAND, handle_command)
-    server.register_handler(QueztlProtocol.HEARTBEAT, handle_heartbeat)
+    server.register_handler(QuetzalCoreProtocol.AUTH, handle_auth)
+    server.register_handler(QuetzalCoreProtocol.COMMAND, handle_command)
+    server.register_handler(QuetzalCoreProtocol.HEARTBEAT, handle_heartbeat)
     
     # Start server
     try:

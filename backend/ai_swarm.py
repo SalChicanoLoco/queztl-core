@@ -1,5 +1,5 @@
 """
-🦅 QUEZTL-CORE MASSIVELY PARALLEL AI WORKER NETWORK
+🦅 QUETZALCORE-CORE MASSIVELY PARALLEL AI WORKER NETWORK
 Distributed agent system with message passing and swarm intelligence
 Scales to 10,000+ concurrent AI workers!
 """

@@ -1,14 +1,14 @@
 /**
- * Queztl Protocol Client (JavaScript/Browser)
+ * QuetzalCore Protocol Client (JavaScript/Browser)
  * Binary WebSocket protocol - 10-20x faster than REST
  * 
  * Usage:
- *   const qp = new QueztlProtocol('wss://api.queztl.com');
+ *   const qp = new QuetzalCoreProtocol('wss://api.quetzalcore.com');
  *   await qp.connect();
  *   await qp.execute('text-to-3d', { prompt: 'dragon' });
  */
 
-class QueztlProtocol {
+class QuetzalCoreProtocol {
     // Message types
     static COMMAND = 0x01;
     static DATA = 0x02;
@@ -111,13 +111,13 @@ class QueztlProtocol {
             this.ws.binaryType = 'arraybuffer';
 
             this.ws.onopen = () => {
-                console.log('Queztl Protocol: Connected');
+                console.log('QuetzalCore Protocol: Connected');
                 this.startHeartbeat();
                 resolve();
             };
 
             this.ws.onerror = (error) => {
-                console.error('Queztl Protocol: Error', error);
+                console.error('QuetzalCore Protocol: Error', error);
                 reject(error);
             };
 
@@ -126,7 +126,7 @@ class QueztlProtocol {
             };
 
             this.ws.onclose = () => {
-                console.log('Queztl Protocol: Disconnected');
+                console.log('QuetzalCore Protocol: Disconnected');
                 this.stopHeartbeat();
             };
         });
@@ -184,19 +184,19 @@ class QueztlProtocol {
 
             // Handle specific message types
             switch (type) {
-                case QueztlProtocol.ACK:
+                case QuetzalCoreProtocol.ACK:
                     console.log('ACK:', msgData);
                     break;
 
-                case QueztlProtocol.ERROR:
+                case QuetzalCoreProtocol.ERROR:
                     console.error('Error:', msgData.error);
                     break;
 
-                case QueztlProtocol.STREAM:
+                case QuetzalCoreProtocol.STREAM:
                     // Handled by registered handlers
                     break;
 
-                case QueztlProtocol.DATA:
+                case QuetzalCoreProtocol.DATA:
                     // Handled by registered handlers
                     break;
             }
@@ -228,7 +228,7 @@ class QueztlProtocol {
      * Authenticate with server
      */
     async auth(token) {
-        this.sendJSON(QueztlProtocol.AUTH, { token });
+        this.sendJSON(QuetzalCoreProtocol.AUTH, { token });
     }
 
     /**
@@ -252,28 +252,28 @@ class QueztlProtocol {
             // Handler for completion
             const dataHandler = (data) => {
                 clearTimeout(timeout);
-                this.off(QueztlProtocol.STREAM, progressHandler);
-                this.off(QueztlProtocol.DATA, dataHandler);
-                this.off(QueztlProtocol.ERROR, errorHandler);
+                this.off(QuetzalCoreProtocol.STREAM, progressHandler);
+                this.off(QuetzalCoreProtocol.DATA, dataHandler);
+                this.off(QuetzalCoreProtocol.ERROR, errorHandler);
                 resolve(data);
             };
 
             // Handler for errors
             const errorHandler = (data) => {
                 clearTimeout(timeout);
-                this.off(QueztlProtocol.STREAM, progressHandler);
-                this.off(QueztlProtocol.DATA, dataHandler);
-                this.off(QueztlProtocol.ERROR, errorHandler);
+                this.off(QuetzalCoreProtocol.STREAM, progressHandler);
+                this.off(QuetzalCoreProtocol.DATA, dataHandler);
+                this.off(QuetzalCoreProtocol.ERROR, errorHandler);
                 reject(new Error(data.error));
             };
 
             // Register handlers
-            this.on(QueztlProtocol.STREAM, progressHandler);
-            this.on(QueztlProtocol.DATA, dataHandler);
-            this.on(QueztlProtocol.ERROR, errorHandler);
+            this.on(QuetzalCoreProtocol.STREAM, progressHandler);
+            this.on(QuetzalCoreProtocol.DATA, dataHandler);
+            this.on(QuetzalCoreProtocol.ERROR, errorHandler);
 
             // Send command
-            this.sendJSON(QueztlProtocol.COMMAND, {
+            this.sendJSON(QuetzalCoreProtocol.COMMAND, {
                 cap: capability,
                 params,
                 job_id: jobId
@@ -287,7 +287,7 @@ class QueztlProtocol {
     startHeartbeat() {
         this.heartbeatInterval = setInterval(() => {
             if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                this.sendJSON(QueztlProtocol.HEARTBEAT, {
+                this.sendJSON(QuetzalCoreProtocol.HEARTBEAT, {
                     timestamp: Date.now()
                 });
             }
@@ -318,5 +318,5 @@ class QueztlProtocol {
 
 // Export for use
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = QueztlProtocol;
+    module.exports = QuetzalCoreProtocol;
 }

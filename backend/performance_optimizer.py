@@ -1,9 +1,9 @@
 """
-🚀 QUEZTL-CORE PERFORMANCE OPTIMIZER
+🚀 QUETZALCORE-CORE PERFORMANCE OPTIMIZER
 Advanced optimization techniques to push beyond 10B ops/sec
 
 ================================================================================
-Copyright (c) 2025 Queztl-Core Project
+Copyright (c) 2025 QuetzalCore-Core Project
 All Rights Reserved - Patent Pending
 
 OPTIMIZATION INNOVATIONS:

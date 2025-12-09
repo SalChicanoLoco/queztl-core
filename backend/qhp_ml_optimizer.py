@@ -19,9 +19,9 @@ import joblib
 import os
 
 class ProtocolMLOptimizer:
-    """Machine learning optimizer for Queztl Protocol"""
+    """Machine learning optimizer for QuetzalCore Protocol"""
     
-    def __init__(self, db_path="queztl_monitor.db"):
+    def __init__(self, db_path="quetzalcore_monitor.db"):
         self.db_path = db_path
         self.scaler = StandardScaler()
         

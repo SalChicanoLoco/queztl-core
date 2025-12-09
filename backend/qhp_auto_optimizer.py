@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Queztl Protocol Auto-Optimizer Daemon
+QuetzalCore Protocol Auto-Optimizer Daemon
 
 Continuously monitors protocol performance and applies ML-driven optimizations
 """
@@ -10,8 +10,8 @@ import time
 import json
 import logging
 from datetime import datetime
-from queztl_monitor import QueztlMonitor, ProtocolAnalyzer
-from queztl_ml_optimizer import ProtocolMLOptimizer
+from quetzalcore_monitor import QuetzalCoreMonitor, ProtocolAnalyzer
+from quetzalcore_ml_optimizer import ProtocolMLOptimizer
 
 logging.basicConfig(
     level=logging.INFO,
@@ -27,7 +27,7 @@ class AutoOptimizer:
                  optimize_interval=300,    # Optimize every 5 minutes
                  train_interval=3600):     # Retrain every hour
         
-        self.monitor = QueztlMonitor()
+        self.monitor = QuetzalCoreMonitor()
         self.analyzer = ProtocolAnalyzer(self.monitor)
         self.ml_optimizer = ProtocolMLOptimizer()
         
@@ -181,7 +181,7 @@ class AutoOptimizer:
     async def run(self):
         """Run all loops concurrently"""
         logger.info("="*60)
-        logger.info(" 🤖 QUEZTL PROTOCOL AUTO-OPTIMIZER STARTED")
+        logger.info(" 🤖 QUETZALCORE PROTOCOL AUTO-OPTIMIZER STARTED")
         logger.info("="*60)
         logger.info(f" Monitor Interval: {self.monitor_interval}s")
         logger.info(f" Optimize Interval: {self.optimize_interval}s")
@@ -199,7 +199,7 @@ class AutoOptimizer:
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description="Queztl Protocol Auto-Optimizer")
+    parser = argparse.ArgumentParser(description="QuetzalCore Protocol Auto-Optimizer")
     parser.add_argument("--monitor-interval", type=int, default=60,
                        help="Monitoring interval in seconds (default: 60)")
     parser.add_argument("--optimize-interval", type=int, default=300,

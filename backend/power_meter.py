@@ -1,5 +1,5 @@
 """
-Advanced Training & Benchmarking System for Queztl-Core
+Advanced Training & Benchmarking System for QuetzalCore-Core
 Stress testing, power measurement, and creative training scenarios
 """
 import asyncio

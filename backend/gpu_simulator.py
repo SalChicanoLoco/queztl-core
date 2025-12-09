@@ -1,10 +1,10 @@
 """
-🦅 QUEZTL-CORE SOFTWARE GPU SIMULATOR
+🦅 QUETZALCORE-CORE SOFTWARE GPU SIMULATOR
 Simulates GPU architecture in pure Python with vectorized operations
 Achieves near-GPU performance through aggressive optimization!
 
 ================================================================================
-Copyright (c) 2025 Queztl-Core Project
+Copyright (c) 2025 QuetzalCore-Core Project
 All Rights Reserved.
 
 CONFIDENTIAL AND PROPRIETARY
@@ -30,7 +30,7 @@ CORE TRADE SECRETS:
 UNAUTHORIZED COPYING, DISTRIBUTION, OR USE IS STRICTLY PROHIBITED.
 Violations will result in civil and criminal prosecution.
 
-For licensing inquiries: legal@queztl-core.com
+For licensing inquiries: legal@quetzalcore-core.com
 ================================================================================
 """
 

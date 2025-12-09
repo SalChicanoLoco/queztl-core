@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Queztl Protocol Monitor & Analyzer
+QuetzalCore Protocol Monitor & Analyzer
 
 Real-time protocol monitoring with:
 - Packet capture and logging
@@ -19,7 +19,7 @@ from typing import Dict, List, Optional
 import sqlite3
 import numpy as np
 
-class QueztlMonitor:
+class QuetzalCoreMonitor:
     """Real-time protocol monitoring and logging"""
     
     MAGIC = b'QP'
@@ -35,7 +35,7 @@ class QueztlMonitor:
         0x11: "HEARTBEAT"
     }
     
-    def __init__(self, db_path="queztl_monitor.db"):
+    def __init__(self, db_path="quetzalcore_monitor.db"):
         self.db_path = db_path
         self.init_database()
         
@@ -116,7 +116,7 @@ class QueztlMonitor:
         conn.close()
         
     def unpack_message(self, data: bytes) -> Optional[Dict]:
-        """Unpack and analyze Queztl Protocol message"""
+        """Unpack and analyze QuetzalCore Protocol message"""
         try:
             if len(data) < 7:
                 return None
@@ -372,7 +372,7 @@ class QueztlMonitor:
 class ProtocolAnalyzer:
     """Deep protocol analysis and pattern recognition"""
     
-    def __init__(self, monitor: QueztlMonitor):
+    def __init__(self, monitor: QuetzalCoreMonitor):
         self.monitor = monitor
         
     def analyze_message_patterns(self) -> Dict:
@@ -539,7 +539,7 @@ class ProtocolAnalyzer:
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description="Queztl Protocol Monitor")
+    parser = argparse.ArgumentParser(description="QuetzalCore Protocol Monitor")
     parser.add_argument("--stats", action="store_true", help="Show current statistics")
     parser.add_argument("--analyze", action="store_true", help="Analyze patterns")
     parser.add_argument("--export", action="store_true", help="Export training data")
@@ -547,7 +547,7 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    monitor = QueztlMonitor()
+    monitor = QuetzalCoreMonitor()
     analyzer = ProtocolAnalyzer(monitor)
     
     if args.stats:

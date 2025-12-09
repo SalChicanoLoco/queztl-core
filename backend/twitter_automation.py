@@ -338,7 +338,7 @@ def create_investor_thread() -> List[str]:
         # Tweet 1: Hook
         """🚀 We just built something that makes REST APIs look like dial-up internet.
 
-QHP (Queztl Hybrid Protocol): 10-20x faster than REST, with zero port configuration.
+QHP (QuetzalCore Hybrid Protocol): 10-20x faster than REST, with zero port configuration.
 
 This is what happens when you question everything we take for granted in web infrastructure.
 
@@ -357,7 +357,7 @@ Result: Companies waste 80% of cloud spend on protocol overhead.
 We can do better.""",
         
         # Tweet 3: The solution
-        """3/ Introducing QHP - Queztl Hybrid Protocol
+        """3/ Introducing QHP - QuetzalCore Hybrid Protocol
 
 ✅ 5-10ms latency (20x faster)
 ✅ Port-free routing (content-based)
@@ -518,7 +518,7 @@ STEP 1: Create Twitter Account
 1. Go to: https://twitter.com/i/flow/signup
 2. Use email: qhp.protocol@gmail.com (or your choice)
 3. Username: @QHProtocol (or similar)
-4. Bio: "QHP - Queztl Hybrid Protocol. 10-20x faster than REST. 
+4. Bio: "QHP - QuetzalCore Hybrid Protocol. 10-20x faster than REST. 
         Open source protocol for distributed systems. Patent pending."
 5. Profile pic: Create simple logo (can use Canva)
 6. Header: "The Protocol Layer for Modern Infrastructure"

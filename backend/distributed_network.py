@@ -1,5 +1,5 @@
 """
-🌐 QUEZTL-CORE v1.2 - DISTRIBUTED MULTI-NODE NETWORK
+🌐 QUETZALCORE-CORE v1.2 - DISTRIBUTED MULTI-NODE NETWORK
 Patent-Pending Distributed GPU/AI Compute Framework
 
 Supports:
@@ -10,7 +10,7 @@ Supports:
 - Auto-discovery and load balancing
 
 ================================================================================
-Copyright (c) 2025 Queztl-Core Project
+Copyright (c) 2025 QuetzalCore-Core Project
 Patent Pending - USPTO Application #XXXXX
 ================================================================================
 """
@@ -430,7 +430,7 @@ class DistributedScheduler:
 
 class NetworkCoordinator:
     """
-    Master coordinator for distributed Queztl network
+    Master coordinator for distributed QuetzalCore network
     Manages node discovery, task scheduling, and monitoring
     """
     

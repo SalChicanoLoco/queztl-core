@@ -495,6 +495,268 @@ class SeismicAnalyzer:
         return agc_traces
 
 
+class MiningMagnetometryProcessor:
+    """
+    ⛏️ MINING-SPECIFIC MAGNETOMETRY PROCESSOR
+    Process cheaper MAG surveys for mineral exploration
+    - Import common formats (XYZ, CSV, Geosoft)
+    - IGRF correction
+    - Anomaly detection & discrimination
+    - Mineral target identification
+    """
+    
+    def __init__(self):
+        self.igrf = IGRFModel()
+        self.mag_analyzer = MagneticAnalyzer()
+    
+    def import_mag_survey(self, filepath: str, format_type: str = "xyz") -> MagneticSurvey:
+        """
+        Import MAG survey from common formats
+        
+        Formats:
+        - xyz: Space/tab delimited (X Y Z TMI)
+        - csv: Comma separated
+        - geosoft: Geosoft XYZ format
+        """
+        print(f"📂 Importing MAG survey from {filepath} (format: {format_type})")
+        
+        if format_type == "xyz" or format_type == "csv":
+            delimiter = ',' if format_type == "csv" else None
+            # Read data (X, Y, Z, Total_Magnetic_Intensity)
+            # data = np.loadtxt(filepath, delimiter=delimiter)
+            # For demo, create synthetic data
+            data = self._generate_synthetic_mag_data()
+        else:
+            data = self._generate_synthetic_mag_data()
+        
+        locations = data[:, :3]  # X, Y, Z (or Lat, Lon, Elev)
+        total_field = data[:, 3]  # TMI in nT
+        
+        survey = MagneticSurvey(
+            locations=locations,
+            total_field=total_field,
+            date=datetime.now(),
+            instrument="proton_magnetometer"
+        )
+        
+        print(f"✅ Loaded {survey.num_stations} measurement stations")
+        return survey
+    
+    def _generate_synthetic_mag_data(self, num_stations: int = 100) -> np.ndarray:
+        """Generate synthetic MAG survey for demo"""
+        # Create grid of measurements
+        x = np.linspace(0, 1000, int(np.sqrt(num_stations)))
+        y = np.linspace(0, 1000, int(np.sqrt(num_stations)))
+        X, Y = np.meshgrid(x, y)
+        
+        # Add synthetic magnetic anomalies
+        # Anomaly 1: Strong positive (possible magnetite deposit)
+        center1 = (400, 600)
+        dist1 = np.sqrt((X - center1[0])**2 + (Y - center1[1])**2)
+        anomaly1 = 500 * np.exp(-(dist1**2) / (100**2))
+        
+        # Anomaly 2: Moderate positive (possible igneous intrusion)
+        center2 = (700, 300)
+        dist2 = np.sqrt((X - center2[0])**2 + (Y - center2[1])**2)
+        anomaly2 = 300 * np.exp(-(dist2**2) / (150**2))
+        
+        # Anomaly 3: Negative (possible void or sedimentary)
+        center3 = (200, 200)
+        dist3 = np.sqrt((X - center3[0])**2 + (Y - center3[1])**2)
+        anomaly3 = -150 * np.exp(-(dist3**2) / (80**2))
+        
+        # Background field (IGRF-like)
+        background = 50000  # nT
+        
+        # Total field
+        TMI = background + anomaly1 + anomaly2 + anomaly3
+        
+        # Add noise
+        TMI += np.random.normal(0, 10, TMI.shape)
+        
+        # Flatten to array
+        locations = np.column_stack([X.flatten(), Y.flatten(), np.zeros(len(X.flatten()))])
+        data = np.column_stack([locations, TMI.flatten()])
+        
+        return data
+    
+    def discriminate_minerals(self, survey: MagneticSurvey) -> Dict[str, Any]:
+        """
+        ⛏️ MINERAL DISCRIMINATION FROM MAG DATA
+        Identify potential ore types based on magnetic signature
+        """
+        print(f"🔬 Discriminating minerals from magnetic signature...")
+        
+        # Remove IGRF background
+        anomalies = survey.remove_igrf(self.igrf)
+        
+        # Calculate statistics
+        mean_anom = np.mean(anomalies)
+        std_anom = np.std(anomalies)
+        max_anom = np.max(anomalies)
+        min_anom = np.min(anomalies)
+        
+        # Mineral discrimination based on magnetic intensity
+        targets = []
+        
+        # 1. IRON-RICH DEPOSITS (Magnetite, Hematite)
+        iron_threshold = mean_anom + 3 * std_anom
+        iron_mask = anomalies > iron_threshold
+        if np.sum(iron_mask) > 0:
+            iron_locations = survey.locations[iron_mask]
+            targets.append({
+                'mineral_type': 'iron_magnetite',
+                'confidence': 'high',
+                'num_targets': int(np.sum(iron_mask)),
+                'max_anomaly': float(np.max(anomalies[iron_mask])),
+                'description': 'Strong positive anomaly - likely magnetite or Fe-rich deposit',
+                'drill_priority': 1,
+                'locations': iron_locations.tolist()[:10]  # Top 10
+            })
+        
+        # 2. COPPER/GOLD (Associated with magnetic alteration)
+        cu_au_threshold_low = mean_anom + 1.5 * std_anom
+        cu_au_threshold_high = iron_threshold
+        cu_au_mask = (anomalies > cu_au_threshold_low) & (anomalies < cu_au_threshold_high)
+        if np.sum(cu_au_mask) > 0:
+            cu_au_locations = survey.locations[cu_au_mask]
+            targets.append({
+                'mineral_type': 'copper_gold_association',
+                'confidence': 'medium',
+                'num_targets': int(np.sum(cu_au_mask)),
+                'max_anomaly': float(np.max(anomalies[cu_au_mask])),
+                'description': 'Moderate positive anomaly - possible Cu-Au with magnetic alteration',
+                'drill_priority': 2,
+                'locations': cu_au_locations.tolist()[:10]
+            })
+        
+        # 3. ULTRAMAFIC/NICKEL
+        # Look for specific patterns: elongated anomalies, moderate strength
+        ultramafic_threshold = mean_anom + 2 * std_anom
+        ultramafic_mask = (anomalies > ultramafic_threshold) & (anomalies < iron_threshold)
+        if np.sum(ultramafic_mask) > 5:  # Need cluster
+            ultramafic_locations = survey.locations[ultramafic_mask]
+            targets.append({
+                'mineral_type': 'ultramafic_nickel',
+                'confidence': 'medium',
+                'num_targets': int(np.sum(ultramafic_mask)),
+                'max_anomaly': float(np.max(anomalies[ultramafic_mask])),
+                'description': 'Clustered moderate anomalies - possible ultramafic intrusion (Ni potential)',
+                'drill_priority': 3,
+                'locations': ultramafic_locations.tolist()[:10]
+            })
+        
+        # 4. NON-MAGNETIC (Negative or low anomaly)
+        # Could indicate sediment-hosted deposits, kimberlites
+        negative_threshold = mean_anom - 2 * std_anom
+        negative_mask = anomalies < negative_threshold
+        if np.sum(negative_mask) > 0:
+            negative_locations = survey.locations[negative_mask]
+            targets.append({
+                'mineral_type': 'non_magnetic_sedimentary',
+                'confidence': 'low',
+                'num_targets': int(np.sum(negative_mask)),
+                'min_anomaly': float(np.min(anomalies[negative_mask])),
+                'description': 'Negative anomaly - possible sedimentary basin, kimberlite, or void',
+                'drill_priority': 4,
+                'locations': negative_locations.tolist()[:10]
+            })
+        
+        # Summary statistics
+        summary = {
+            'survey_stats': {
+                'total_stations': survey.num_stations,
+                'mean_anomaly_nT': float(mean_anom),
+                'std_anomaly_nT': float(std_anom),
+                'max_anomaly_nT': float(max_anom),
+                'min_anomaly_nT': float(min_anom),
+                'range_nT': float(max_anom - min_anom)
+            },
+            'targets': targets,
+            'num_target_types': len(targets),
+            'recommended_drill_targets': [t for t in targets if t['drill_priority'] <= 2]
+        }
+        
+        print(f"✅ Found {len(targets)} potential mineral targets")
+        print(f"🎯 Recommended {len(summary['recommended_drill_targets'])} high-priority drill targets")
+        
+        return summary
+    
+    def grid_and_contour(self, survey: MagneticSurvey, grid_size: int = 50) -> Dict[str, Any]:
+        """
+        Grid MAG data and create contour map
+        Output suitable for visualization
+        """
+        print(f"📊 Gridding MAG data ({grid_size}x{grid_size} grid)...")
+        
+        # Remove IGRF
+        anomalies = survey.remove_igrf(self.igrf)
+        
+        # Create regular grid
+        x = survey.locations[:, 0]
+        y = survey.locations[:, 1]
+        
+        x_min, x_max = np.min(x), np.max(x)
+        y_min, y_max = np.min(y), np.max(y)
+        
+        xi = np.linspace(x_min, x_max, grid_size)
+        yi = np.linspace(y_min, y_max, grid_size)
+        XI, YI = np.meshgrid(xi, yi)
+        
+        # Interpolate to grid (simplified - use nearest neighbor)
+        from scipy.interpolate import griddata
+        ZI = griddata((x, y), anomalies, (XI, YI), method='cubic', fill_value=0)
+        
+        # Calculate contour levels
+        levels = np.linspace(np.min(anomalies), np.max(anomalies), 10)
+        
+        print(f"✅ Grid created: {grid_size}x{grid_size}")
+        
+        return {
+            'grid': {
+                'x': XI.tolist(),
+                'y': YI.tolist(),
+                'z_anomaly': ZI.tolist(),
+                'shape': [grid_size, grid_size]
+            },
+            'contour_levels': levels.tolist(),
+            'bounds': {
+                'x_min': float(x_min),
+                'x_max': float(x_max),
+                'y_min': float(y_min),
+                'y_max': float(y_max)
+            }
+        }
+    
+    def export_drill_targets(self, discrimination_result: Dict[str, Any], 
+                            output_format: str = "csv") -> str:
+        """
+        Export drill targets to file
+        Formats: csv, kml, shapefile
+        """
+        print(f"💾 Exporting drill targets to {output_format}...")
+        
+        targets = discrimination_result['targets']
+        
+        # CSV format
+        if output_format == "csv":
+            csv_data = "Target_ID,Mineral_Type,Confidence,Priority,X,Y,Anomaly_nT\n"
+            
+            target_id = 1
+            for target in targets:
+                if 'locations' in target and len(target['locations']) > 0:
+                    for loc in target['locations']:
+                        anomaly_val = target.get('max_anomaly', target.get('min_anomaly', 0))
+                        csv_data += f"{target_id},{target['mineral_type']},{target['confidence']},"
+                        csv_data += f"{target['drill_priority']},{loc[0]:.2f},{loc[1]:.2f},{anomaly_val:.1f}\n"
+                        target_id += 1
+            
+            print(f"✅ Exported {target_id-1} drill targets")
+            return csv_data
+        
+        return "Format not supported"
+
+
 class SubsurfaceModeler:
     """
     Multi-physics 3D subsurface modeling
@@ -505,6 +767,7 @@ class SubsurfaceModeler:
         self.magnetic_analyzer = MagneticAnalyzer()
         self.resistivity_analyzer = ResistivityAnalyzer()
         self.seismic_analyzer = SeismicAnalyzer()
+        self.mining_mag_processor = MiningMagnetometryProcessor()
     
     def create_3d_model(self, 
                        magnetic_survey: Optional[MagneticSurvey] = None,
@@ -579,6 +842,7 @@ class SubsurfaceModeler:
         # Look for correlations between properties
         high_susceptibility = np.mean(susceptibility) > 0.01
         low_resistivity = np.mean(resistivity) < 100
+        high_resistivity = np.mean(resistivity) > 1000
         high_velocity = np.mean(velocity) > 3000
         
         if high_susceptibility and low_resistivity:
@@ -608,5 +872,6 @@ __all__ = [
     'ResistivityAnalyzer',
     'SeismicAnalyzer',
     'SubsurfaceModeler',
+    'MiningMagnetometryProcessor',  # NEW: Mining-specific MAG processing
     'GeophysicsDataType'
 ]

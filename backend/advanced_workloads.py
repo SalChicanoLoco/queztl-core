@@ -1,5 +1,5 @@
 """
-🦅 QUEZTL-CORE ADVANCED WORKLOADS
+🦅 QUETZALCORE-CORE ADVANCED WORKLOADS
 GPU-accelerated 3D operations, crypto mining, and extreme stress tests
 """
 
