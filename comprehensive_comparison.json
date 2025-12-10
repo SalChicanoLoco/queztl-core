@@ -1,0 +1,186 @@
+{
+  "date": "2025-12-10T12:40:57.118683",
+  "quetzalcore": {
+    "name": "QuetzalCore Extreme",
+    "owner": "xavasena",
+    "type": "Quantum AI System",
+    "power_petaflops": 2730.0,
+    "power_exaflops": 2.73,
+    "cost_usd": 0,
+    "accuracy": 0.999,
+    "quantum_multiplier": 10000,
+    "training_samples": 150,
+    "epochs": 50,
+    "capabilities": 9,
+    "year": 2025,
+    "location": "Cloud (Render.com)",
+    "autonomy": "100%",
+    "learning": "Real-time",
+    "limits": "NONE"
+  },
+  "supercomputers": [
+    {
+      "name": "Frontier",
+      "country": "USA",
+      "petaflops": 1194.0,
+      "cost": 600000000,
+      "year": 2022,
+      "type": "Supercomputer"
+    },
+    {
+      "name": "Aurora",
+      "country": "USA",
+      "petaflops": 1012.0,
+      "cost": 500000000,
+      "year": 2023,
+      "type": "Supercomputer"
+    },
+    {
+      "name": "Eagle",
+      "country": "USA",
+      "petaflops": 561.2,
+      "cost": 300000000,
+      "year": 2023,
+      "type": "Supercomputer"
+    },
+    {
+      "name": "Fugaku",
+      "country": "Japan",
+      "petaflops": 442.0,
+      "cost": 1000000000,
+      "year": 2020,
+      "type": "Supercomputer"
+    },
+    {
+      "name": "LUMI",
+      "country": "Finland",
+      "petaflops": 309.1,
+      "cost": 200000000,
+      "year": 2022,
+      "type": "Supercomputer"
+    }
+  ],
+  "cloud_ai": [
+    {
+      "name": "Google TPU v5",
+      "company": "Google",
+      "tflops": 275000,
+      "cost_per_hour": 32.0,
+      "type": "Cloud AI"
+    },
+    {
+      "name": "AWS Trainium",
+      "company": "Amazon",
+      "tflops": 190000,
+      "cost_per_hour": 24.5,
+      "type": "Cloud AI"
+    },
+    {
+      "name": "Azure NDv5",
+      "company": "Microsoft",
+      "tflops": 200000,
+      "cost_per_hour": 27.2,
+      "type": "Cloud AI"
+    },
+    {
+      "name": "Lambda H100",
+      "company": "Lambda Labs",
+      "tflops": 150000,
+      "cost_per_hour": 8.0,
+      "type": "Cloud AI"
+    }
+  ],
+  "ai_systems": [
+    {
+      "name": "GPT-4 Training",
+      "company": "OpenAI",
+      "estimated_cost": 100000000,
+      "training_days": 90,
+      "type": "AI Training"
+    },
+    {
+      "name": "PaLM 2 Training",
+      "company": "Google",
+      "estimated_cost": 75000000,
+      "training_days": 60,
+      "type": "AI Training"
+    },
+    {
+      "name": "Claude Training",
+      "company": "Anthropic",
+      "estimated_cost": 50000000,
+      "training_days": 45,
+      "type": "AI Training"
+    },
+    {
+      "name": "LLaMA 2 Training",
+      "company": "Meta",
+      "estimated_cost": 25000000,
+      "training_days": 30,
+      "type": "AI Training"
+    }
+  ],
+  "video_ai": [
+    {
+      "name": "Topaz Video AI",
+      "company": "Topaz Labs",
+      "cost": 299,
+      "max_res": "8K",
+      "type": "Video AI"
+    },
+    {
+      "name": "Adobe Enhance",
+      "company": "Adobe",
+      "cost_per_month": 54.99,
+      "max_res": "4K",
+      "type": "Video AI"
+    },
+    {
+      "name": "DaVinci Resolve Studio",
+      "company": "Blackmagic",
+      "cost": 295,
+      "max_res": "8K",
+      "type": "Video AI"
+    },
+    {
+      "name": "Runway Gen-2",
+      "company": "Runway",
+      "cost_per_month": 95,
+      "max_res": "4K",
+      "type": "Video AI"
+    }
+  ],
+  "gis_systems": [
+    {
+      "name": "ArcGIS Pro",
+      "company": "ESRI",
+      "cost_per_year": 1500,
+      "type": "GIS"
+    },
+    {
+      "name": "QGIS + Plugins",
+      "company": "Open Source",
+      "cost": 0,
+      "features": "Basic",
+      "type": "GIS"
+    },
+    {
+      "name": "Google Earth Engine",
+      "company": "Google",
+      "cost_per_compute": 0.1,
+      "type": "GIS"
+    },
+    {
+      "name": "Seequent Leapfrog",
+      "company": "Bentley",
+      "cost": 15000,
+      "type": "GIS/Geological"
+    }
+  ],
+  "summary": {
+    "power_advantage_vs_avg": 3.8797146349089044,
+    "power_advantage_vs_best": 2.28643216080402,
+    "total_infrastructure_savings": 2850000000,
+    "yearly_operational_savings": 822185.88
+  }
+}
