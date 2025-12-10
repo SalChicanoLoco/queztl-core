@@ -1,0 +1,2187 @@
+{
+  "session": "extreme_unlimited_training",
+  "date": "2025-12-10T12:36:30.210512",
+  "mode": "BREAK_EVERYTHING",
+  "objective": "DOMINATE_ALL",
+  "no_limits": true,
+  "samples": [
+    {
+      "id": "extreme_video_001",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "720p",
+        "target": "5K",
+        "codec": "prores",
+        "fps": 120,
+        "bitrate": 113,
+        "hdr": false,
+        "noise_reduction": 0.7120165078951337,
+        "sharpness": 0.8765998633090628
+      },
+      "expected_quality": 0.972781833674026,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_002",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "2K",
+        "target": "8K",
+        "codec": "h266",
+        "fps": 480,
+        "bitrate": 304,
+        "hdr": false,
+        "noise_reduction": 0.5367764596892403,
+        "sharpness": 0.8456735393950849
+      },
+      "expected_quality": 0.9506530396548108,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_003",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "8K",
+        "target": "32K",
+        "codec": "h266",
+        "fps": 120,
+        "bitrate": 125,
+        "hdr": false,
+        "noise_reduction": 0.8691770407856809,
+        "sharpness": 0.815401931208263
+      },
+      "expected_quality": 0.9893716085071675,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_004",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "480p",
+        "target": "4K",
+        "codec": "vp9",
+        "fps": 30,
+        "bitrate": 389,
+        "hdr": true,
+        "noise_reduction": 0.6840416940753449,
+        "sharpness": 0.8597299202265296
+      },
+      "expected_quality": 0.9688575626894692,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_005",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "8K",
+        "target": "32K",
+        "codec": "h266",
+        "fps": 60,
+        "bitrate": 90,
+        "hdr": true,
+        "noise_reduction": 0.8012565289734496,
+        "sharpness": 0.8295046079161682
+      },
+      "expected_quality": 0.9896875850230068,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_006",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "8K",
+        "target": "32K",
+        "codec": "h264",
+        "fps": 120,
+        "bitrate": 311,
+        "hdr": false,
+        "noise_reduction": 0.9056728134990655,
+        "sharpness": 0.9352419134608683
+      },
+      "expected_quality": 0.9738972442807724,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_007",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "2K",
+        "target": "8K",
+        "codec": "vp9",
+        "fps": 480,
+        "bitrate": 312,
+        "hdr": true,
+        "noise_reduction": 0.7196587734665363,
+        "sharpness": 0.7883073151114875
+      },
+      "expected_quality": 0.9714894130708696,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_008",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "1080p",
+        "target": "8K",
+        "codec": "prores",
+        "fps": 480,
+        "bitrate": 443,
+        "hdr": false,
+        "noise_reduction": 0.5569481034397246,
+        "sharpness": 0.8144674166436819
+      },
+      "expected_quality": 0.9551810074447753,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_009",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "480p",
+        "target": "4K",
+        "codec": "h264",
+        "fps": 120,
+        "bitrate": 219,
+        "hdr": false,
+        "noise_reduction": 0.9857627402905498,
+        "sharpness": 0.9493616989835096
+      },
+      "expected_quality": 0.9756118371699926,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_010",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "720p",
+        "target": "5K",
+        "codec": "vp9",
+        "fps": 30,
+        "bitrate": 190,
+        "hdr": false,
+        "noise_reduction": 0.6732302990979289,
+        "sharpness": 0.7771751077784432
+      },
+      "expected_quality": 0.9790935442450995,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_011",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "2K",
+        "target": "8K",
+        "codec": "h265",
+        "fps": 30,
+        "bitrate": 482,
+        "hdr": false,
+        "noise_reduction": 0.8295812609756332,
+        "sharpness": 0.8189622533311444
+      },
+      "expected_quality": 0.9695152619643119,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_012",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "4K",
+        "target": "16K",
+        "codec": "h264",
+        "fps": 30,
+        "bitrate": 235,
+        "hdr": true,
+        "noise_reduction": 0.8483453526778775,
+        "sharpness": 0.7641120423815465
+      },
+      "expected_quality": 0.9701047730425778,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_013",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "8K",
+        "target": "32K",
+        "codec": "h265",
+        "fps": 24,
+        "bitrate": 96,
+        "hdr": false,
+        "noise_reduction": 0.5740208544764978,
+        "sharpness": 0.9033397425080265
+      },
+      "expected_quality": 0.9813699199013113,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_014",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "480p",
+        "target": "4K",
+        "codec": "prores",
+        "fps": 24,
+        "bitrate": 411,
+        "hdr": false,
+        "noise_reduction": 0.5664485073642426,
+        "sharpness": 0.7371309988503308
+      },
+      "expected_quality": 0.9897924477984268,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_015",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "8K",
+        "target": "32K",
+        "codec": "h265",
+        "fps": 30,
+        "bitrate": 318,
+        "hdr": true,
+        "noise_reduction": 0.9981434521066415,
+        "sharpness": 0.9755582331723276
+      },
+      "expected_quality": 0.9814244158552292,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_016",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "1080p",
+        "target": "8K",
+        "codec": "h266",
+        "fps": 30,
+        "bitrate": 126,
+        "hdr": false,
+        "noise_reduction": 0.5040728169780957,
+        "sharpness": 0.8122111570984847
+      },
+      "expected_quality": 0.9781878073297933,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_017",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "4K",
+        "target": "16K",
+        "codec": "h265",
+        "fps": 30,
+        "bitrate": 452,
+        "hdr": true,
+        "noise_reduction": 0.7301204502329612,
+        "sharpness": 0.9155355641367655
+      },
+      "expected_quality": 0.9676316063493242,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_018",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "4K",
+        "target": "16K",
+        "codec": "prores",
+        "fps": 480,
+        "bitrate": 82,
+        "hdr": true,
+        "noise_reduction": 0.8665900019369088,
+        "sharpness": 0.8514937500295119
+      },
+      "expected_quality": 0.9698663000598374,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_019",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "1080p",
+        "target": "8K",
+        "codec": "h266",
+        "fps": 60,
+        "bitrate": 289,
+        "hdr": false,
+        "noise_reduction": 0.7499906066891462,
+        "sharpness": 0.7737783808140417
+      },
+      "expected_quality": 0.9812243538454999,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_020",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "2K",
+        "target": "8K",
+        "codec": "h266",
+        "fps": 30,
+        "bitrate": 351,
+        "hdr": false,
+        "noise_reduction": 0.9181184155285775,
+        "sharpness": 0.761647189358699
+      },
+      "expected_quality": 0.9726551426395313,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_021",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "8K",
+        "target": "32K",
+        "codec": "h266",
+        "fps": 30,
+        "bitrate": 209,
+        "hdr": true,
+        "noise_reduction": 0.5632118294039883,
+        "sharpness": 0.9424803358670543
+      },
+      "expected_quality": 0.9706075247464914,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_022",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "720p",
+        "target": "5K",
+        "codec": "prores",
+        "fps": 60,
+        "bitrate": 411,
+        "hdr": false,
+        "noise_reduction": 0.8636768026570547,
+        "sharpness": 0.9237433564122759
+      },
+      "expected_quality": 0.9587757153439821,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_023",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "4K",
+        "target": "16K",
+        "codec": "h266",
+        "fps": 120,
+        "bitrate": 81,
+        "hdr": true,
+        "noise_reduction": 0.9330325724582971,
+        "sharpness": 0.9190018884511921
+      },
+      "expected_quality": 0.989241105178941,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_024",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "4K",
+        "target": "16K",
+        "codec": "h265",
+        "fps": 480,
+        "bitrate": 395,
+        "hdr": true,
+        "noise_reduction": 0.6180767804753595,
+        "sharpness": 0.8200445567109906
+      },
+      "expected_quality": 0.9720765936501904,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_025",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "2K",
+        "target": "8K",
+        "codec": "vp9",
+        "fps": 24,
+        "bitrate": 221,
+        "hdr": true,
+        "noise_reduction": 0.8002191156641979,
+        "sharpness": 0.831989268545839
+      },
+      "expected_quality": 0.9507611654201722,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_026",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "2K",
+        "target": "8K",
+        "codec": "h266",
+        "fps": 120,
+        "bitrate": 121,
+        "hdr": false,
+        "noise_reduction": 0.5903500251093955,
+        "sharpness": 0.7268852144752952
+      },
+      "expected_quality": 0.9656818424626411,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_027",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "4K",
+        "target": "16K",
+        "codec": "h264",
+        "fps": 240,
+        "bitrate": 205,
+        "hdr": false,
+        "noise_reduction": 0.7378697116040477,
+        "sharpness": 0.875383556952839
+      },
+      "expected_quality": 0.9718614596777511,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_028",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "720p",
+        "target": "5K",
+        "codec": "av1",
+        "fps": 240,
+        "bitrate": 263,
+        "hdr": false,
+        "noise_reduction": 0.7710108937014737,
+        "sharpness": 0.9282214837885167
+      },
+      "expected_quality": 0.9527657835359481,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_029",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "4K",
+        "target": "16K",
+        "codec": "h266",
+        "fps": 24,
+        "bitrate": 425,
+        "hdr": false,
+        "noise_reduction": 0.545990326131518,
+        "sharpness": 0.8115789377625096
+      },
+      "expected_quality": 0.9860906723024083,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_030",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "2K",
+        "target": "8K",
+        "codec": "av1",
+        "fps": 120,
+        "bitrate": 148,
+        "hdr": true,
+        "noise_reduction": 0.6950597688077645,
+        "sharpness": 0.7048434067016893
+      },
+      "expected_quality": 0.956212729900916,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_031",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "8K",
+        "target": "32K",
+        "codec": "h264",
+        "fps": 120,
+        "bitrate": 326,
+        "hdr": false,
+        "noise_reduction": 0.8632215833322632,
+        "sharpness": 0.7905852567264313
+      },
+      "expected_quality": 0.9688155183464962,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_032",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "4K",
+        "target": "16K",
+        "codec": "prores",
+        "fps": 30,
+        "bitrate": 331,
+        "hdr": false,
+        "noise_reduction": 0.6848387681713263,
+        "sharpness": 0.9895277470311172
+      },
+      "expected_quality": 0.9546612187523871,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_033",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "720p",
+        "target": "5K",
+        "codec": "vp9",
+        "fps": 240,
+        "bitrate": 289,
+        "hdr": false,
+        "noise_reduction": 0.9557257187960577,
+        "sharpness": 0.9730892349344353
+      },
+      "expected_quality": 0.9710444480896835,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_034",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "1080p",
+        "target": "8K",
+        "codec": "h265",
+        "fps": 480,
+        "bitrate": 311,
+        "hdr": true,
+        "noise_reduction": 0.9373487209444752,
+        "sharpness": 0.7300622080894765
+      },
+      "expected_quality": 0.9705145451713145,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_035",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "2K",
+        "target": "8K",
+        "codec": "h265",
+        "fps": 60,
+        "bitrate": 322,
+        "hdr": false,
+        "noise_reduction": 0.8273671947843437,
+        "sharpness": 0.8724899479689185
+      },
+      "expected_quality": 0.9509637546128203,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_036",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "8K",
+        "target": "32K",
+        "codec": "h265",
+        "fps": 480,
+        "bitrate": 459,
+        "hdr": true,
+        "noise_reduction": 0.8344015644246924,
+        "sharpness": 0.939183754272739
+      },
+      "expected_quality": 0.9748139455719756,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_037",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "4K",
+        "target": "16K",
+        "codec": "h265",
+        "fps": 240,
+        "bitrate": 110,
+        "hdr": false,
+        "noise_reduction": 0.6232557934501459,
+        "sharpness": 0.7809564696156654
+      },
+      "expected_quality": 0.9885088700445868,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_038",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "720p",
+        "target": "5K",
+        "codec": "h266",
+        "fps": 24,
+        "bitrate": 286,
+        "hdr": false,
+        "noise_reduction": 0.8934567545176815,
+        "sharpness": 0.9029291100044965
+      },
+      "expected_quality": 0.957401916626447,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_039",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "480p",
+        "target": "4K",
+        "codec": "h265",
+        "fps": 120,
+        "bitrate": 57,
+        "hdr": true,
+        "noise_reduction": 0.631231456479193,
+        "sharpness": 0.9199707817186239
+      },
+      "expected_quality": 0.9896374382403351,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_040",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "720p",
+        "target": "5K",
+        "codec": "h265",
+        "fps": 120,
+        "bitrate": 337,
+        "hdr": true,
+        "noise_reduction": 0.8925900391460615,
+        "sharpness": 0.7881117902866549
+      },
+      "expected_quality": 0.9824766691069632,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_041",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "2K",
+        "target": "8K",
+        "codec": "h266",
+        "fps": 24,
+        "bitrate": 335,
+        "hdr": true,
+        "noise_reduction": 0.7739537977485608,
+        "sharpness": 0.9212305096076512
+      },
+      "expected_quality": 0.971077187391301,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_042",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "1080p",
+        "target": "8K",
+        "codec": "h266",
+        "fps": 30,
+        "bitrate": 338,
+        "hdr": true,
+        "noise_reduction": 0.5666399390404012,
+        "sharpness": 0.9694773282622806
+      },
+      "expected_quality": 0.9825772427915532,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_043",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "720p",
+        "target": "5K",
+        "codec": "h265",
+        "fps": 240,
+        "bitrate": 186,
+        "hdr": true,
+        "noise_reduction": 0.7157550658337408,
+        "sharpness": 0.7171316367323274
+      },
+      "expected_quality": 0.9802080263032906,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_044",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "480p",
+        "target": "4K",
+        "codec": "prores",
+        "fps": 480,
+        "bitrate": 222,
+        "hdr": true,
+        "noise_reduction": 0.7204187601540246,
+        "sharpness": 0.9079578257124907
+      },
+      "expected_quality": 0.9853867322378751,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_045",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "8K",
+        "target": "32K",
+        "codec": "h264",
+        "fps": 24,
+        "bitrate": 472,
+        "hdr": true,
+        "noise_reduction": 0.8840978379570582,
+        "sharpness": 0.7514736028049342
+      },
+      "expected_quality": 0.9611911972052422,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_046",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "2K",
+        "target": "8K",
+        "codec": "av1",
+        "fps": 30,
+        "bitrate": 471,
+        "hdr": false,
+        "noise_reduction": 0.7190288924465958,
+        "sharpness": 0.9793066708105981
+      },
+      "expected_quality": 0.9717182181618677,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_047",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "8K",
+        "target": "32K",
+        "codec": "h266",
+        "fps": 24,
+        "bitrate": 277,
+        "hdr": false,
+        "noise_reduction": 0.5126134931935784,
+        "sharpness": 0.7114396005231407
+      },
+      "expected_quality": 0.9629065729901152,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_048",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "4K",
+        "target": "16K",
+        "codec": "av1",
+        "fps": 30,
+        "bitrate": 186,
+        "hdr": false,
+        "noise_reduction": 0.9266672262865636,
+        "sharpness": 0.8387703168997529
+      },
+      "expected_quality": 0.9501035861692121,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_049",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "480p",
+        "target": "4K",
+        "codec": "vp9",
+        "fps": 120,
+        "bitrate": 309,
+        "hdr": false,
+        "noise_reduction": 0.7177140304607632,
+        "sharpness": 0.9902494492277736
+      },
+      "expected_quality": 0.9899942346177374,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_video_050",
+      "type": "video_enhancement",
+      "input": {
+        "resolution": "4K",
+        "target": "16K",
+        "codec": "prores",
+        "fps": 120,
+        "bitrate": 348,
+        "hdr": true,
+        "noise_reduction": 0.8759337377006304,
+        "sharpness": 0.9208550966336667
+      },
+      "expected_quality": 0.9842780202965997,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_gis_001",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "geological_survey",
+        "area_km2": 3744,
+        "resolution": "1m",
+        "depth_m": 3664,
+        "layers": 13,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9739333082238801,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_002",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "mineral_mapping",
+        "area_km2": 4505,
+        "resolution": "0.5m",
+        "depth_m": 1387,
+        "layers": 79,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9619488583601182,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_003",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "mineral_mapping",
+        "area_km2": 30751,
+        "resolution": "0.5m",
+        "depth_m": 4926,
+        "layers": 63,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9678202943977667,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_004",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "geological_survey",
+        "area_km2": 36870,
+        "resolution": "1m",
+        "depth_m": 3814,
+        "layers": 34,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9647443809432629,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_005",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "volcanic_monitoring",
+        "area_km2": 23815,
+        "resolution": "5m",
+        "depth_m": 865,
+        "layers": 77,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9769661363524346,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_006",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "oil_detection",
+        "area_km2": 44747,
+        "resolution": "2m",
+        "depth_m": 1866,
+        "layers": 19,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9826705869004341,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_007",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "volcanic_monitoring",
+        "area_km2": 29490,
+        "resolution": "1m",
+        "depth_m": 4341,
+        "layers": 35,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9691452861876672,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_008",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "seismic_prediction",
+        "area_km2": 24512,
+        "resolution": "0.5m",
+        "depth_m": 243,
+        "layers": 74,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9612650490089288,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_009",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "mineral_mapping",
+        "area_km2": 22942,
+        "resolution": "5m",
+        "depth_m": 1510,
+        "layers": 70,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9735499343097868,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_010",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "seismic_prediction",
+        "area_km2": 37331,
+        "resolution": "5m",
+        "depth_m": 4462,
+        "layers": 72,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9654332189944751,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_011",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "volcanic_monitoring",
+        "area_km2": 12656,
+        "resolution": "2m",
+        "depth_m": 2827,
+        "layers": 96,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9707500164835988,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_012",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "earthquake_prediction",
+        "area_km2": 16610,
+        "resolution": "0.5m",
+        "depth_m": 4660,
+        "layers": 55,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9820138124518625,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_013",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "geological_survey",
+        "area_km2": 12168,
+        "resolution": "0.5m",
+        "depth_m": 4762,
+        "layers": 68,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9752899279485934,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_014",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "fault_analysis",
+        "area_km2": 3686,
+        "resolution": "1m",
+        "depth_m": 4384,
+        "layers": 99,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9712944911481355,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_015",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "underground_water",
+        "area_km2": 19764,
+        "resolution": "0.5m",
+        "depth_m": 3341,
+        "layers": 22,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9607373533026397,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_016",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "earthquake_prediction",
+        "area_km2": 27683,
+        "resolution": "2m",
+        "depth_m": 2116,
+        "layers": 49,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9683964786860776,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_017",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "fault_analysis",
+        "area_km2": 8551,
+        "resolution": "2m",
+        "depth_m": 1932,
+        "layers": 77,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9852532761608066,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_018",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "geological_survey",
+        "area_km2": 4448,
+        "resolution": "1m",
+        "depth_m": 2201,
+        "layers": 26,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9833678208207743,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_019",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "fault_analysis",
+        "area_km2": 19473,
+        "resolution": "0.5m",
+        "depth_m": 739,
+        "layers": 35,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9665629568017581,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_020",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "underground_water",
+        "area_km2": 30615,
+        "resolution": "1m",
+        "depth_m": 4552,
+        "layers": 74,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9824172675270911,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_021",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "seismic_prediction",
+        "area_km2": 1570,
+        "resolution": "5m",
+        "depth_m": 2181,
+        "layers": 84,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9869067777921829,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_022",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "fault_analysis",
+        "area_km2": 31865,
+        "resolution": "0.5m",
+        "depth_m": 660,
+        "layers": 95,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9641994545328544,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_023",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "mineral_mapping",
+        "area_km2": 20841,
+        "resolution": "1m",
+        "depth_m": 4811,
+        "layers": 71,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9858552151497296,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_024",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "mineral_mapping",
+        "area_km2": 29819,
+        "resolution": "2m",
+        "depth_m": 2716,
+        "layers": 42,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9841767555593615,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_025",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "mineral_mapping",
+        "area_km2": 49012,
+        "resolution": "1m",
+        "depth_m": 2234,
+        "layers": 57,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9874216086661685,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_026",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "oil_detection",
+        "area_km2": 41468,
+        "resolution": "0.5m",
+        "depth_m": 4177,
+        "layers": 81,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9726457436772933,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_027",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "mineral_mapping",
+        "area_km2": 18024,
+        "resolution": "0.5m",
+        "depth_m": 1606,
+        "layers": 13,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9619527512145981,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_028",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "oil_detection",
+        "area_km2": 22466,
+        "resolution": "0.5m",
+        "depth_m": 2809,
+        "layers": 20,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9608034556407865,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_029",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "volcanic_monitoring",
+        "area_km2": 16850,
+        "resolution": "0.5m",
+        "depth_m": 2644,
+        "layers": 20,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9880456290428935,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_gis_030",
+      "type": "gis_analysis",
+      "input": {
+        "analysis_type": "mineral_mapping",
+        "area_km2": 40550,
+        "resolution": "0.5m",
+        "depth_m": 2568,
+        "layers": 18,
+        "3d_modeling": true,
+        "ai_prediction": true
+      },
+      "expected_accuracy": 0.9809546702136325,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_killer_001",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "ProGIS",
+        "their_best": 0.88,
+        "our_target": 0.98,
+        "improvement_needed": 0.10896620152407033
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+15%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_002",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "VideoAI",
+        "their_best": 0.87,
+        "our_target": 0.98,
+        "improvement_needed": 0.19088130316271582
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+14%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_003",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "UltraUpscaler",
+        "their_best": 0.82,
+        "our_target": 0.98,
+        "improvement_needed": 0.1479534143436832
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+15%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_004",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "TopVideoEnhancer",
+        "their_best": 0.85,
+        "our_target": 0.98,
+        "improvement_needed": 0.12076803787193369
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+17%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_005",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "ProGIS",
+        "their_best": 0.88,
+        "our_target": 0.98,
+        "improvement_needed": 0.15848921552218878
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+20%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_006",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "ProGIS",
+        "their_best": 0.88,
+        "our_target": 0.98,
+        "improvement_needed": 0.16337691660257808
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+11%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_007",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "TopVideoEnhancer",
+        "their_best": 0.85,
+        "our_target": 0.98,
+        "improvement_needed": 0.1058147387017069
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+18%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_008",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "TopVideoEnhancer",
+        "their_best": 0.85,
+        "our_target": 0.98,
+        "improvement_needed": 0.12533520687759347
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+13%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_009",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "GeoMaster",
+        "their_best": 0.86,
+        "our_target": 0.98,
+        "improvement_needed": 0.1298794966714879
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+15%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_010",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "GeoMaster",
+        "their_best": 0.86,
+        "our_target": 0.98,
+        "improvement_needed": 0.12126468439739226
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+10%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_011",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "ProGIS",
+        "their_best": 0.88,
+        "our_target": 0.98,
+        "improvement_needed": 0.10724345116904359
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+14%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_012",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "GeoMaster",
+        "their_best": 0.86,
+        "our_target": 0.98,
+        "improvement_needed": 0.15664584448486094
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+13%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_013",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "ProGIS",
+        "their_best": 0.88,
+        "our_target": 0.98,
+        "improvement_needed": 0.10756152350247075
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+12%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_014",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "VideoAI",
+        "their_best": 0.87,
+        "our_target": 0.98,
+        "improvement_needed": 0.11193388198621819
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+19%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_015",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "VideoAI",
+        "their_best": 0.87,
+        "our_target": 0.98,
+        "improvement_needed": 0.19401979137639785
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+16%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_016",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "ProGIS",
+        "their_best": 0.88,
+        "our_target": 0.98,
+        "improvement_needed": 0.17487717265981348
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+21%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_017",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "ProGIS",
+        "their_best": 0.88,
+        "our_target": 0.98,
+        "improvement_needed": 0.10895320068582302
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+10%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_018",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "GeoMaster",
+        "their_best": 0.86,
+        "our_target": 0.98,
+        "improvement_needed": 0.149695358902161
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+14%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_019",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "UltraUpscaler",
+        "their_best": 0.82,
+        "our_target": 0.98,
+        "improvement_needed": 0.1278613814554251
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+13%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_killer_020",
+      "type": "competitor_killer",
+      "input": {
+        "competitor": "TopVideoEnhancer",
+        "their_best": 0.85,
+        "our_target": 0.98,
+        "improvement_needed": 0.11118588807865068
+      },
+      "strategy": "quantum_domination",
+      "kill_ratio": "+21%",
+      "priority": "DESTROY"
+    },
+    {
+      "id": "extreme_learning_001",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 443,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.1225325460264628,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_002",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 762,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.09055082350823579,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_003",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 379,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.06745959304923577,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_004",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 287,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.061939245374812914,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_005",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 368,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.09618380440553796,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_006",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 845,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.13219240735265086,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_007",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 275,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.05547525570581907,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_008",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 382,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.11607103056100851,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_009",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 892,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.13918229339974897,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_010",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 812,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.08745756207294604,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_011",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 748,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.07788187588794634,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_012",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 467,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.11814084964384156,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_013",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 491,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.08489941442857872,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_014",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 827,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.1302937006377352,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_learning_015",
+      "type": "realtime_learning",
+      "input": {
+        "learn_from": "every_frame_processed",
+        "adapt_speed": "instant",
+        "memory_unlimited": true,
+        "patterns_to_track": 505,
+        "auto_improve": true,
+        "share_learning": false
+      },
+      "expected_improvement": 0.11327984087007244,
+      "priority": "MAXIMUM"
+    },
+    {
+      "id": "extreme_prediction_001",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 87,
+        "quantum_states": 630
+      },
+      "expected_confidence": 0.9832776983129539,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_002",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 35,
+        "quantum_states": 298
+      },
+      "expected_confidence": 0.9873221083329186,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_003",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 19,
+        "quantum_states": 584
+      },
+      "expected_confidence": 0.9861015055413144,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_004",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 65,
+        "quantum_states": 110
+      },
+      "expected_confidence": 0.984637101509216,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_005",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 50,
+        "quantum_states": 650
+      },
+      "expected_confidence": 0.989787301570234,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_006",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 31,
+        "quantum_states": 292
+      },
+      "expected_confidence": 0.9767761333913078,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_007",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 50,
+        "quantum_states": 303
+      },
+      "expected_confidence": 0.9715608586197472,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_008",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 49,
+        "quantum_states": 152
+      },
+      "expected_confidence": 0.9753455997863208,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_009",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 88,
+        "quantum_states": 232
+      },
+      "expected_confidence": 0.9814389664415504,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_010",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 85,
+        "quantum_states": 710
+      },
+      "expected_confidence": 0.9761070580573593,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_011",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 44,
+        "quantum_states": 681
+      },
+      "expected_confidence": 0.9841555811197974,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_012",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 15,
+        "quantum_states": 719
+      },
+      "expected_confidence": 0.9872231946100817,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_013",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 20,
+        "quantum_states": 521
+      },
+      "expected_confidence": 0.9813891051229034,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_014",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 61,
+        "quantum_states": 509
+      },
+      "expected_confidence": 0.9824546234167739,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_prediction_015",
+      "type": "quantum_prediction",
+      "input": {
+        "predict": "optimal_settings",
+        "accuracy": 0.99,
+        "speed": "instant",
+        "scenarios": 40,
+        "quantum_states": 985
+      },
+      "expected_confidence": 0.9703360584800557,
+      "priority": "CRITICAL"
+    },
+    {
+      "id": "extreme_optimize_001",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "3569x",
+        "target_quality": 0.9874067079046104,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.2569460854992294,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_002",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "4193x",
+        "target_quality": 0.9897849174149005,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.20918362925695677,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_003",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "6091x",
+        "target_quality": 0.9720078612814842,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.43891867936807794,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_004",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "8018x",
+        "target_quality": 0.9887273500043221,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.30307232167056636,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_005",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "8478x",
+        "target_quality": 0.9897041519311987,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.49047040410210574,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_006",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "7432x",
+        "target_quality": 0.9702543212616686,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.2577329566019234,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_007",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "6301x",
+        "target_quality": 0.981170339314706,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.4430750857050045,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_008",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "8812x",
+        "target_quality": 0.9872602163292986,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.2750554223606003,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_009",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "5004x",
+        "target_quality": 0.9726922542503739,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.28175488356924966,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_010",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "8545x",
+        "target_quality": 0.9884700540028293,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.29544585076160007,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_011",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "1422x",
+        "target_quality": 0.9742562577385684,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.2553416791386065,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_012",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "2581x",
+        "target_quality": 0.9824197174238132,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.252710660320919,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_013",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "5976x",
+        "target_quality": 0.9871645629994769,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.37826880652677175,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_014",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "8097x",
+        "target_quality": 0.9870144310250557,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.4288997583465388,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_015",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "3002x",
+        "target_quality": 0.9760293259876913,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.45180485568909345,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_016",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "5606x",
+        "target_quality": 0.9868593094401916,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.41215180578046373,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_017",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "1602x",
+        "target_quality": 0.9770270552749534,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.44277258477985215,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_018",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "5926x",
+        "target_quality": 0.9825778864360534,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.27608837400544994,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_019",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "6225x",
+        "target_quality": 0.9748004570440378,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.2258623321155209,
+      "priority": "EXTREME"
+    },
+    {
+      "id": "extreme_optimize_020",
+      "type": "extreme_optimization",
+      "input": {
+        "optimize": "everything",
+        "target_speed": "1151x",
+        "target_quality": 0.9700544442157829,
+        "target_cost": 0.0,
+        "no_limits": true
+      },
+      "expected_gain": 0.3742731495646082,
+      "priority": "EXTREME"
+    }
+  ],
+  "total_samples": 150,
+  "quantum_multiplier": 10000,
+  "kill_mode": "EXTREME"
+}
