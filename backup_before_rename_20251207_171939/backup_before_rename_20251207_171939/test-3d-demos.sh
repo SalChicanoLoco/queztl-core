@@ -1,0 +1,42 @@
+#!/bin/bash
+# Test 3D Demos - Open in Browser
+# NO LOCALHOST - ALL CLOUD
+
+echo "╔════════════════════════════════════════════════════════════════╗"
+echo "║           QUETZALCORE 3D DEMO TEST - CLOUD ONLY                     ║"
+echo "╚════════════════════════════════════════════════════════════════╝"
+echo ""
+echo "🌐 Opening demos in your browser..."
+echo ""
+echo "1️⃣  Login Page:"
+echo "   https://senasaitech.com/login.html"
+echo ""
+echo "2️⃣  Credentials:"
+echo "   Email: salvador@senasaitech.com"
+echo "   Password: 2024quetzalcore"
+echo ""
+echo "3️⃣  After login, test these:"
+echo "   📊 Demos Hub: https://senasaitech.com/demos.html"
+echo "   🎮 3DMark Benchmark: https://senasaitech.com/3d-demo.html"
+echo "   🏆 Alternative Benchmark: https://senasaitech.com/benchmark.html"
+echo ""
+echo "4️⃣  What to test:"
+echo "   ✅ Login works"
+echo "   ✅ 3DMark loads (should see benchmark suite)"
+echo "   ✅ Click 'RUN ALL BENCHMARKS'"
+echo "   ✅ Check it uses cloud backend (hive-backend.onrender.com)"
+echo "   ✅ Benchmarks run without errors"
+echo ""
+echo "🚀 Opening login page now..."
+echo ""
+
+# Open in default browser
+open "https://senasaitech.com/login.html"
+
+echo "✅ Browser opened!"
+echo ""
+echo "💡 TIP: Open browser console (Cmd+Option+I) to see:"
+echo "   - API calls to cloud backend"
+echo "   - No localhost references"
+echo "   - Real-time benchmark metrics"
+echo ""

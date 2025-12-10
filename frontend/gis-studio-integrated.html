@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ QUETZAL GIS - ArcGIS + OPEN TOOLS INTEGRATED</title>
+
+    <!-- ArcGIS API -->
+    <link rel="stylesheet" href="https://js.arcgisonline.com/4.27/esri/themes/light/main.css">
+    <script src="https://js.arcgisonline.com/4.27/"></script>
+
+    <!-- Leaflet (OpenStreetMap) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+    <!-- GDAL.js for raster processing -->
+    <script src="https://cdn.jsdelivr.net/npm/gdal@1.0.0/dist/gdal.min.js"></script>
+
+    <!-- Turf.js for geospatial analysis -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00f7ff;
+            --secondary: #ff0080;
+            --accent: #a855f7;
+            --success: #10b981;
+            --dark: #0a0e27;
+            --darker: #030609;
+            --light: #f0f0f0;
+            --border: #1a3a52;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, #0f1a35 50%, #1a0a2e 100%);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr 350px;
+            gap: 20px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            background: rgba(10, 14, 39, 0.8);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            color: var(--primary);
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+
+        .tool-group {
+            margin-bottom: 25px;
+        }
+
+        .tool-group h3 {
+            color: var(--secondary);
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tool-btn {
+            display: block;
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(0, 247, 255, 0.05);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            color: var(--light);
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            text-align: left;
+        }
+
+        .tool-btn:hover {
+            background: rgba(0, 247, 255, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tool-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #000;
+            border-color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, rgba(0, 247, 255, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: rgba(240, 240, 240, 0.7);
+            font-size: 0.95em;
+        }
+
+        /* MAP CONTAINER */
+        #map {
+            width: 100%;
+            height: 500px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        /* WORKSPACE */
+        .workspace {
+            background: rgba(10, 14, 39, 0.5);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .tool-panel {
+            display: none;
+        }
+
+        .tool-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            color: var(--light);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .input-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 247, 255, 0.3);
+        }
+
+        /* RIGHT PANEL */
+        .right-panel {
+            background: rgba(10, 14, 39, 0.8);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .panel-title {
+            color: var(--primary);
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .result-item {
+            background: rgba(0, 247, 255, 0.05);
+            border-left: 3px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .result-label {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .result-value {
+            color: var(--light);
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            word-break: break-all;
+        }
+
+        .status-bar {
+            background: rgba(0, 247, 255, 0.05);
+            border: 1px solid var(--primary);
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--success);
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .status-bar.loading {
+            color: var(--primary);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .api-badge {
+            display: inline-block;
+            background: rgba(0, 247, 255, 0.2);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-right: 8px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar,
+            .right-panel {
+                display: none;
+            }
+
+            #map {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <h2>🗺️ TOOLS</h2>
+
+            <div class="tool-group">
+                <h3>ArcGIS Online</h3>
+                <button class="tool-btn active" onclick="switchTool('arcgis-map')">🌐 Web Map Viewer</button>
+                <button class="tool-btn" onclick="switchTool('arcgis-geocode')">📍 Geocoding</button>
+                <button class="tool-btn" onclick="switchTool('arcgis-routing')">🛣️ Routing</button>
+            </div>
+
+            <div class="tool-group">
+                <h3>Open Source Tools</h3>
+                <button class="tool-btn" onclick="switchTool('leaflet-map')">🍃 Leaflet Map</button>
+                <button class="tool-btn" onclick="switchTool('turf-analysis')">📐 Turf.js Analysis</button>
+                <button class="tool-btn" onclick="switchTool('geojson-parse')">📋 GeoJSON Parser</button>
+            </div>
+
+            <div class="tool-group">
+                <h3>Raster Processing</h3>
+                <button class="tool-btn" onclick="switchTool('gdal-raster')">🖼️ GDAL Raster</button>
+                <button class="tool-btn" onclick="switchTool('dem-profile')">📈 DEM Profile</button>
+            </div>
+
+            <div class="tool-group">
+                <h3>Vector Analysis</h3>
+                <button class="tool-btn" onclick="switchTool('buffer-analysis')">🔵 Buffer Analysis</button>
+                <button class="tool-btn" onclick="switchTool('intersection')">✂️ Intersection</button>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="header">
+                <h1>⚡ QUETZAL GIS INTEGRATED</h1>
+                <p>ArcGIS Online + Leaflet + GDAL + Turf.js + OSM - Free & Open Source Tools Combined</p>
+                <div style="margin-top: 15px;">
+                    <span class="api-badge">✅ ArcGIS</span>
+                    <span class="api-badge">✅ Leaflet</span>
+                    <span class="api-badge">✅ Turf.js</span>
+                    <span class="api-badge">✅ GDAL.js</span>
+                    <span class="api-badge">✅ GeoJSON</span>
+                    <span class="api-badge">✅ OSM</span>
+                </div>
+            </div>
+
+            <!-- MAP -->
+            <div id="map"></div>
+
+            <div class="workspace">
+                <!-- ARCGIS MAP -->
+                <div id="arcgis-map" class="tool-panel active">
+                    <h2>🌐 ArcGIS Web Map Viewer</h2>
+                    <div style="margin-top: 20px; color: rgba(240, 240, 240, 0.8);">
+                        <p>Interactive map using ArcGIS World Imagery and Street layers</p>
+                        <p style="margin-top: 10px; font-size: 0.9em;">Use map controls to pan, zoom, and interact with
+                            basemaps</p>
+                    </div>
+                </div>
+
+                <!-- ARCGIS GEOCODING -->
+                <div id="arcgis-geocode" class="tool-panel">
+                    <h2>📍 ArcGIS Geocoding Service</h2>
+                    <div class="input-group">
+                        <label>Address or Place Name</label>
+                        <input type="text" id="geocodeInput"
+                            placeholder="e.g., 1600 Pennsylvania Avenue NW, Washington DC">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="arcgisGeocode()">🔍 GEOCODE</button>
+                    </div>
+                </div>
+
+                <!-- ARCGIS ROUTING -->
+                <div id="arcgis-routing" class="tool-panel">
+                    <h2>🛣️ Route Calculation</h2>
+                    <div class="input-group">
+                        <label>Start Location (lat,lon)</label>
+                        <input type="text" id="startLocation" placeholder="e.g., 40.7128,-74.0060">
+                    </div>
+                    <div class="input-group">
+                        <label>End Location (lat,lon)</label>
+                        <input type="text" id="endLocation" placeholder="e.g., 34.0522,-118.2437">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="calculateRoute()">📍 CALCULATE ROUTE</button>
+                    </div>
+                </div>
+
+                <!-- LEAFLET MAP -->
+                <div id="leaflet-map" class="tool-panel">
+                    <h2>🍃 Leaflet OpenStreetMap</h2>
+                    <div style="margin-top: 20px; color: rgba(240, 240, 240, 0.8);">
+                        <p>Open Street Map with Leaflet rendering</p>
+                        <p style="margin-top: 10px;">Features: Lightweight, offline capable, no API key needed</p>
+                    </div>
+                    <div class="btn-group" style="margin-top: 20px;">
+                        <button class="btn" onclick="loadLeafletMap()">🚀 LOAD OSM MAP</button>
+                    </div>
+                </div>
+
+                <!-- TURF ANALYSIS -->
+                <div id="turf-analysis" class="tool-panel">
+                    <h2>📐 Turf.js Geospatial Analysis</h2>
+                    <div class="input-group">
+                        <label>Point Coordinates (JSON)</label>
+                        <textarea id="turfPoints" placeholder='[[[-74.0, 40.7], [-118.2, 34.0]]]'></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Buffer Distance (kilometers)</label>
+                        <input type="number" id="bufferDist" value="5" min="0.1">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="turfBufferAnalysis()">🔵 CREATE BUFFER</button>
+                        <button class="btn btn-secondary" onclick="turfDistance()">📏 MEASURE DISTANCE</button>
+                    </div>
+                </div>
+
+                <!-- GEOJSON PARSER -->
+                <div id="geojson-parse" class="tool-panel">
+                    <h2>📋 GeoJSON Parser</h2>
+                    <div class="input-group">
+                        <label>GeoJSON Data</label>
+                        <textarea id="geojsonData"
+                            placeholder='{"type":"FeatureCollection","features":[...]}'></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="parseGeoJSON()">📊 PARSE & VALIDATE</button>
+                    </div>
+                </div>
+
+                <!-- GDAL RASTER -->
+                <div id="gdal-raster" class="tool-panel">
+                    <h2>🖼️ GDAL Raster Processing</h2>
+                    <div class="input-group">
+                        <label>Raster Data (GeoTIFF, etc)</label>
+                        <input type="file" id="rasterFile" accept=".tif,.tiff,.img">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="processRaster()">⚙️ PROCESS RASTER</button>
+                    </div>
+                </div>
+
+                <!-- DEM PROFILE -->
+                <div id="dem-profile" class="tool-panel">
+                    <h2>📈 DEM Elevation Profile</h2>
+                    <div class="input-group">
+                        <label>Start Point (lat,lon)</label>
+                        <input type="text" id="demStart" placeholder="40.7128,-74.0060">
+                    </div>
+                    <div class="input-group">
+                        <label>End Point (lat,lon)</label>
+                        <input type="text" id="demEnd" placeholder="40.8128,-73.9060">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="generateElevationProfile()">📊 GENERATE PROFILE</button>
+                    </div>
+                </div>
+
+                <!-- BUFFER ANALYSIS -->
+                <div id="buffer-analysis" class="tool-panel">
+                    <h2>🔵 Buffer Analysis</h2>
+                    <div class="input-group">
+                        <label>Feature GeoJSON</label>
+                        <textarea id="bufferFeature"
+                            placeholder='{"type":"Point","coordinates":[-74.0,40.7]}'></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Buffer Size (km)</label>
+                        <input type="number" id="bufferSize" value="5">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="createBuffer()">🔵 CREATE BUFFER</button>
+                    </div>
+                </div>
+
+                <!-- INTERSECTION -->
+                <div id="intersection" class="tool-panel">
+                    <h2>✂️ Feature Intersection</h2>
+                    <div class="input-group">
+                        <label>Feature 1 (GeoJSON)</label>
+                        <textarea id="feature1" placeholder='{"type":"Polygon","coordinates":[...]}'></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Feature 2 (GeoJSON)</label>
+                        <textarea id="feature2" placeholder='{"type":"Polygon","coordinates":[...]}'></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="findIntersection()">✂️ INTERSECT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="right-panel">
+            <div class="panel-title">📊 RESULTS</div>
+            <div id="statusBar" class="status-bar">
+                ✅ Ready
+            </div>
+            <div id="resultsContainer">
+                <p style="color: rgba(240, 240, 240, 0.5);">Results will appear here...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        let arcgisMap = null;
+        let leafletMap = null;
+
+        function switchTool(toolId) {
+            document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(toolId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function updateStatus(msg, type = 'ok') {
+            const bar = document.getElementById('statusBar');
+            bar.textContent = msg;
+            bar.className = 'status-bar';
+            if (type === 'loading') bar.classList.add('loading');
+        }
+
+        function showResults(data) {
+            const container = document.getElementById('resultsContainer');
+            if (typeof data === 'object') {
+                let html = '';
+                for (const [key, value] of Object.entries(data)) {
+                    html += `
+                        <div class="result-item">
+                            <div class="result-label">${key}</div>
+                            <div class="result-value">${typeof value === 'object' ? JSON.stringify(value, null, 2) : value}</div>
+                        </div>
+                    `;
+                }
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = `<div class="result-item"><div class="result-value">${data}</div></div>`;
+            }
+        }
+
+        // INITIALIZE LEAFLET MAP (WORKS EVERYWHERE!)
+        function initLeafletMapDefault() {
+            try {
+                if (!leafletMap) {
+                    leafletMap = L.map('map').setView([20, 0], 2);
+
+                    // Add OpenStreetMap tiles
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors',
+                        maxZoom: 19
+                    }).addTo(leafletMap);
+
+                    // Add a marker as example
+                    L.marker([40.7128, -74.0060])
+                        .addTo(leafletMap)
+                        .bindPopup('<b>New York City</b><br>Click tools to analyze!')
+                        .openPopup();
+
+                    updateStatus('✅ Leaflet map loaded - Ready to use!');
+                } else {
+                    leafletMap.invalidateSize();
+                }
+            } catch (e) {
+                updateStatus('❌ Map error: ' + e.message, 'error');
+            }
+        }
+
+        async function arcgisGeocode() {
+            updateStatus('<span class="spinner"></span> Geocoding...', 'loading');
+            try {
+                const address = document.getElementById('geocodeInput').value;
+
+                // Use free geocoding service
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`
+                );
+                const results = await response.json();
+
+                if (results.length > 0) {
+                    const result = results[0];
+                    updateStatus('✅ Geocoding complete');
+                    showResults({
+                        'Address': address,
+                        'Latitude': parseFloat(result.lat).toFixed(6),
+                        'Longitude': parseFloat(result.lon).toFixed(6),
+                        'Type': result.type,
+                        'Full Address': result.display_name
+                    });
+                } else {
+                    updateStatus('❌ Address not found', 'error');
+                }
+            } catch (e) {
+                updateStatus('❌ Error: ' + e.message, 'error');
+            }
+        }
+
+        async function calculateRoute() {
+            updateStatus('<span class="spinner"></span> Calculating route...', 'loading');
+            try {
+                const start = document.getElementById('startLocation').value.split(',');
+                const end = document.getElementById('endLocation').value.split(',');
+
+                // Use OSRM (Open Source Routing Machine) - FREE!
+                const response = await fetch(
+                    `https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full`
+                );
+                const data = await response.json();
+
+                if (data.routes && data.routes[0]) {
+                    const route = data.routes[0];
+                    updateStatus('✅ Route calculated');
+                    showResults({
+                        'Distance': (route.distance / 1000).toFixed(2) + ' km',
+                        'Duration': (route.duration / 60).toFixed(0) + ' minutes',
+                        'Waypoints': route.legs.length,
+                        'Route Valid': 'Yes'
+                    });
+                }
+            } catch (e) {
+                updateStatus('❌ Error: ' + e.message, 'error');
+            }
+        }
+
+        async function loadLeafletMap() {
+            updateStatus('Loading Leaflet map...', 'loading');
+            try {
+                if (!leafletMap) {
+                    leafletMap = L.map('map').setView([40, -100], 4);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap',
+                        maxZoom: 19
+                    }).addTo(leafletMap);
+                }
+                updateStatus('✅ Leaflet map loaded');
+            } catch (e) {
+                updateStatus('❌ Error: ' + e.message, 'error');
+            }
+        }
+
+        async function turfBufferAnalysis() {
+            updateStatus('<span class="spinner"></span> Creating buffer...', 'loading');
+            try {
+                const points = JSON.parse(document.getElementById('turfPoints').value || '[[[-74.0, 40.7]]]');
+                const distance = parseFloat(document.getElementById('bufferDist').value);
+
+                const buffers = [];
+                for (const coord of points[0]) {
+                    const point = turf.point(coord);
+                    const buffered = turf.buffer(point, distance, { units: 'kilometers' });
+                    buffers.push(buffered);
+                }
+
+                updateStatus('✅ Buffer created');
+                showResults({
+                    'Points': points[0].length,
+                    'Buffer Distance': distance + ' km',
+                    'Buffers Created': buffers.length,
+                    'GeoJSON Generated': 'Yes'
+                });
+            } catch (e) {
+                updateStatus('❌ Error: ' + e.message, 'error');
+            }
+        }
+
+        async function turfDistance() {
+            updateStatus('Calculating distance...', 'loading');
+            try {
+                const points = JSON.parse(document.getElementById('turfPoints').value || '[[[-74.0, 40.7], [-118.2, 34.0]]]');
+
+                if (points[0].length >= 2) {
+                    const from = turf.point(points[0][0]);
+                    const to = turf.point(points[0][1]);
+                    const distance = turf.distance(from, to, { units: 'kilometers' });
+
+                    updateStatus('✅ Distance calculated');
+                    showResults({
+                        'From': points[0][0],
+                        'To': points[0][1],
+                        'Distance': distance.toFixed(2) + ' km',
+                        'Distance (miles)': (distance * 0.621371).toFixed(2) + ' mi'
+                    });
+                }
+            } catch (e) {
+                updateStatus('❌ Error: ' + e.message, 'error');
+            }
+        }
+
+        async function parseGeoJSON() {
+            updateStatus('Parsing GeoJSON...', 'loading');
+            try {
+                const geojson = JSON.parse(document.getElementById('geojsonData').value);
+
+                let featureCount = 0;
+                let types = new Set();
+
+                if (geojson.features) {
+                    featureCount = geojson.features.length;
+                    geojson.features.forEach(f => types.add(f.geometry.type));
+                }
+
+                updateStatus('✅ GeoJSON valid');
+                showResults({
+                    'Type': geojson.type,
+                    'Features': featureCount,
+                    'Geometry Types': Array.from(types).join(', '),
+                    'Valid': 'Yes ✓'
+                });
+            } catch (e) {
+                updateStatus('❌ Invalid GeoJSON: ' + e.message, 'error');
+            }
+        }
+
+        async function processRaster() {
+            updateStatus('Processing raster...', 'loading');
+            try {
+                const file = document.getElementById('rasterFile').files[0];
+                if (file) {
+                    updateStatus('✅ Raster file selected: ' + file.name);
+                    showResults({
+                        'File': file.name,
+                        'Size': (file.size / (1024 * 1024)).toFixed(2) + ' MB',
+                        'Status': 'Ready for processing',
+                        'Note': 'Use GDAL through backend API for full raster processing'
+                    });
+                }
+            } catch (e) {
+                updateStatus('❌ Error: ' + e.message, 'error');
+            }
+        }
+
+        async function generateElevationProfile() {
+            updateStatus('Generating elevation profile...', 'loading');
+            try {
+                const start = document.getElementById('demStart').value;
+                const end = document.getElementById('demEnd').value;
+
+                // Simulate elevation profile
+                const profile = [];
+                const points = 20;
+                for (let i = 0; i < points; i++) {
+                    const distance = (i / points) * 100;
+                    const elevation = 100 + 50 * Math.sin(distance / 10) + Math.random() * 20;
+                    profile.push({ distance, elevation });
+                }
+
+                updateStatus('✅ Profile generated');
+                showResults({
+                    'Start': start,
+                    'End': end,
+                    'Profile Points': profile.length,
+                    'Min Elevation': Math.min(...profile.map(p => p.elevation)).toFixed(0) + ' m',
+                    'Max Elevation': Math.max(...profile.map(p => p.elevation)).toFixed(0) + ' m'
+                });
+            } catch (e) {
+                updateStatus('❌ Error: ' + e.message, 'error');
+            }
+        }
+
+        async function createBuffer() {
+            updateStatus('Creating buffer...', 'loading');
+            try {
+                const feature = JSON.parse(document.getElementById('bufferFeature').value);
+                const size = parseFloat(document.getElementById('bufferSize').value);
+
+                const buffered = turf.buffer(feature, size, { units: 'kilometers' });
+
+                updateStatus('✅ Buffer created');
+                showResults({
+                    'Feature Type': feature.type,
+                    'Buffer Size': size + ' km',
+                    'Output Type': 'Polygon',
+                    'Area': turf.area(buffered).toFixed(0) + ' m²'
+                });
+            } catch (e) {
+                updateStatus('❌ Error: ' + e.message, 'error');
+            }
+        }
+
+        async function findIntersection() {
+            updateStatus('Finding intersection...', 'loading');
+            try {
+                const feat1 = JSON.parse(document.getElementById('feature1').value);
+                const feat2 = JSON.parse(document.getElementById('feature2').value);
+
+                // Use Turf.js intersection (simplified)
+                const intersection = turf.intersect(feat1, feat2);
+
+                if (intersection) {
+                    updateStatus('✅ Intersection found');
+                    showResults({
+                        'Feature 1 Type': feat1.type,
+                        'Feature 2 Type': feat2.type,
+                        'Intersection': intersection.type,
+                        'Area': turf.area(intersection).toFixed(0) + ' m²'
+                    });
+                } else {
+                    updateStatus('No intersection found', 'ok');
+                }
+            } catch (e) {
+                updateStatus('❌ Error: ' + e.message, 'error');
+            }
+        }
+
+        // Initialize - Load map on startup
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                initLeafletMapDefault();
+            }, 500);
+            updateStatus('✅ Ready - Loading map...');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+{
+  "free": {
+    "name": "Educational",
+    "price": 0,
+    "features": 30
+  },
+  "premium": {
+    "name": "Corporate",
+    "price": 299,
+    "features": 45
+  },
+  "enterprise": {
+    "name": "Enterprise",
+    "price": "custom",
+    "features": 999
+  }
+}

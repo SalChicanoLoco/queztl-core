@@ -1,0 +1,26 @@
+FROM ubuntu:22.04
+
+# Prevent interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install build essentials
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    libssl-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Set working directory
+WORKDIR /workspace
+
+# Copy project files
+COPY quetzalcore-hypervisor /workspace/quetzalcore-hypervisor
+
+# Default command
+CMD ["bash"]

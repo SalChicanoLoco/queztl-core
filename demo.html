@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuetzalCore BETA 1 - Mining Intelligence Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #aaa;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .card h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #00d4ff;
+        }
+
+        .card p {
+            color: #bbb;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card ul {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        .card li {
+            padding: 5px 0;
+            color: #aaa;
+            font-size: 0.95em;
+        }
+
+        .card li:before {
+            content: "✓ ";
+            color: #00d4ff;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00d4ff;
+            border: 1px solid #00d4ff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .features {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .features h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #00d4ff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature {
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.05);
+            border-left: 3px solid #00d4ff;
+            border-radius: 4px;
+        }
+
+        .feature h3 {
+            color: #00d4ff;
+            margin-bottom: 8px;
+        }
+
+        .feature p {
+            color: #aaa;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #00d4ff;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .stat-label {
+            color: #aaa;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #666;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 60px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background: #0f0c29;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .modal-content h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            float: right;
+            font-size: 2em;
+            cursor: pointer;
+            color: #00d4ff;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .demo-steps {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-number {
+            background: #00d4ff;
+            color: #0f0c29;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            color: #00d4ff;
+            margin-bottom: 8px;
+        }
+
+        .step-content p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🦅 QuetzalCore BETA 1</h1>
+            <p class="subtitle">Mining Intelligence Platform - Interactive Demo</p>
+        </header>
+
+        <!-- Key Stats -->
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">9,300+</div>
+                <div class="stat-label">Lines of Code</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">27+</div>
+                <div class="stat-label">API Endpoints</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">Real-time</div>
+                <div class="stat-label">WebSocket Updates</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">Auto-scaling</div>
+                <div class="stat-label">Infrastructure</div>
+            </div>
+        </div>
+
+        <!-- Demo Steps -->
+        <div class="demo-steps">
+            <h2>🚀 How It Works</h2>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Upload Survey Data</h3>
+                    <p>Import magnetometry surveys in CSV, netCDF, or custom formats. Supports airborne, marine, and
+                        ground surveys.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Automatic Processing</h3>
+                    <p>System applies IGRF/WMM corrections, removes noise, and performs multi-element analysis.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Anomaly Detection</h3>
+                    <p>Identifies significant magnetic anomalies with statistical confidence scoring and spatial
+                        analysis.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Mineral Discrimination</h3>
+                    <p>Classifies ore types (Fe, Cu, Au, Pb-Zn) based on magnetic signatures and known geological
+                        models.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Drill Targets</h3>
+                    <p>Generates ranked drill targets with economic potential assessment and depth estimates.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Features -->
+        <div class="features">
+            <h2>✨ Key Features</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <h3>🧲 MAG Processing</h3>
+                    <p>Advanced magnetometry analysis with field corrections and multi-scale decomposition</p>
+                </div>
+                <div class="feature">
+                    <h3>🎯 Anomaly Detection</h3>
+                    <p>Statistical analysis with 10+ detection algorithms and confidence scoring</p>
+                </div>
+                <div class="feature">
+                    <h3>🧪 Mineral ID</h3>
+                    <p>Mineral discrimination for Fe, Cu, Au, Pb-Zn and other economic minerals</p>
+                </div>
+                <div class="feature">
+                    <h3>📊 Real-time Dashboard</h3>
+                    <p>Interactive visualization with live updates and 3D model generation</p>
+                </div>
+                <div class="feature">
+                    <h3>⚡ Auto-scaling</h3>
+                    <p>Infrastructure automatically scales based on workload (Kubernetes-ready)</p>
+                </div>
+                <div class="feature">
+                    <h3>📈 Reports</h3>
+                    <p>Professional reports with maps, statistics, and economic analysis</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Cards -->
+        <div class="demo-grid">
+            <div class="card">
+                <h2>🎬 Run Demo</h2>
+                <p>See the full mining analysis pipeline in action with realistic synthetic survey data.</p>
+                <ul>
+                    <li>30-second interactive demo</li>
+                    <li>Survey data processing</li>
+                    <li>Anomaly detection</li>
+                    <li>Mineral discrimination</li>
+                    <li>Drill target generation</li>
+                </ul>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="runTerminalDemo()">Run in Terminal</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🌐 Web Dashboard</h2>
+                <p>Access the full production system with real-time metrics and interactive controls.</p>
+                <ul>
+                    <li>Live metrics dashboard</li>
+                    <li>Mining survey upload</li>
+                    <li>Interactive maps</li>
+                    <li>Real-time processing</li>
+                    <li>Results export</li>
+                </ul>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="launchDashboard()">Launch Dashboard</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🚀 Quick Deploy</h2>
+                <p>Deploy the entire system locally or to the cloud in minutes.</p>
+                <ul>
+                    <li>Docker Compose setup</li>
+                    <li>PostgreSQL database</li>
+                    <li>Redis caching</li>
+                    <li>FastAPI backend</li>
+                    <li>Next.js frontend</li>
+                </ul>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="showDeployModal()">Deploy Now</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📚 Documentation</h2>
+                <p>Complete guides for setup, API integration, and mining workflow.</p>
+                <ul>
+                    <li>Architecture guide</li>
+                    <li>API reference</li>
+                    <li>Mining workflow</li>
+                    <li>Deployment options</li>
+                    <li>Troubleshooting</li>
+                </ul>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="window.open('BETA_1_README.md')">Read Docs</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🔍 Health Check</h2>
+                <p>Validate your system is production-ready with comprehensive checks.</p>
+                <ul>
+                    <li>Project structure</li>
+                    <li>Dependencies</li>
+                    <li>Security setup</li>
+                    <li>Code quality</li>
+                    <li>Deployment readiness</li>
+                </ul>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="runHealthCheck()">Check System</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>💡 Use Cases</h2>
+                <p>Real-world applications for mining exploration and development.</p>
+                <ul>
+                    <li>Greenfield exploration</li>
+                    <li>Grade estimation</li>
+                    <li>Pit optimization</li>
+                    <li>Environmental monitoring</li>
+                    <li>Geothermal surveys</li>
+                </ul>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="showUseCases()">View Use Cases</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <div id="deployModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('deployModal')">&times;</span>
+                <h2>🚀 Deployment Options</h2>
+                <p>Choose your preferred deployment method:</p>
+                <div style="margin-top: 20px;">
+                    <button class="btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="deployLocal()">
+                        Local (Docker Compose)
+                    </button>
+                    <button class="btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="deployRailway()">
+                        Railway.app (Cloud)
+                    </button>
+                    <button class="btn-primary" style="width: 100%;" onclick="closeModal('deployModal')">
+                        View More Options
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>QuetzalCore BETA 1 | Production-Ready Mining Intelligence Platform</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                Built with FastAPI, Next.js, PostgreSQL | Patent Pending
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function runTerminalDemo() {
+            alert('Run this command in your terminal:\n\npython3 demo-mining-client.py\n\nThe interactive demo will start immediately!');
+        }
+
+        function launchDashboard() {
+            window.location.href = 'http://localhost:3000';
+        }
+
+        function showDeployModal() {
+            document.getElementById('deployModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function deployLocal() {
+            alert('Run this command:\n\n./quick-launch-beta-1.sh\n\nYour system will be running in 2-3 minutes!');
+            closeModal('deployModal');
+        }
+
+        function deployRailway() {
+            alert('Deploy to Railway:\n\n1. npm i -g @railway/cli\n2. railway login\n3. railway init && railway up\n\nThen access your live system!');
+            closeModal('deployModal');
+        }
+
+        function runHealthCheck() {
+            alert('Run this command:\n\npython3 health-check-beta-1.py\n\nThis validates your system is production-ready!');
+        }
+
+        function showUseCases() {
+            alert('Common Use Cases:\n\n✓ Greenfield Exploration\n✓ Grade Estimation\n✓ Pit Optimization\n✓ Environmental Monitoring\n✓ Geothermal Surveys\n✓ Water Resource Mapping\n\nThe system adapts to your workflow!');
+        }
+
+        // Click outside modal to close
+        window.onclick = function (event) {
+            const modal = document.getElementById('deployModal');
+            if (event.target == modal) {
+                closeModal('deployModal');
+            }
+        }
+    </script>
+</body>
+
+</html>

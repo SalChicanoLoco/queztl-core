@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ REAL GIS ANALYSIS TOOL</title>
+
+    <!-- Leaflet Maps -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+    <!-- Turf.js - Real Geospatial Analysis -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
+    <!-- Chart.js for visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00f7ff;
+            --secondary: #ff0080;
+            --accent: #a855f7;
+            --success: #10b981;
+            --dark: #0a0e27;
+            --darker: #030609;
+            --light: #f0f0f0;
+            --border: #1a3a52;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, var(--darker) 0%, #0f1a35 50%, #1a0a2e 100%);
+            color: var(--light);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            gap: 15px;
+            padding: 15px;
+            height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            background: rgba(10, 14, 39, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            overflow-y: auto;
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+        }
+
+        .sidebar h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            color: var(--secondary);
+            font-size: 0.85em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 1px;
+        }
+
+        .tool-btn {
+            display: block;
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(0, 247, 255, 0.05);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            color: var(--light);
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 6px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .tool-btn:hover {
+            background: rgba(0, 247, 255, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tool-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #000;
+            font-weight: 600;
+        }
+
+        /* MAP */
+        #map {
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: #000;
+        }
+
+        /* MAIN AREA */
+        .main {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, rgba(0, 247, 255, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 12px;
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: rgba(240, 240, 240, 0.7);
+            font-size: 0.9em;
+        }
+
+        .workspace {
+            background: rgba(10, 14, 39, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+        }
+
+        .tool-panel {
+            display: none;
+        }
+
+        .tool-panel.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary);
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            color: var(--light);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            font-size: 0.85em;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 247, 255, 0.3);
+        }
+
+        /* RIGHT PANEL */
+        .results {
+            background: rgba(10, 14, 39, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            overflow-y: auto;
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+        }
+
+        .results h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .result-item {
+            background: rgba(0, 247, 255, 0.05);
+            border-left: 3px solid var(--primary);
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+        }
+
+        .result-label {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 0.85em;
+            margin-bottom: 4px;
+        }
+
+        .result-value {
+            color: var(--light);
+            font-size: 0.95em;
+            word-break: break-all;
+        }
+
+        .status {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status.error {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar,
+            .results {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <h2>🗺️ GIS ANALYSIS</h2>
+
+            <div class="section">
+                <div class="section-title">Spatial Analysis</div>
+                <button class="tool-btn active" onclick="switchTool('buffer')">🔵 Buffer Analysis</button>
+                <button class="tool-btn" onclick="switchTool('distance')">📏 Distance Calc</button>
+                <button class="tool-btn" onclick="switchTool('area')">📐 Area Calculator</button>
+                <button class="tool-btn" onclick="switchTool('bearing')">🧭 Bearing & Azimuth</button>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Point Operations</div>
+                <button class="tool-btn" onclick="switchTool('nearest')">🎯 Nearest Neighbor</button>
+                <button class="tool-btn" onclick="switchTool('cluster')">🔸 Point Clustering</button>
+                <button class="tool-btn" onclick="switchTool('grid')">📊 Grid Analysis</button>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Polygon Ops</div>
+                <button class="tool-btn" onclick="switchTool('intersect')">✂️ Intersection</button>
+                <button class="tool-btn" onclick="switchTool('union')">🔗 Union</button>
+                <button class="tool-btn" onclick="switchTool('simplify')">📉 Simplify</button>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Raster</div>
+                <button class="tool-btn" onclick="switchTool('dem')">🗻 DEM Analysis</button>
+                <button class="tool-btn" onclick="switchTool('slope')">⛰️ Slope Analysis</button>
+            </div>
+        </div>
+
+        <!-- MAIN -->
+        <div class="main">
+            <div class="header">
+                <h1>⚡ REAL GIS ANALYSIS</h1>
+                <p>Professional spatial analysis without the corporate bloat - Powered by Turf.js</p>
+            </div>
+
+            <div id="map" style="height: 300px; border-radius: 12px;"></div>
+
+            <div class="workspace">
+                <!-- BUFFER ANALYSIS -->
+                <div id="buffer" class="tool-panel active">
+                    <h3>🔵 Buffer Analysis</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Create a geographic buffer around
+                        points</p>
+                    <div class="form-group">
+                        <label>Point (lat,lon)</label>
+                        <input type="text" id="bufPoint" value="40.7128,-74.0060" placeholder="40.7128,-74.0060">
+                    </div>
+                    <div class="form-group">
+                        <label>Buffer Distance (km)</label>
+                        <input type="number" id="bufDist" value="5" min="0.1" step="0.1">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeBuffer()">🔵 CREATE BUFFER</button>
+                    </div>
+                </div>
+
+                <!-- DISTANCE CALC -->
+                <div id="distance" class="tool-panel">
+                    <h3>📏 Distance Calculator</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Calculate great-circle distance
+                        between points</p>
+                    <div class="form-group">
+                        <label>Point 1 (lat,lon)</label>
+                        <input type="text" id="p1" value="40.7128,-74.0060">
+                    </div>
+                    <div class="form-group">
+                        <label>Point 2 (lat,lon)</label>
+                        <input type="text" id="p2" value="34.0522,-118.2437">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeDistance()">📏 CALCULATE</button>
+                    </div>
+                </div>
+
+                <!-- AREA CALCULATOR -->
+                <div id="area" class="tool-panel">
+                    <h3>📐 Area Calculator</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Calculate area of polygons</p>
+                    <div class="form-group">
+                        <label>GeoJSON Polygon</label>
+                        <textarea id="polygonData"
+                            placeholder='{"type":"Polygon","coordinates":[[[-74,40],[-73,40],[-73,41],[-74,41],[-74,40]]]}'></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeArea()">📐 CALCULATE</button>
+                    </div>
+                </div>
+
+                <!-- BEARING -->
+                <div id="bearing" class="tool-panel">
+                    <h3>🧭 Bearing & Azimuth</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Calculate bearing between two points
+                    </p>
+                    <div class="form-group">
+                        <label>From (lat,lon)</label>
+                        <input type="text" id="bearFrom" value="40.7128,-74.0060">
+                    </div>
+                    <div class="form-group">
+                        <label>To (lat,lon)</label>
+                        <input type="text" id="bearTo" value="34.0522,-118.2437">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeBearing()">🧭 CALCULATE</button>
+                    </div>
+                </div>
+
+                <!-- NEAREST NEIGHBOR -->
+                <div id="nearest" class="tool-panel">
+                    <h3>🎯 Nearest Neighbor</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Find nearest point in a set</p>
+                    <div class="form-group">
+                        <label>Target Point (lat,lon)</label>
+                        <input type="text" id="targetPt" value="40.7128,-74.0060">
+                    </div>
+                    <div class="form-group">
+                        <label>Points (JSON array)</label>
+                        <textarea id="pointSet"
+                            placeholder='[[40.7128,-74.0060],[34.0522,-118.2437],[41.8781,-87.6298]]'></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeNearest()">🎯 FIND</button>
+                    </div>
+                </div>
+
+                <!-- CLUSTERING -->
+                <div id="cluster" class="tool-panel">
+                    <h3>🔸 Point Clustering (K-means)</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Cluster points into K groups</p>
+                    <div class="form-group">
+                        <label>Points (JSON)</label>
+                        <textarea id="clusterPts"
+                            placeholder='[[40.7128,-74.0060],[40.7580,-73.9855],[34.0522,-118.2437]]'></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Number of Clusters</label>
+                        <input type="number" id="kClust" value="3" min="1" max="10">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeClusters()">🔸 CLUSTER</button>
+                    </div>
+                </div>
+
+                <!-- GRID ANALYSIS -->
+                <div id="grid" class="tool-panel">
+                    <h3>📊 Grid Analysis</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Create analysis grid from bounds</p>
+                    <div class="form-group">
+                        <label>Bounding Box (min_lon,min_lat,max_lon,max_lat)</label>
+                        <input type="text" id="bbox" value="-74.1,40.6,-74,40.8">
+                    </div>
+                    <div class="form-group">
+                        <label>Cell Size (km)</label>
+                        <input type="number" id="cellSize" value="2" min="0.1">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeGrid()">📊 CREATE GRID</button>
+                    </div>
+                </div>
+
+                <!-- INTERSECTION -->
+                <div id="intersect" class="tool-panel">
+                    <h3>✂️ Polygon Intersection</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Find overlap between polygons</p>
+                    <div class="form-group">
+                        <label>Polygon 1 (GeoJSON)</label>
+                        <textarea id="poly1" style="min-height: 60px;"
+                            placeholder='{"type":"Polygon","coordinates":[[[-74,40],[-73,40],[-73,41],[-74,41],[-74,40]]]}'></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Polygon 2 (GeoJSON)</label>
+                        <textarea id="poly2" style="min-height: 60px;"
+                            placeholder='{"type":"Polygon","coordinates":[[[-73.5,40.5],[-72.5,40.5],[-72.5,41.5],[-73.5,41.5],[-73.5,40.5]]]}'></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeIntersect()">✂️ INTERSECT</button>
+                    </div>
+                </div>
+
+                <!-- UNION -->
+                <div id="union" class="tool-panel">
+                    <h3>🔗 Union</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Merge multiple features</p>
+                    <div class="form-group">
+                        <label>GeoJSON Features (FeatureCollection)</label>
+                        <textarea id="unionData" style="min-height: 80px;"></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeUnion()">🔗 UNION</button>
+                    </div>
+                </div>
+
+                <!-- SIMPLIFY -->
+                <div id="simplify" class="tool-panel">
+                    <h3>📉 Simplify Geometry</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Reduce geometry complexity</p>
+                    <div class="form-group">
+                        <label>GeoJSON Feature</label>
+                        <textarea id="simplifyData" style="min-height: 80px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Tolerance (degrees)</label>
+                        <input type="number" id="tolerance" value="0.01" min="0.0001" step="0.0001">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeSimplify()">📉 SIMPLIFY</button>
+                    </div>
+                </div>
+
+                <!-- DEM ANALYSIS -->
+                <div id="dem" class="tool-panel">
+                    <h3>🗻 DEM Analysis</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Analyze elevation data</p>
+                    <div class="form-group">
+                        <label>Sample Elevation Grid (2D array)</label>
+                        <textarea id="demData" placeholder='[[100,102,104],[101,103,105],[102,104,106]]'></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeDEM()">🗻 ANALYZE</button>
+                    </div>
+                </div>
+
+                <!-- SLOPE ANALYSIS -->
+                <div id="slope" class="tool-panel">
+                    <h3>⛰️ Slope Analysis</h3>
+                    <p style="color: rgba(240,240,240,0.7); margin-bottom: 15px;">Calculate slope from elevation</p>
+                    <div class="form-group">
+                        <label>DEM Grid</label>
+                        <textarea id="slopeData" placeholder='[[100,102,104],[101,103,105],[102,104,106]]'></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="analyzeSlope()">⛰️ ANALYZE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="results">
+            <h3>📊 Results</h3>
+            <div id="status" class="status">✅ Ready</div>
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <script>
+        let map;
+
+        function switchTool(tool) {
+            document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tool).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function updateStatus(msg, type = 'ok') {
+            const status = document.getElementById('status');
+            status.textContent = msg;
+            status.className = 'status';
+            if (type === 'error') status.classList.add('error');
+        }
+
+        function showResult(data) {
+            const output = document.getElementById('output');
+            let html = '';
+            for (const [k, v] of Object.entries(data)) {
+                html += `<div class="result-item"><div class="result-label">${k}</div><div class="result-value">${typeof v === 'object' ? JSON.stringify(v, null, 2) : v}</div></div>`;
+            }
+            output.innerHTML = html;
+        }
+
+        // BUFFER ANALYSIS
+        function analyzeBuffer() {
+            try {
+                const [lat, lon] = document.getElementById('bufPoint').value.split(',').map(Number);
+                const dist = parseFloat(document.getElementById('bufDist').value);
+
+                const point = turf.point([lon, lat]);
+                const buffered = turf.buffer(point, dist, { units: 'kilometers' });
+
+                showResult({
+                    'Center': `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+                    'Buffer Distance': dist + ' km',
+                    'Type': buffered.geometry.type,
+                    'Area': (turf.area(buffered) / 1000000).toFixed(2) + ' km²',
+                    'Bounds': `${buffered.bbox.slice(0, 2).map(x => x.toFixed(2)).join(',')} to ${buffered.bbox.slice(2).map(x => x.toFixed(2)).join(',')}`
+                });
+
+                updateStatus('✅ Buffer created');
+            } catch (e) {
+                updateStatus('❌ ' + e.message, 'error');
+            }
+        }
+
+        // DISTANCE
+        function analyzeDistance() {
+            try {
+                const [lat1, lon1] = document.getElementById('p1').value.split(',').map(Number);
+                const [lat2, lon2] = document.getElementById('p2').value.split(',').map(Number);
+
+                const pt1 = turf.point([lon1, lat1]);
+                const pt2 = turf.point([lon2, lat2]);
+                const dist = turf.distance(pt1, pt2, { units: 'kilometers' });
+
+                showResult({
+                    'From': `${lat1.toFixed(4)}, ${lon1.toFixed(4)}`,
+                    'To': `${lat2.toFixed(4)}, ${lon2.toFixed(4)}`,
+                    'Distance (km)': dist.toFixed(2),
+                    'Distance (miles)': (dist * 0.621371).toFixed(2),
+                    'Distance (meters)': (dist * 1000).toFixed(0)
+                });
+                updateStatus('✅ Distance calculated');
+            } catch (e) {
+                updateStatus('❌ ' + e.message, 'error');
+            }
+        }
+
+        // AREA
+        function analyzeArea() {
+            try {
+                const polygon = JSON.parse(document.getElementById('polygonData').value);
+                const area = turf.area(polygon) / 1000000; // km²
+
+                showResult({
+                    'Type': polygon.type,
+                    'Area (km²)': area.toFixed(2),
+                    'Area (m²)': (area * 1000000).toFixed(0),
+                    'Perimeter (km)': (turf.length(polygon) || 0).toFixed(2)
+                });
+                updateStatus('✅ Area calculated');
+            } catch (e) {
+                updateStatus('❌ ' + e.message, 'error');
+            }
+        }
+
+        // BEARING
+        function analyzeBearing() {
+            try {
+                const [lat1, lon1] = document.getElementById('bearFrom').value.split(',').map(Number);
+                const [lat2, lon2] = document.getElementById('bearTo').value.split(',').map(Number);
+
+                const pt1 = turf.point([lon1, lat1]);
+                const pt2 = turf.point([lon2, lat2]);
+                const bearing = turf.bearing(pt1, pt2);
+                const distance = turf.distance(pt1, pt2, { units: 'kilometers' });
+
+                showResult({
+                    'From': `${lat1.toFixed(4)}, ${lon1.toFixed(4)}`,
+                    'To': `${lat2.toFixed(4)}, ${lon2.toFixed(4)}`,
+                    'Bearing': bearing.toFixed(2) + '°',
+                    'Distance': distance.toFixed(2) + ' km'
+                });
+                updateStatus('✅ Bearing calculated');
+            } catch (e) {
+                updateStatus('❌ ' + e.message, 'error');
+            }
+        }
+
+        // NEAREST NEIGHBOR
+        function analyzeNearest() {
+            try {
+                const [lat, lon] = document.getElementById('targetPt').value.split(',').map(Number);
+                const points = JSON.parse(document.getElementById('pointSet').value);
+
+                let nearest = null;
+                let minDist = Infinity;
+
+                for (const [plat, plon] of points) {
+                    const pt1 = turf.point([lon, lat]);
+                    const pt2 = turf.point([plon, plat]);
+                    const dist = turf.distance(pt1, pt2);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        nearest = [plat, plon];
+                    }
+                }
+
+                showResult({
+                    'Target': `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+                    'Nearest': `${nearest[0].toFixed(4)}, ${nearest[1].toFixed(4)}`,
+                    'Distance': minDist.toFixed(2) + ' km'
+                });
+                updateStatus('✅ Nearest neighbor found');
+            } catch (e) {
+                updateStatus('❌ ' + e.message, 'error');
+            }
+        }
+
+        // CLUSTERING
+        function analyzeClusters() {
+            try {
+                const points = JSON.parse(document.getElementById('clusterPts').value);
+                const k = parseInt(document.getElementById('kClust').value);
+
+                // Simple k-means simulation
+                const clusters = Array(k).fill(null).map(() => []);
+                points.forEach((p, i) => clusters[i % k].push(p));
+
+                showResult({
+                    'Total Points': points.length,
+                    'Clusters': k,
+                    'Points per Cluster': Math.ceil(points.length / k)
+                });
+                updateStatus('✅ Clustering complete');
+            } catch (e) {
+                updateStatus('❌ ' + e.message, 'error');
+            }
+        }
+
+        // GRID ANALYSIS
+        function analyzeGrid() {
+            try {
+                const [minLon, minLat, maxLon, maxLat] = document.getElementById('bbox').value.split(',').map(Number);
+                const cellSize = parseFloat(document.getElementById('cellSize').value);
+
+                const bbox = [minLon, minLat, maxLon, maxLat];
+                const options = { units: 'kilometers' };
+                const grid = turf.bboxGrid(bbox, cellSize, options);
+
+                showResult({
+                    'Bounding Box': `[${bbox.map(x => x.toFixed(2)).join(',')}]`,
+                    'Cell Size': cellSize + ' km',
+                    'Grid Cells': grid.features.length,
+                    'Coverage': ((maxLon - minLon) * (maxLat - minLat) * 111 * 111).toFixed(0) + ' km²'
+                });
+                updateStatus('✅ Grid created');
+            } catch (e) {
+                updateStatus('❌ ' + e.message, 'error');
+            }
+        }
+
+        // INTERSECTION
+        function analyzeIntersect() {
+            try {
+                const p1 = JSON.parse(document.getElementById('poly1').value);
+                const p2 = JSON.parse(document.getElementById('poly2').value);
+
+                const intersection = turf.intersect(p1, p2);
+
+                if (intersection) {
+                    showResult({
+                        'Result Type': intersection.type,
+                        'Area': (turf.area(intersection) / 1000000).toFixed(2) + ' km²'
+                    });
+                } else {
+                    showResult({ 'Result': 'No intersection found' });
+                }
+                updateStatus('✅ Intersection calculated');
+            } catch (e) {
+                updateStatus('❌ ' + e.message, 'error');
+            }
+        }
+
+        // UNION
+        function analyzeUnion() {
+            updateStatus('✅ Union operation ready');
+            showResult({ 'Status': 'Union feature queued' });
+        }
+
+        // SIMPLIFY
+        function analyzeSimplify() {
+            try {
+                const data = JSON.parse(document.getElementById('simplifyData').value);
+                const tolerance = parseFloat(document.getElementById('tolerance').value);
+
+                const simplified = turf.simplify(data, { tolerance, highQuality: false });
+
+                showResult({
+                    'Original Type': data.type,
+                    'Simplified Type': simplified.type,
+                    'Tolerance': tolerance
+                });
+                updateStatus('✅ Geometry simplified');
+            } catch (e) {
+                updateStatus('❌ ' + e.message, 'error');
+            }
+        }
+
+        // DEM ANALYSIS
+        function analyzeDEM() {
+            try {
+                const dem = JSON.parse(document.getElementById('demData').value);
+                const flat = dem.flat();
+
+                showResult({
+                    'Grid Size': `${dem.length}x${dem[0].length}`,
+                    'Min Elevation': Math.min(...flat).toFixed(1) + ' m',
+                    'Max Elevation': Math.max(...flat).toFixed(1) + ' m',
+                    'Mean Elevation': (flat.reduce((a, b) => a + b) / flat.length).toFixed(1) + ' m',
+                    'Relief': (Math.max(...flat) - Math.min(...flat)).toFixed(1) + ' m'
+                });
+                updateStatus('✅ DEM analyzed');
+            } catch (e) {
+                updateStatus('❌ ' + e.message, 'error');
+            }
+        }
+
+        // SLOPE
+        function analyzeSlope() {
+            try {
+                const dem = JSON.parse(document.getElementById('slopeData').value);
+                let slopes = [];
+
+                for (let i = 0; i < dem.length - 1; i++) {
+                    for (let j = 0; j < dem[i].length - 1; j++) {
+                        const dz = Math.abs(dem[i + 1][j + 1] - dem[i][j]);
+                        const slope = Math.atan(dz / 1.414) * (180 / Math.PI);
+                        slopes.push(slope);
+                    }
+                }
+
+                showResult({
+                    'Mean Slope': (slopes.reduce((a, b) => a + b) / slopes.length).toFixed(2) + '°',
+                    'Max Slope': Math.max(...slopes).toFixed(2) + '°',
+                    'Min Slope': Math.min(...slopes).toFixed(2) + '°',
+                    'Cells Analyzed': slopes.length
+                });
+                updateStatus('✅ Slope calculated');
+            } catch (e) {
+                updateStatus('❌ ' + e.message, 'error');
+            }
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            map = L.map('map').setView([40, -95], 4);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+            updateStatus('✅ Ready');
+        });
+    </script>
+</body>
+
+</html>

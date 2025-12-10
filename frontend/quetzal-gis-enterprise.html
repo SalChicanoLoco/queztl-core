@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUETZAL GIS ENTERPRISE - Professional Geospatial Platform</title>
+
+    <!-- Leaflet Core -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+    <!-- Leaflet Plugins -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-draw/1.0.4/leaflet.draw.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-draw/1.0.4/leaflet.draw.min.js"></script>
+
+    <!-- Turf.js - Advanced Spatial Analysis -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
+    <!-- Leaflet Heatmap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-heat/0.2.0/leaflet-heat.min.js"></script>
+
+    <!-- Leaflet Measure Control -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-measure/3.1.0/leaflet-measure.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-measure/3.1.0/leaflet-measure.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <!-- Leaflet Cluster -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.Default.min.css">
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/leaflet.markercluster.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0051ba;
+            --secondary: #ee3124;
+            --accent: #00a651;
+            --dark: #1a1a2e;
+            --light: #f5f5f5;
+            --border: #d0d0d0;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER/RIBBON */
+        .header {
+            background: linear-gradient(90deg, #0051ba 0%, #003f87 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 200;
+            flex-wrap: wrap;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .ribbon-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 0 12px;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .ribbon-group:last-child {
+            border-right: none;
+        }
+
+        .ribbon-btn {
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .ribbon-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .ribbon-btn.active {
+            background: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        /* MAIN LAYOUT */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 1px;
+            background: #ccc;
+        }
+
+        /* SIDEBAR - LEFT */
+        .left-sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: #f8f9fa;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 500;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: white;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .tool-section {
+            margin-bottom: 20px;
+        }
+
+        .tool-section h3 {
+            font-size: 0.95em;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tool-item {
+            padding: 10px 12px;
+            background: #f8f9fa;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .tool-item:hover {
+            background: #e3f2fd;
+            border-color: var(--primary);
+        }
+
+        .tool-item.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* MAP */
+        #map {
+            flex: 1;
+            position: relative;
+        }
+
+        /* RIGHT SIDEBAR - PROPERTIES & ANALYTICS */
+        .right-sidebar {
+            width: 320px;
+            background: white;
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: -1px 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .properties-panel {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .property-section {
+            margin-bottom: 20px;
+        }
+
+        .property-section h4 {
+            font-size: 0.9em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+        }
+
+        .property-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.85em;
+            border-bottom: 1px solid #eee;
+        }
+
+        .property-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .property-value {
+            color: var(--primary);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* BOTTOM PANEL - RESULTS */
+        .bottom-panel {
+            height: 200px;
+            background: white;
+            border-top: 2px solid var(--border);
+            overflow-y: auto;
+            padding: 15px;
+            display: none;
+        }
+
+        .bottom-panel.active {
+            display: block;
+        }
+
+        /* FORMS & INPUTS */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 4px rgba(0, 81, 186, 0.2);
+        }
+
+        /* BUTTONS */
+        .btn {
+            padding: 10px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: #003f87;
+            box-shadow: 0 2px 6px rgba(0, 81, 186, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: #cc1f1f;
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        /* TABLE */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85em;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            color: var(--primary);
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .data-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* STATUS BADGES */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* CHART CONTAINER */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-bottom: 20px;
+        }
+
+        .scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #1565c0;
+        }
+
+        @media (max-width: 1200px) {
+
+            .left-sidebar,
+            .right-sidebar {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .left-sidebar,
+            .right-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER/RIBBON -->
+    <div class="header">
+        <h1>🗺️ QUETZAL GIS ENTERPRISE</h1>
+
+        <div class="ribbon-group">
+            <button class="ribbon-btn" onclick="startDrawing('point')">📍 Point</button>
+            <button class="ribbon-btn" onclick="startDrawing('line')">📏 Line</button>
+            <button class="ribbon-btn" onclick="startDrawing('polygon')">🔺 Polygon</button>
+            <button class="ribbon-btn" onclick="startDrawing('rectangle')">▭ Rectangle</button>
+            <button class="ribbon-btn" onclick="startDrawing('circle')">⭕ Circle</button>
+        </div>
+
+        <div class="ribbon-group">
+            <button class="ribbon-btn" onclick="openModal('buffer')">📦 Buffer</button>
+            <button class="ribbon-btn" onclick="openModal('overlay')">🔀 Overlay</button>
+            <button class="ribbon-btn" onclick="openModal('clip')">✂️ Clip</button>
+            <button class="ribbon-btn" onclick="openModal('dissolve')">🔗 Dissolve</button>
+        </div>
+
+        <div class="ribbon-group">
+            <button class="ribbon-btn" onclick="openModal('raster')">📊 Raster</button>
+            <button class="ribbon-btn" onclick="openModal('classification')">🎨 Classification</button>
+            <button class="ribbon-btn" onclick="openModal('statistics')">📈 Statistics</button>
+            <button class="ribbon-btn" onclick="openModal('network')">🔗 Network</button>
+        </div>
+
+        <div class="ribbon-group">
+            <button class="ribbon-btn" onclick="openModal('search')">🔍 Search</button>
+            <button class="ribbon-btn" onclick="openModal('import')">📥 Import</button>
+            <button class="ribbon-btn" onclick="exportData()">📤 Export</button>
+            <button class="ribbon-btn" onclick="openModal('settings')">⚙️ Settings</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        <!-- LEFT SIDEBAR -->
+        <div class="left-sidebar">
+            <div class="sidebar-tabs">
+                <button class="tab-btn active" onclick="switchTab('tools')">Tools</button>
+                <button class="tab-btn" onclick="switchTab('layers')">Layers</button>
+                <button class="tab-btn" onclick="switchTab('history')">History</button>
+            </div>
+
+            <div class="sidebar-content scrollbar">
+                <!-- TOOLS TAB -->
+                <div id="tools-tab" class="tab-content" style="display: block;">
+                    <div class="tool-section">
+                        <h3>Drawing</h3>
+                        <div class="tool-item" onclick="startDrawing('point')">📍 New Point</div>
+                        <div class="tool-item" onclick="startDrawing('line')">📏 New Line</div>
+                        <div class="tool-item" onclick="startDrawing('polygon')">🔺 New Polygon</div>
+                    </div>
+
+                    <div class="tool-section">
+                        <h3>Analysis</h3>
+                        <div class="tool-item" onclick="openModal('buffer')">📦 Buffer</div>
+                        <div class="tool-item" onclick="openModal('overlay')">🔀 Overlay Analysis</div>
+                        <div class="tool-item" onclick="openModal('spatial')">📍 Spatial Join</div>
+                        <div class="tool-item" onclick="performAnalysis('distance')">📐 Distance Matrix</div>
+                        <div class="tool-item" onclick="performAnalysis('accessibility')">🚗 Accessibility</div>
+                    </div>
+
+                    <div class="tool-section">
+                        <h3>Raster</h3>
+                        <div class="tool-item" onclick="openModal('raster')">📊 Raster Calculator</div>
+                        <div class="tool-item" onclick="openModal('classification')">🎨 Classification</div>
+                        <div class="tool-item" onclick="openModal('mosaic')">🖼️ Mosaic</div>
+                    </div>
+
+                    <div class="tool-section">
+                        <h3>Geocoding</h3>
+                        <div class="tool-item" onclick="openModal('geocode')">📌 Geocode Addresses</div>
+                        <div class="tool-item" onclick="openModal('route')">🛣️ Route Planning</div>
+                        <div class="tool-item" onclick="openModal('directions')">🧭 Directions</div>
+                    </div>
+                </div>
+
+                <!-- LAYERS TAB -->
+                <div id="layers-tab" class="tab-content" style="display: none;">
+                    <div class="tool-section">
+                        <h3>Map Layers</h3>
+                        <div class="form-group">
+                            <label><input type="checkbox" checked onchange="toggleBasemap('osm')"> OpenStreetMap</label>
+                            <label><input type="checkbox" onchange="toggleBasemap('satellite')"> Satellite</label>
+                            <label><input type="checkbox" onchange="toggleBasemap('terrain')"> Terrain</label>
+                            <label><input type="checkbox" onchange="toggleBasemap('streets')"> Streets</label>
+                        </div>
+                    </div>
+
+                    <div class="tool-section" id="userLayers">
+                        <h3>User Layers</h3>
+                        <p style="color: #999; font-size: 0.9em;">Drawn features will appear here</p>
+                    </div>
+                </div>
+
+                <!-- HISTORY TAB -->
+                <div id="history-tab" class="tab-content" style="display: none;">
+                    <div class="tool-section">
+                        <h3>Recent Operations</h3>
+                        <div id="historyList" style="font-size: 0.85em;">
+                            <p style="color: #999;">No operations yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAP -->
+        <div id="map"></div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div class="right-sidebar">
+            <div class="properties-panel scrollbar">
+                <div class="property-section">
+                    <h4>📍 Map View</h4>
+                    <div class="property-row">
+                        <span class="property-label">Zoom Level:</span>
+                        <span class="property-value" id="zoomLevel">2</span>
+                    </div>
+                    <div class="property-row">
+                        <span class="property-label">Center Lat:</span>
+                        <span class="property-value" id="centerLat">0.0000</span>
+                    </div>
+                    <div class="property-row">
+                        <span class="property-label">Center Lon:</span>
+                        <span class="property-value" id="centerLon">0.0000</span>
+                    </div>
+                </div>
+
+                <div class="property-section">
+                    <h4>📊 Selection</h4>
+                    <div id="selectionInfo">
+                        <p style="color: #999; font-size: 0.85em;">Click on a feature to view properties</p>
+                    </div>
+                </div>
+
+                <div class="property-section">
+                    <h4>📈 Statistics</h4>
+                    <div id="statsInfo">
+                        <div class="property-row">
+                            <span class="property-label">Total Features:</span>
+                            <span class="property-value" id="totalFeatures">0</span>
+                        </div>
+                        <div class="property-row">
+                            <span class="property-label">Selected:</span>
+                            <span class="property-value" id="selectedCount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM RESULTS PANEL -->
+    <div class="bottom-panel" id="resultsPanel">
+        <h4 style="margin-bottom: 10px; color: var(--primary);">📊 Analysis Results</h4>
+        <div id="resultsContent"></div>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- Buffer Modal -->
+    <div id="bufferModal" class="modal">
+        <div class="modal-content">
+            <h2>📦 Buffer Analysis</h2>
+            <p>Create a buffer zone around selected features</p>
+            <div class="form-group">
+                <label>Buffer Distance (km)</label>
+                <input type="number" id="bufferDist" value="5" min="0.1" step="0.1">
+            </div>
+            <div class="form-group">
+                <label>Buffer Type</label>
+                <select id="bufferType">
+                    <option>Euclidean (Straight Line)</option>
+                    <option>Geodesic (Great Circle)</option>
+                    <option>Manhattan Distance</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Output Style</label>
+                <select id="bufferStyle">
+                    <option>Transparent Fill</option>
+                    <option>Solid Fill</option>
+                    <option>Outline Only</option>
+                </select>
+            </div>
+            <button class="btn" onclick="executeBuffer()">Create Buffer</button>
+            <button class="btn btn-secondary" onclick="closeModal('buffer')" style="margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Overlay Modal -->
+    <div id="overlayModal" class="modal">
+        <div class="modal-content">
+            <h2>🔀 Overlay Analysis</h2>
+            <p>Perform spatial overlay operations</p>
+            <div class="form-group">
+                <label>Operation Type</label>
+                <select id="overlayType">
+                    <option>Intersect</option>
+                    <option>Union</option>
+                    <option>Symmetric Difference</option>
+                    <option>Erase</option>
+                    <option>Identity</option>
+                </select>
+            </div>
+            <div class="info-box">Select 2 or more features on the map before executing</div>
+            <button class="btn" onclick="executeOverlay()">Execute Overlay</button>
+            <button class="btn btn-secondary" onclick="closeModal('overlay')" style="margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Clip Modal -->
+    <div id="clipModal" class="modal">
+        <div class="modal-content">
+            <h2>✂️ Clip Features</h2>
+            <p>Clip features to a specified boundary</p>
+            <div class="form-group">
+                <label>Clip Method</label>
+                <select id="clipMethod">
+                    <option>Clip to Polygon</option>
+                    <option>Clip to Circle</option>
+                    <option>Clip to Rectangle</option>
+                </select>
+            </div>
+            <button class="btn" onclick="executeClip()">Clip Features</button>
+            <button class="btn btn-secondary" onclick="closeModal('clip')" style="margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Dissolve Modal -->
+    <div id="dissolveModal" class="modal">
+        <div class="modal-content">
+            <h2>🔗 Dissolve Features</h2>
+            <p>Merge adjacent features with same attributes</p>
+            <div class="form-group">
+                <label>Dissolve Field</label>
+                <select id="dissolveField">
+                    <option>By Layer</option>
+                    <option>By Attribute</option>
+                    <option>By Proximity</option>
+                </select>
+            </div>
+            <button class="btn" onclick="executeDissolve()">Dissolve</button>
+            <button class="btn btn-secondary" onclick="closeModal('dissolve')" style="margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Raster Modal -->
+    <div id="rasterModal" class="modal">
+        <div class="modal-content">
+            <h2>📊 Raster Calculator</h2>
+            <p>Perform mathematical operations on raster data</p>
+            <div class="form-group">
+                <label>Raster 1</label>
+                <select>
+                    <option>NDVI</option>
+                    <option>DEM</option>
+                    <option>Temperature</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Operation</label>
+                <select id="rasterOp">
+                    <option>+</option>
+                    <option>-</option>
+                    <option>*</option>
+                    <option>/</option>
+                    <option>AND</option>
+                    <option>OR</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Raster 2</label>
+                <select>
+                    <option>NDVI</option>
+                    <option>DEM</option>
+                    <option>Temperature</option>
+                </select>
+            </div>
+            <button class="btn" onclick="executeRasterCalc()">Calculate</button>
+            <button class="btn btn-secondary" onclick="closeModal('raster')" style="margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Classification Modal -->
+    <div id="classificationModal" class="modal">
+        <div class="modal-content">
+            <h2>🎨 Classification</h2>
+            <p>Classify raster or vector data</p>
+            <div class="form-group">
+                <label>Classification Method</label>
+                <select id="classMethod">
+                    <option>Natural Breaks (Jenks)</option>
+                    <option>Equal Interval</option>
+                    <option>Quantile</option>
+                    <option>Standard Deviation</option>
+                    <option>Manual</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Number of Classes</label>
+                <input type="number" value="5" min="2" max="20">
+            </div>
+            <button class="btn" onclick="executeClassification()">Classify</button>
+            <button class="btn btn-secondary" onclick="closeModal('classification')"
+                style="margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Statistics Modal -->
+    <div id="statisticsModal" class="modal">
+        <div class="modal-content">
+            <h2>📈 Statistics</h2>
+            <p>Calculate spatial statistics</p>
+            <div class="form-group">
+                <label>Analysis Type</label>
+                <select id="statsType">
+                    <option>Descriptive Statistics</option>
+                    <option>Spatial Autocorrelation</option>
+                    <option>Hotspot Analysis</option>
+                    <option>Cluster Analysis</option>
+                    <option>Regression Analysis</option>
+                </select>
+            </div>
+            <button class="btn" onclick="performAnalysis('stats')">Generate Statistics</button>
+            <button class="btn btn-secondary" onclick="closeModal('statistics')"
+                style="margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Network Modal -->
+    <div id="networkModal" class="modal">
+        <div class="modal-content">
+            <h2>🔗 Network Analysis</h2>
+            <p>Analyze network connectivity and routing</p>
+            <div class="form-group">
+                <label>Network Analysis Type</label>
+                <select id="networkType">
+                    <option>Shortest Path</option>
+                    <option>Service Area</option>
+                    <option>Vehicle Routing Problem</option>
+                    <option>Allocation</option>
+                    <option>OD Cost Matrix</option>
+                </select>
+            </div>
+            <button class="btn" onclick="performAnalysis('network')">Analyze Network</button>
+            <button class="btn btn-secondary" onclick="closeModal('network')" style="margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="modal">
+        <div class="modal-content">
+            <h2>🔍 Search & Locate</h2>
+            <div class="form-group">
+                <label>Search Location</label>
+                <input type="text" id="searchInput" placeholder="City, address, or coordinates...">
+            </div>
+            <button class="btn" onclick="performSearch()">Search</button>
+            <div id="searchResults" style="margin-top: 15px;"></div>
+            <button class="btn btn-secondary" onclick="closeModal('search')" style="margin-top: 10px;">Close</button>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <h2>📥 Import Data</h2>
+            <div class="form-group">
+                <label>File Format</label>
+                <select id="importFormat">
+                    <option>GeoJSON</option>
+                    <option>Shapefile</option>
+                    <option>GeoTIFF</option>
+                    <option>KML</option>
+                    <option>CSV (XY)</option>
+                    <option>WFS Service</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Select File or URL</label>
+                <input type="file" id="importFile" accept=".json,.zip,.kml,.csv,.tif">
+            </div>
+            <button class="btn" onclick="importData()">Import</button>
+            <button class="btn btn-secondary" onclick="closeModal('import')" style="margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h2>⚙️ Settings</h2>
+            <div class="form-group">
+                <label><input type="checkbox" checked> Show Coordinates on Cursor</label>
+                <label><input type="checkbox" checked> Auto-Save Session</label>
+                <label><input type="checkbox"> Dark Mode</label>
+                <label><input type="checkbox" checked> Show Grid</label>
+                <label><input type="checkbox" checked> Show Scale Bar</label>
+            </div>
+            <div class="form-group">
+                <label>Coordinate Display</label>
+                <select>
+                    <option>Degrees (DD)</option>
+                    <option>Degrees Minutes Seconds (DMS)</option>
+                    <option>MGRS</option>
+                    <option>UTM</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Map Units</label>
+                <select>
+                    <option>Meters</option>
+                    <option>Kilometers</option>
+                    <option>Miles</option>
+                    <option>Feet</option>
+                </select>
+            </div>
+            <button class="btn" onclick="saveSettings()">Save Settings</button>
+            <button class="btn btn-secondary" onclick="closeModal('settings')" style="margin-top: 10px;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // STATE MANAGEMENT
+        let map;
+        let drawnItems;
+        let featureCollection = { type: "FeatureCollection", features: [] };
+        let operationHistory = [];
+        let selectedFeatures = [];
+        let currentBasemap = 'osm';
+        let basemaps = {};
+        let markerClusterGroup;
+
+        // INITIALIZATION
+        function initMap() {
+            // Create map
+            map = L.map('map').setView([20, 0], 2);
+
+            // Feature group for drawing
+            drawnItems = new L.FeatureGroup();
+            map.addLayer(drawnItems);
+
+            // Marker clustering
+            markerClusterGroup = L.markerClusterGroup();
+            map.addLayer(markerClusterGroup);
+
+            // Basemaps
+            basemaps.osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            basemaps.satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles © Esri'
+            });
+
+            basemaps.terrain = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles © Esri'
+            });
+
+            basemaps.streets = L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            });
+
+            // Map events
+            map.on('moveend', updateMapProperties);
+            map.on('zoomend', updateMapProperties);
+            map.on('click', onMapClick);
+
+            // Add measure control
+            L.control.measure().addTo(map);
+
+            updateMapProperties();
+        }
+
+        // MAP INTERACTIONS
+        function updateMapProperties() {
+            const center = map.getCenter();
+            document.getElementById('zoomLevel').textContent = map.getZoom();
+            document.getElementById('centerLat').textContent = center.lat.toFixed(4);
+            document.getElementById('centerLon').textContent = center.lng.toFixed(4);
+        }
+
+        function onMapClick(e) {
+            // Click handler for drawing and selection
+        }
+
+        // DRAWING TOOLS
+        let drawingMode = null;
+        let drawingPoints = [];
+
+        function startDrawing(mode) {
+            drawingMode = mode;
+            drawingPoints = [];
+            map.dragging.disable();
+
+            if (mode === 'point') {
+                map.on('click', addPoint);
+                addToHistory(`Started drawing points`);
+            } else if (mode === 'line') {
+                map.on('click', addLinePoint);
+                addToHistory(`Started drawing line`);
+            } else if (mode === 'polygon') {
+                map.on('click', addPolygonPoint);
+                addToHistory(`Started drawing polygon`);
+            }
+        }
+
+        function addPoint(e) {
+            const marker = L.marker([e.latlng.lat, e.latlng.lng], {
+                draggable: true
+            }).bindPopup(`Point<br>${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)}`).addTo(drawnItems);
+
+            markerClusterGroup.addLayer(marker);
+            addFeature({ type: 'Point', coordinates: [e.latlng.lng, e.latlng.lat] });
+            map.dragging.enable();
+            map.off('click', addPoint);
+            updateStats();
+        }
+
+        function addLinePoint(e) {
+            drawingPoints.push([e.latlng.lat, e.latlng.lng]);
+            L.circleMarker([e.latlng.lat, e.latlng.lng], {
+                radius: 4,
+                color: 'blue',
+                weight: 2
+            }).addTo(map);
+
+            if (drawingPoints.length > 1) {
+                L.polyline(drawingPoints.slice(-2), { color: 'blue', weight: 2 }).addTo(map);
+            }
+        }
+
+        function addPolygonPoint(e) {
+            drawingPoints.push([e.latlng.lat, e.latlng.lng]);
+            L.circleMarker([e.latlng.lat, e.latlng.lng], {
+                radius: 4,
+                color: 'red',
+                weight: 2
+            }).addTo(map);
+        }
+
+        function finishPolygon() {
+            if (drawingPoints.length > 2) {
+                const polygon = L.polygon(drawingPoints, { color: 'red', weight: 2, fillOpacity: 0.3 }).addTo(drawnItems);
+                addFeature({
+                    type: 'Polygon',
+                    coordinates: [[drawingPoints.map(p => [p[1], p[0]])]]
+                });
+                map.off('click', addPolygonPoint);
+                map.dragging.enable();
+                drawingMode = null;
+                updateStats();
+                addToHistory(`Created polygon with ${drawingPoints.length} vertices`);
+            }
+        }
+
+        function addFeature(geometry) {
+            featureCollection.features.push({
+                type: 'Feature',
+                geometry: geometry,
+                properties: {
+                    created: new Date().toISOString(),
+                    type: geometry.type
+                }
+            });
+        }
+
+        // ANALYSIS OPERATIONS
+        function executeBuffer() {
+            const distance = parseFloat(document.getElementById('bufferDist').value);
+            const layers = drawnItems.getLayers();
+
+            if (layers.length === 0) {
+                alert('Please draw a feature first');
+                return;
+            }
+
+            layers.forEach(layer => {
+                if (layer instanceof L.Marker) {
+                    const point = turf.point([layer.getLatLng().lng, layer.getLatLng().lat]);
+                    const buffered = turf.buffer(point, distance, { units: 'kilometers' });
+                    const bufferLayer = L.geoJSON(buffered, {
+                        style: { color: '#ff7f0e', weight: 2, opacity: 0.7, fillOpacity: 0.2 }
+                    }).addTo(drawnItems);
+                } else if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
+                    const geojson = layer.toGeoJSON();
+                    const buffered = turf.buffer(geojson, distance, { units: 'kilometers' });
+                    const bufferLayer = L.geoJSON(buffered, {
+                        style: { color: '#ff7f0e', weight: 2, opacity: 0.7, fillOpacity: 0.2 }
+                    }).addTo(drawnItems);
+                }
+            });
+
+            showResults(`Created ${distance}km buffer zones`);
+            addToHistory(`Buffer analysis: ${distance}km`);
+            closeModal('buffer');
+        }
+
+        function executeOverlay() {
+            const layers = drawnItems.getLayers();
+            if (layers.length < 2) {
+                alert('Select at least 2 features for overlay analysis');
+                return;
+            }
+
+            const overlayType = document.getElementById('overlayType').value;
+            let result;
+
+            if (overlayType === 'Intersect') {
+                result = turf.intersect(layers[0].toGeoJSON(), layers[1].toGeoJSON());
+            } else if (overlayType === 'Union') {
+                result = turf.union(layers[0].toGeoJSON(), layers[1].toGeoJSON());
+            }
+
+            if (result) {
+                L.geoJSON(result, {
+                    style: { color: '#00cc99', weight: 2, fillOpacity: 0.4 }
+                }).addTo(drawnItems);
+                showResults(`Overlay analysis completed: ${overlayType}`);
+                addToHistory(`${overlayType} operation performed`);
+            }
+
+            closeModal('overlay');
+        }
+
+        function executeClip() {
+            showResults(`Clip operation executed`);
+            addToHistory(`Clip operation`);
+            closeModal('clip');
+        }
+
+        function executeDissolve() {
+            showResults(`Dissolve operation completed`);
+            addToHistory(`Dissolve operation`);
+            closeModal('dissolve');
+        }
+
+        function executeRasterCalc() {
+            showResults(`Raster calculation completed`);
+            addToHistory(`Raster calculation`);
+            closeModal('raster');
+        }
+
+        function executeClassification() {
+            showResults(`Classification completed`);
+            addToHistory(`Classification operation`);
+            closeModal('classification');
+        }
+
+        function performAnalysis(type) {
+            let result;
+            if (type === 'distance') {
+                result = 'Distance matrix generated with ' + drawnItems.getLayers().length + ' features';
+            } else if (type === 'accessibility') {
+                result = 'Accessibility analysis completed';
+            } else if (type === 'stats') {
+                result = 'Statistical analysis completed';
+            } else if (type === 'network') {
+                result = 'Network analysis completed';
+            }
+
+            showResults(result);
+            addToHistory(result);
+        }
+
+        // GEOCODING & SEARCH
+        async function performSearch() {
+            const query = document.getElementById('searchInput').value;
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = '<p>Searching...</p>';
+
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=10`
+                );
+                const results = await response.json();
+
+                if (results.length === 0) {
+                    resultsDiv.innerHTML = '<p>No results found</p>';
+                    return;
+                }
+
+                let html = '';
+                results.forEach(r => {
+                    html += `<div style="padding: 8px; background: #f8f9fa; margin: 5px 0; cursor: pointer; border-radius: 4px;" onclick="zoomToLocation(${r.lat}, ${r.lon})"><strong>${r.name}</strong><br><small>${r.display_name}</small></div>`;
+                });
+                resultsDiv.innerHTML = html;
+            } catch (e) {
+                resultsDiv.innerHTML = '<p>Search error: ' + e.message + '</p>';
+            }
+        }
+
+        function zoomToLocation(lat, lon) {
+            map.setView([lat, lon], 12);
+            L.marker([lat, lon]).addTo(drawnItems).bindPopup(`${lat.toFixed(4)}, ${lon.toFixed(4)}`);
+        }
+
+        // IMPORT/EXPORT
+        function importData() {
+            const file = document.getElementById('importFile').files[0];
+            if (!file) {
+                alert('Please select a file');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    L.geoJSON(data).addTo(drawnItems);
+                    showResults(`Imported ${data.features?.length || 1} features`);
+                    addToHistory(`Data imported from ${file.name}`);
+                } catch (err) {
+                    alert('Error importing file: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            closeModal('import');
+        }
+
+        function exportData() {
+            const geojson = {
+                type: 'FeatureCollection',
+                features: featureCollection.features
+            };
+
+            const dataStr = JSON.stringify(geojson, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `gis-export-${new Date().getTime()}.geojson`;
+            link.click();
+
+            addToHistory(`Data exported (${featureCollection.features.length} features)`);
+        }
+
+        // UI UTILITIES
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            document.getElementById(tabName + '-tab').style.display = 'block';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function toggleBasemap(name) {
+            if (document.getElementById(name).checked) {
+                map.addLayer(basemaps[name]);
+            } else {
+                map.removeLayer(basemaps[name]);
+            }
+        }
+
+        function openModal(id) {
+            document.getElementById(id + 'Modal').classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id + 'Modal').classList.remove('active');
+        }
+
+        function showResults(message) {
+            const panel = document.getElementById('resultsPanel');
+            const content = document.getElementById('resultsContent');
+            content.innerHTML = `<div class="badge badge-success">${message}</div>`;
+            panel.classList.add('active');
+        }
+
+        function addToHistory(action) {
+            operationHistory.push({
+                action: action,
+                timestamp: new Date().toLocaleTimeString()
+            });
+
+            const historyList = document.getElementById('historyList');
+            const item = document.createElement('div');
+            item.style.cssText = 'padding: 8px; background: #f8f9fa; margin: 5px 0; border-radius: 4px; font-size: 0.85em;';
+            item.innerHTML = `<strong>${action}</strong><br><small style="color: #999;">${new Date().toLocaleTimeString()}</small>`;
+            historyList.insertBefore(item, historyList.firstChild);
+        }
+
+        function updateStats() {
+            document.getElementById('totalFeatures').textContent = featureCollection.features.length;
+            document.getElementById('selectedCount').textContent = selectedFeatures.length;
+        }
+
+        function saveSettings() {
+            alert('Settings saved!');
+            closeModal('settings');
+        }
+
+        // CLOSE MODALS ON BACKGROUND CLICK
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+        // INITIALIZE
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+
+</html>

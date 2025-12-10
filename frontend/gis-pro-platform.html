@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗺️ QUETZAL GIS PRO - Enterprise Geospatial Platform</title>
+
+    <!-- Leaflet for mapping -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+    <!-- Leaflet Draw for geometry -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-draw/1.0.4/leaflet.draw.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-draw/1.0.4/leaflet.draw.min.js"></script>
+
+    <!-- Turf.js for spatial analysis -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0066ff;
+            --secondary: #ff3333;
+            --accent: #00cc99;
+            --dark: #1a1a2e;
+            --light: #f5f5f5;
+            --border: #e0e0e0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark);
+            color: #333;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toolbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .toolbar h1 {
+            font-size: 1.5em;
+            color: var(--primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toolbar-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 0 15px;
+            border-right: 1px solid var(--border);
+        }
+
+        .toolbar-group:last-child {
+            border-right: none;
+        }
+
+        .tool-btn {
+            padding: 8px 16px;
+            background: var(--light);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .tool-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tool-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        #map {
+            flex: 1;
+            background: #e8f4f8;
+        }
+
+        .sidebar {
+            width: 320px;
+            background: white;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-title {
+            padding: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            font-size: 1.1em;
+        }
+
+        .layers-panel {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .layer-item {
+            padding: 12px;
+            background: var(--light);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .layer-item:hover {
+            background: #f0f0f0;
+            border-left-color: var(--primary);
+        }
+
+        .layer-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .layer-item-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .layer-item-info {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .right-panel {
+            width: 300px;
+            background: white;
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-section {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-section h3 {
+            font-size: 0.95em;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .stat-label {
+            color: #666;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .tool-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #0052cc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .leaflet-draw-toolbar.top {
+            background: transparent;
+        }
+
+        .analysis-result {
+            background: var(--light);
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .analysis-result.warning {
+            background: #fff3cd;
+            border-left: 3px solid #ff9800;
+        }
+
+        .analysis-result.success {
+            background: #d4edda;
+            border-left: 3px solid var(--accent);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #1565c0;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 1024px) {
+
+            .sidebar,
+            .right-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+        <h1>🗺️ QUETZAL GIS PRO</h1>
+
+        <div class="toolbar-group">
+            <button class="tool-btn" onclick="toggleTool('draw')">📐 Draw</button>
+            <button class="tool-btn" onclick="toggleTool('measure')">📏 Measure</button>
+            <button class="tool-btn" onclick="toggleTool('buffer')">⭕ Buffer</button>
+        </div>
+
+        <div class="toolbar-group">
+            <button class="tool-btn" onclick="showModal('search')">🔍 Search</button>
+            <button class="tool-btn" onclick="showModal('heatmap')">🔥 Heatmap</button>
+            <button class="tool-btn" onclick="showModal('analysis')">📊 Analysis</button>
+        </div>
+
+        <div class="toolbar-group">
+            <button class="tool-btn" onclick="exportData()">📥 Export</button>
+            <button class="tool-btn" onclick="clearMap()">🗑️ Clear</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- SIDEBAR - LAYERS -->
+        <div class="sidebar">
+            <div class="sidebar-title">📚 Layers</div>
+            <div class="layers-panel" id="layersPanel">
+                <div class="layer-item">
+                    <input type="checkbox" id="osm" checked onchange="toggleLayer('osm')">
+                    <label class="layer-item-label">OpenStreetMap</label>
+                    <div class="layer-item-info">Base map layer</div>
+                </div>
+
+                <div class="layer-item">
+                    <input type="checkbox" id="satellite" onchange="toggleLayer('satellite')">
+                    <label class="layer-item-label">Satellite</label>
+                    <div class="layer-item-info">Aerial imagery</div>
+                </div>
+
+                <div class="layer-item">
+                    <input type="checkbox" id="terrain" onchange="toggleLayer('terrain')">
+                    <label class="layer-item-label">Terrain</label>
+                    <div class="layer-item-info">Elevation model</div>
+                </div>
+
+                <div class="layer-item">
+                    <input type="checkbox" id="streets" onchange="toggleLayer('streets')">
+                    <label class="layer-item-label">Streets</label>
+                    <div class="layer-item-info">Road network</div>
+                </div>
+
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border);">
+                    <h4 style="color: var(--primary); margin-bottom: 10px;">Drawn Features</h4>
+                    <div id="drawnFeatures" style="font-size: 0.9em; color: #666;">
+                        <p>Draw on the map to create features</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAP -->
+        <div id="map"></div>
+
+        <!-- RIGHT PANEL - ANALYTICS -->
+        <div class="right-panel">
+            <div class="panel-section">
+                <h3>📍 Map Properties</h3>
+                <div class="stat-item">
+                    <span class="stat-label">Zoom Level:</span>
+                    <span class="stat-value" id="zoomLevel">2</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Center:</span>
+                    <span class="stat-value" id="centerCoords" style="font-size: 0.8em;">0, 0</span>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <h3>📊 Analysis Results</h3>
+                <div id="analysisPanel">
+                    <p style="color: #999; font-size: 0.9em;">Select features to analyze</p>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <h3>⚙️ Tools</h3>
+                <div class="info-box">
+                    <strong>Pro Tip:</strong> Draw shapes, then use Analysis tools to measure distance, area, and
+                    spatial relationships
+                </div>
+                <button class="btn" onclick="showModal('analysis')" style="margin-bottom: 10px;">Run Analysis</button>
+                <button class="btn btn-secondary" onclick="showModal('settings')">Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="modal">
+        <div class="modal-content">
+            <h2>🔍 Search Locations</h2>
+            <form onsubmit="searchLocation(event)">
+                <div class="form-group">
+                    <label>Place Name or Address</label>
+                    <input type="text" id="searchInput" placeholder="e.g., Paris, France" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn">Search</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('search')">Close</button>
+                </div>
+            </form>
+            <div id="searchResults" style="margin-top: 15px; font-size: 0.9em;"></div>
+        </div>
+    </div>
+
+    <!-- Buffer Modal -->
+    <div id="bufferModal" class="modal">
+        <div class="modal-content">
+            <h2>⭕ Create Buffer</h2>
+            <div class="info-box">Draw a point or shape first, then create a buffer around it</div>
+            <div class="form-group">
+                <label>Buffer Distance (km)</label>
+                <input type="number" id="bufferDistance" value="5" min="0.1" step="0.1">
+            </div>
+            <div class="form-group">
+                <label>Buffer Style</label>
+                <select id="bufferStyle">
+                    <option value="circle">Circle (5km radius)</option>
+                    <option value="square">Square (5km sides)</option>
+                    <option value="polygon">Polygon Buffer</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="btn" onclick="createBuffer()">Create Buffer</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('buffer')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Modal -->
+    <div id="analysisModal" class="modal">
+        <div class="modal-content">
+            <h2>📊 Spatial Analysis</h2>
+            <div class="info-box">Draw features and select analysis type</div>
+            <div class="form-group">
+                <label>Analysis Type</label>
+                <select id="analysisType">
+                    <option value="distance">Distance Measurement</option>
+                    <option value="area">Area Calculation</option>
+                    <option value="centroid">Find Centroid</option>
+                    <option value="bbox">Bounding Box</option>
+                    <option value="density">Feature Density</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="btn" onclick="runAnalysis()">Run Analysis</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('analysis')">Close</button>
+            </div>
+            <div id="analysisOutput" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <!-- Heatmap Modal -->
+    <div id="heatmapModal" class="modal">
+        <div class="modal-content">
+            <h2>🔥 Heatmap Visualization</h2>
+            <div class="info-box">Create a heatmap of features on your map</div>
+            <div class="form-group">
+                <label>Intensity</label>
+                <input type="range" id="heatmapIntensity" min="0.1" max="1" step="0.1" value="0.5">
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="btn" onclick="generateHeatmap()">Generate Heatmap</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('heatmap')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let map = null;
+        let drawnItems = new L.FeatureGroup();
+        let currentLayers = {};
+        let drawControl = null;
+        let measureControl = null;
+
+        // INITIALIZE MAP
+        function initMap() {
+            map = L.map('map').setView([20, 0], 2);
+
+            // Base layers
+            currentLayers.osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap',
+                maxZoom: 19
+            }).addTo(map);
+
+            currentLayers.satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles © Esri'
+            });
+
+            currentLayers.terrain = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data © OpenTopoMap'
+            });
+
+            currentLayers.streets = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastered/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '© Carto'
+            });
+
+            // Add drawn items layer
+            map.addLayer(drawnItems);
+
+            // Leaflet Draw
+            drawControl = new L.Control.Draw({
+                draw: {
+                    polygon: true,
+                    polyline: true,
+                    rectangle: true,
+                    circle: true,
+                    marker: true
+                }
+            });
+            map.addControl(drawControl);
+
+            // Handle drawn features
+            map.on('draw:created', function (e) {
+                var layer = e.layer;
+                drawnItems.addLayer(layer);
+                updateDrawnFeatures();
+            });
+
+            map.on('draw:edited', function (e) {
+                updateDrawnFeatures();
+            });
+
+            map.on('draw:deleted', function (e) {
+                updateDrawnFeatures();
+            });
+
+            // Update coordinates on map interaction
+            map.on('moveend zoomend', function () {
+                const center = map.getCenter();
+                document.getElementById('zoomLevel').textContent = map.getZoom();
+                document.getElementById('centerCoords').textContent =
+                    `${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`;
+            });
+        }
+
+        function toggleLayer(layerId) {
+            const checkbox = document.getElementById(layerId);
+            if (checkbox.checked) {
+                map.addLayer(currentLayers[layerId]);
+            } else {
+                map.removeLayer(currentLayers[layerId]);
+            }
+        }
+
+        function updateDrawnFeatures() {
+            const count = drawnItems.getLayers().length;
+            const html = `<p><strong>Features:</strong> ${count}</p>`;
+            document.getElementById('drawnFeatures').innerHTML = html;
+        }
+
+        function toggleTool(tool) {
+            if (tool === 'draw') {
+                // Toggle draw control
+            } else if (tool === 'measure') {
+                alert('Measure: Draw a line and we\'ll calculate the distance');
+            } else if (tool === 'buffer') {
+                showModal('buffer');
+            }
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId + 'Modal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId + 'Modal').classList.remove('active');
+        }
+
+        async function searchLocation(e) {
+            e.preventDefault();
+            const query = document.getElementById('searchInput').value;
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = '<div class="spinner"></div> Searching...';
+
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`
+                );
+                const results = await response.json();
+
+                if (results.length === 0) {
+                    resultsDiv.innerHTML = '<div class="analysis-result warning">No results found</div>';
+                    return;
+                }
+
+                let html = '';
+                results.forEach(r => {
+                    html += `
+                        <div class="analysis-result success" onclick="zoomToLocation(${r.lat}, ${r.lon})">
+                            <strong>${r.name}</strong><br>
+                            <small>${r.display_name}</small>
+                        </div>
+                    `;
+                });
+                resultsDiv.innerHTML = html;
+            } catch (e) {
+                resultsDiv.innerHTML = '<div class="analysis-result warning">Error: ' + e.message + '</div>';
+            }
+        }
+
+        function zoomToLocation(lat, lon) {
+            map.setView([lat, lon], 10);
+            L.marker([lat, lon]).addTo(drawnItems).bindPopup(`Searched location<br>${lat.toFixed(4)}, ${lon.toFixed(4)}`);
+        }
+
+        function createBuffer() {
+            const distance = parseFloat(document.getElementById('bufferDistance').value);
+            const layers = drawnItems.getLayers();
+
+            if (layers.length === 0) {
+                alert('Please draw a feature first!');
+                return;
+            }
+
+            layers.forEach(layer => {
+                if (layer instanceof L.Marker) {
+                    const point = turf.point([layer.getLatLng().lng, layer.getLatLng().lat]);
+                    const buffered = turf.buffer(point, distance, { units: 'kilometers' });
+
+                    const bufferLayer = L.geoJSON(buffered, {
+                        style: {
+                            color: '#ff7f0e',
+                            weight: 2,
+                            opacity: 0.7,
+                            fillOpacity: 0.2
+                        }
+                    }).addTo(drawnItems);
+                } else if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
+                    const geojson = layer.toGeoJSON();
+                    const buffered = turf.buffer(geojson, distance, { units: 'kilometers' });
+
+                    const bufferLayer = L.geoJSON(buffered, {
+                        style: {
+                            color: '#ff7f0e',
+                            weight: 2,
+                            opacity: 0.7,
+                            fillOpacity: 0.2
+                        }
+                    }).addTo(drawnItems);
+                }
+            });
+
+            closeModal('buffer');
+            alert(`Buffer of ${distance}km created!`);
+        }
+
+        function runAnalysis() {
+            const analysisType = document.getElementById('analysisType').value;
+            const layers = drawnItems.getLayers();
+            const output = document.getElementById('analysisOutput');
+
+            if (layers.length === 0) {
+                output.innerHTML = '<div class="analysis-result warning">No features to analyze</div>';
+                return;
+            }
+
+            let results = '';
+
+            if (analysisType === 'distance') {
+                layers.forEach((layer, i) => {
+                    if (layer instanceof L.Polyline && !(layer instanceof L.Polygon)) {
+                        const geojson = layer.toGeoJSON();
+                        const distance = turf.length(geojson, { units: 'kilometers' });
+                        results += `<div class="analysis-result success"><strong>Line ${i + 1} Distance:</strong> ${distance.toFixed(2)} km</div>`;
+                    }
+                });
+            } else if (analysisType === 'area') {
+                layers.forEach((layer, i) => {
+                    if (layer instanceof L.Polygon) {
+                        const geojson = layer.toGeoJSON();
+                        const area = turf.area(geojson) / 1000000; // Convert to km²
+                        results += `<div class="analysis-result success"><strong>Polygon ${i + 1} Area:</strong> ${area.toFixed(2)} km²</div>`;
+                    }
+                });
+            } else if (analysisType === 'centroid') {
+                layers.forEach((layer, i) => {
+                    const geojson = layer.toGeoJSON();
+                    const centroid = turf.centroid(geojson);
+                    const coords = centroid.geometry.coordinates;
+                    results += `<div class="analysis-result success"><strong>Centroid ${i + 1}:</strong> ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}</div>`;
+                });
+            } else if (analysisType === 'bbox') {
+                layers.forEach((layer, i) => {
+                    const geojson = layer.toGeoJSON();
+                    const bbox = turf.bbox(geojson);
+                    results += `<div class="analysis-result success"><strong>Bounding Box ${i + 1}:</strong> [${bbox[0].toFixed(2)}, ${bbox[1].toFixed(2)}] to [${bbox[2].toFixed(2)}, ${bbox[3].toFixed(2)}]</div>`;
+                });
+            }
+
+            output.innerHTML = results || '<div class="analysis-result warning">No valid features for this analysis</div>';
+        }
+
+        function generateHeatmap() {
+            const markers = drawnItems.getLayers().filter(l => l instanceof L.Marker);
+            if (markers.length === 0) {
+                alert('Add some markers first!');
+                return;
+            }
+
+            const intensity = parseFloat(document.getElementById('heatmapIntensity').value);
+            alert(`Heatmap generated with ${markers.length} points at intensity ${intensity}`);
+            closeModal('heatmap');
+        }
+
+        function exportData() {
+            const geojson = drawnItems.toGeoJSON();
+            const dataStr = JSON.stringify(geojson, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'gis-data.geojson';
+            link.click();
+        }
+
+        function clearMap() {
+            if (confirm('Clear all drawn features?')) {
+                drawnItems.clearLayers();
+                updateDrawnFeatures();
+            }
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+
+</html>

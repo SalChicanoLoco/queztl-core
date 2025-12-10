@@ -1,0 +1,24 @@
+{
+  "cities": [
+    {
+      "name": "San Francisco",
+      "lat": 37.7749,
+      "lon": -122.4194,
+      "pop": 873965
+    },
+    {
+      "name": "Los Angeles",
+      "lat": 34.0522,
+      "lon": -118.2437,
+      "pop": 3990456
+    },
+    {
+      "name": "New York",
+      "lat": 40.7128,
+      "lon": -74.006,
+      "pop": 8398748
+    }
+  ],
+  "features": 18,
+  "timestamp": "2025-12-08T20:38:01.430147"
+}

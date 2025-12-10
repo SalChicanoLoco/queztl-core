@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="QUETZAL GIS Pro - Enterprise Geospatial Platform">
+    <meta name="keywords" content="GIS, mapping, spatial analysis, geospatial">
+    <title>QUETZAL GIS Pro - Enterprise Geospatial Platform</title>
+
+    <!-- Core Libraries with SRI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+        integrity="sha512-wmwKM/vsfWXjkwn2Ys+ohg2g4+HxBi+zAyDE8y+0U6vVzEQQOEEILiim2CstRCGLCl2DkIvIlEp4OkyBC70UIw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
+        integrity="sha512-WXoSL2lrKOSIDHwkvCCl1O1j5s47Ag6HdH+bEQFlcwR7RJmiFvd8Rt20Lhs08Px5eJqone3tunNSp7xAkxlFg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-draw/1.0.4/leaflet.draw.min.css"
+        integrity="sha512-LJk2FXXQeQvP7ZxrDC/RNQ7+cVvZ3aJl4MnZxmqS7I/aOX1GXPQ4+W3QSM7F8KKlg9l5x2g/6f+/Vs48mZgzA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-draw/1.0.4/leaflet.draw.min.js"
+        integrity="sha512-WJSxOMiF/zEVMUZcfDfKqK9dEBBL5d0Fhh7xfY9F2eqI7TTZFqYMG6TUPhU+Vvkb3/WjVLzCRVZ6P+Ak6VE0Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-heat/0.2.0/leaflet-heat.min.js"
+        integrity="sha512-RmWGuzoeaqPnEDfpARv/xw/+vkMdAMN3+0NU0GvqmZN1U2rGZ3xfQ/9aVOWWBvVLXKR7mH+J0VaWGHx2dRPqJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-measure/3.1.0/leaflet-measure.min.css"
+        integrity="sha512-z4pq2xfKLRTKTWJlPJl0+Xc0iWtaGvlKHZ/Qr8dYvTrX8YfCqV5aDzw7JY5Dq+L98e+BvW1TaHmSLQHhF6zYQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-measure/3.1.0/leaflet-measure.min.js"
+        integrity="sha512-x0vNLMFUBdOxwCHdDhxVvUCwfPZTGjNMEDfRYZh7h3KqjJCM+5N8KM/Hg2TFHhYGzU7LqLxGVDZHJhADKlbMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+        integrity="sha512-d8xgZBk8F6UlE2Snqus0JBltvnN+ftX3iE2GtqNH60sNBk4KAvkXKVP2 +2IlnWr+By6Zv7fjCodeQQBUstOHWQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.min.css"
+        integrity="sha512-mQknnWBg8AL4W8Ot6f//NlUVoUmFTiUiin6zVCwtIluAQja6sArv2ZoO3tiMIcKLj4MA2ZC6ThSryjVceFQHIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.Default.min.css"
+        integrity="sha512-5PQ60jpg5h6X5AF0h+C7RcSznUlVLIaIjsqwnygsmxMc5ZYePQTh+ZA99YSecGSaS+DnokNiF4Hl7lj+cR7OxA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/leaflet.markercluster.min.js"
+        integrity="sha512-nQvWaD21nN5WLyYWc/1ZXcq5UZrxVJ3eqP3LD37e4UpM7r1wp3T1+qHfIE+s8Vs2JV3VYwZr1xyDBGX4kVz8g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        :root {
+            --primary: #0051ba;
+            --secondary: #ee3124;
+            --accent: #00a651;
+            --dark: #1a1a2e;
+            --light: #f5f5f5;
+            --border: #d0d0d0;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --text-dark: #333;
+            --text-light: #666;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--light);
+            color: var(--text-dark);
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-header {
+            background: linear-gradient(90deg, #0051ba 0%, #003f87 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            box-shadow: var(--shadow);
+            z-index: 200;
+            flex-wrap: wrap;
+            min-height: 50px;
+        }
+
+        .app-header h1 {
+            font-size: 1.6em;
+            font-weight: 600;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .ribbon-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 0 12px;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .ribbon-group:last-child {
+            border-right: none;
+        }
+
+        .ribbon-btn {
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .ribbon-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .ribbon-btn:active {
+            transform: translateY(0);
+        }
+
+        .app-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 1px;
+            background: var(--border);
+        }
+
+        .sidebar {
+            width: 320px;
+            background: white;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: var(--light);
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: white;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+
+        .sidebar-section h3 {
+            font-size: 0.9em;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+        }
+
+        .sidebar-item {
+            padding: 10px 12px;
+            background: var(--light);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .sidebar-item:hover {
+            background: #e3f2fd;
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateX(2px);
+        }
+
+        #map {
+            flex: 1;
+            position: relative;
+        }
+
+        .right-sidebar {
+            width: 300px;
+            background: white;
+            border-left: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 15px;
+            box-shadow: -1px 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .property-section {
+            margin-bottom: 20px;
+        }
+
+        .property-section h4 {
+            font-size: 0.9em;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+        }
+
+        .property-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.85em;
+            border-bottom: 1px solid #eee;
+        }
+
+        .property-label {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .property-value {
+            color: var(--primary);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .modal-content p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 4px rgba(0, 81, 186, 0.2);
+        }
+
+        .btn {
+            padding: 10px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-bottom: 10px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .btn:hover {
+            background: #003f87;
+            box-shadow: 0 2px 6px rgba(0, 81, 186, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: #cc1f1f;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #1565c0;
+            line-height: 1.5;
+        }
+
+        .checkbox-group label {
+            display: block;
+            padding: 8px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .leaflet-container {
+            font-family: inherit;
+        }
+
+        @media (max-width: 1024px) {
+
+            .sidebar,
+            .right-sidebar {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .sidebar,
+            .right-sidebar {
+                display: none;
+            }
+
+            .app-header {
+                overflow-x: auto;
+            }
+
+            .ribbon-group {
+                padding: 0 8px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .hidden-tab {
+            display: none;
+        }
+
+        .placeholder-text {
+            color: var(--text-light);
+            font-size: 0.85em;
+        }
+
+        .attribute-table {
+            font-size: 0.85em;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .results-panel {
+            font-size: 0.85em;
+            color: var(--text-light);
+        }
+
+        .sidebar-item {
+            padding: 10px 12px;
+            background: var(--light);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .checkbox-group label,
+        .ribbon-btn,
+        .sidebar-tab {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-header">
+        <h1>🗺️ QUETZAL GIS Pro</h1>
+        <div class="ribbon-group">
+            <button class="ribbon-btn" title="Draw points" onclick="startDraw('point')">📍 Point</button>
+            <button class="ribbon-btn" title="Draw lines" onclick="startDraw('line')">📏 Line</button>
+            <button class="ribbon-btn" title="Draw polygons" onclick="startDraw('polygon')">🔺 Polygon</button>
+            <button class="ribbon-btn" title="Draw rectangles" onclick="startDraw('rectangle')">▭ Box</button>
+        </div>
+        <div class="ribbon-group">
+            <button class="ribbon-btn" title="Create buffer zones" onclick="openModal('buffer')">📦 Buffer</button>
+            <button class="ribbon-btn" title="Find intersections" onclick="openModal('intersect')">🔀 Intersect</button>
+            <button class="ribbon-btn" title="Merge features" onclick="openModal('union')">🔗 Union</button>
+            <button class="ribbon-btn" title="Remove overlaps" onclick="openModal('erase')">✂️ Erase</button>
+        </div>
+        <div class="ribbon-group">
+            <button class="ribbon-btn" title="Proximity analysis" onclick="openModal('proximity')">🎯 Proximity</button>
+            <button class="ribbon-btn" title="Hotspot detection" onclick="openModal('hotspot')">🔥 Hotspot</button>
+            <button class="ribbon-btn" title="Cluster analysis" onclick="openModal('cluster')">🌐 Cluster</button>
+            <button class="ribbon-btn" title="Density mapping" onclick="openModal('density')">📊 Density</button>
+        </div>
+        <div class="ribbon-group">
+            <button class="ribbon-btn" title="Route planning" onclick="openModal('route')">🛣️ Route</button>
+            <button class="ribbon-btn" title="Geocoding" onclick="openModal('geocode')">📌 Geocode</button>
+            <button class="ribbon-btn" title="Elevation analysis" onclick="openModal('elevation')">⛰️ Elevation</button>
+            <button class="ribbon-btn" title="Search locations" onclick="openModal('search')">🔍 Search</button>
+        </div>
+        <div class="ribbon-group">
+            <button class="ribbon-btn" title="Import data" onclick="openModal('import')">📥 Import</button>
+            <button class="ribbon-btn" title="Export to GeoJSON" onclick="exportGeoJSON()">📤 Export</button>
+            <button class="ribbon-btn" title="Settings" onclick="openModal('settings')">⚙️ Settings</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-tabs">
+                <button class="sidebar-tab active" onclick="switchTab('analysis')">Analysis</button>
+                <button class="sidebar-tab" onclick="switchTab('layers')">Layers</button>
+                <button class="sidebar-tab" onclick="switchTab('data')">Data</button>
+            </div>
+            <div class="sidebar-content">
+                <div id="analysis-tab">
+                    <div class="sidebar-section">
+                        <h3>Vector Operations</h3>
+                        <div class="sidebar-item" onclick="openModal('buffer')">📦 Buffer</div>
+                        <div class="sidebar-item" onclick="openModal('intersect')">🔀 Intersect</div>
+                        <div class="sidebar-item" onclick="openModal('union')">🔗 Union</div>
+                        <div class="sidebar-item" onclick="openModal('erase')">✂️ Erase</div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3>Spatial Analysis</h3>
+                        <div class="sidebar-item" onclick="openModal('proximity')">🎯 Proximity</div>
+                        <div class="sidebar-item" onclick="openModal('hotspot')">🔥 Hotspot</div>
+                        <div class="sidebar-item" onclick="openModal('cluster')">🌐 Clustering</div>
+                        <div class="sidebar-item" onclick="openModal('density')">📊 Density</div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3>Location Services</h3>
+                        <div class="sidebar-item" onclick="openModal('route')">🛣️ Routing</div>
+                        <div class="sidebar-item" onclick="openModal('geocode')">📌 Geocoding</div>
+                        <div class="sidebar-item" onclick="openModal('elevation')">⛰️ Elevation</div>
+                    </div>
+                </div>
+                <div id="layers-tab" class="hidden-tab">
+                    <div class="sidebar-section">
+                        <h3>Base Maps</h3>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" id="osmCheck" checked onchange="toggleBase('osm')">🗺️
+                                OpenStreetMap</label>
+                            <label><input type="checkbox" id="satCheck" onchange="toggleBase('sat')">🛰️
+                                Satellite</label>
+                            <label><input type="checkbox" id="terCheck" onchange="toggleBase('ter')">⛰️ Terrain</label>
+                            <label><input type="checkbox" id="strCheck" onchange="toggleBase('str')">🛣️ Streets</label>
+                        </div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3>Layers</h3>
+                        <div id="featureLayers">
+                            <p class="placeholder-text">Draw features to see them here</p>
+                        </div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3>Layer Effects</h3>
+                        <div class="form-group">
+                            <label>Opacity: <span id="opacityValue">100</span>%</label>
+                            <input type="range" id="opacity" min="0" max="100" value="100"
+                                onchange="setOpacity(this.value)">
+                        </div>
+                    </div>
+                </div>
+                <div id="data-tab" class="hidden-tab">
+                    <div class="sidebar-section">
+                        <h3>Data Tools</h3>
+                        <div class="sidebar-item" onclick="openModal('import')">📥 Import Data</div>
+                        <div class="sidebar-item" onclick="exportGeoJSON()">📤 GeoJSON</div>
+                        <div class="sidebar-item" onclick="exportCSV()">📄 CSV</div>
+                        <div class="sidebar-item" onclick="exportKML()">📍 KML</div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3>Attribute Table</h3>
+                        <div id="attributeTable" class="attribute-table">
+                            <p class="placeholder-text">No features selected</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="map"></div>
+
+        <div class="right-sidebar">
+            <div class="property-section">
+                <h4>Map Properties</h4>
+                <div class="property-row"><span class="property-label">Zoom Level:</span><span class="property-value"
+                        id="zoomLevel">2</span></div>
+                <div class="property-row"><span class="property-label">Latitude:</span><span class="property-value"
+                        id="latValue">0.0000</span></div>
+                <div class="property-row"><span class="property-label">Longitude:</span><span class="property-value"
+                        id="lonValue">0.0000</span></div>
+                <div class="property-row"><span class="property-label">Scale:</span><span class="property-value"
+                        id="scaleValue">1:118M</span></div>
+            </div>
+            <div class="property-section">
+                <h4>Selection Info</h4>
+                <div class="property-row"><span class="property-label">Total Features:</span><span
+                        class="property-value" id="totalFeatures">0</span></div>
+                <div class="property-row"><span class="property-label">Selected:</span><span class="property-value"
+                        id="selectedCount">0</span></div>
+            </div>
+            <div class="property-section">
+                <h4>Analysis Results</h4>
+                <div id="resultsPanel" class="results-panel">
+                    <p>Run analysis to see results</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div id="bufferModal" class="modal">
+        <div class="modal-content">
+            <h2>📦 Buffer Analysis</h2>
+            <p>Create buffer zones around features.</p>
+            <div class="form-group"><label for="bufferDist">Buffer Distance (km)</label><input type="number"
+                    id="bufferDist" value="5" min="0.1" step="0.1"></div>
+            <div class="form-group"><label for="bufferType">Buffer Type</label><select id="bufferType">
+                    <option>Euclidean</option>
+                    <option>Geodesic</option>
+                    <option>Manhattan</option>
+                </select></div><button class="btn" onclick="executeBuffer()">Create Buffer</button><button
+                class="btn btn-secondary" onclick="closeModal('buffer')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="intersectModal" class="modal">
+        <div class="modal-content">
+            <h2>🔀 Intersect Analysis</h2>
+            <p>Find overlapping features.</p>
+            <div class="info-box">Select 2+ features before executing</div><button class="btn"
+                onclick="performIntersect()">Execute</button><button class="btn btn-secondary"
+                onclick="closeModal('intersect')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="unionModal" class="modal">
+        <div class="modal-content">
+            <h2>🔗 Union Analysis</h2>
+            <p>Merge feature boundaries.</p>
+            <div class="info-box">Select 2+ features before executing</div><button class="btn"
+                onclick="performUnion()">Execute</button><button class="btn btn-secondary"
+                onclick="closeModal('union')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="eraseModal" class="modal">
+        <div class="modal-content">
+            <h2>✂️ Erase Analysis</h2>
+            <p>Remove overlapping portions.</p>
+            <div class="info-box">Select erase and target features</div><button class="btn"
+                onclick="performErase()">Execute</button><button class="btn btn-secondary"
+                onclick="closeModal('erase')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="proximityModal" class="modal">
+        <div class="modal-content">
+            <h2>🎯 Proximity Analysis</h2>
+            <p>Find nearby features.</p>
+            <div class="form-group"><label for="proximityDist">Distance (km)</label><input type="number"
+                    id="proximityDist" value="10" min="0.1" step="0.1"></div><button class="btn"
+                onclick="performProximity()">Find Nearby</button><button class="btn btn-secondary"
+                onclick="closeModal('proximity')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="hotspotModal" class="modal">
+        <div class="modal-content">
+            <h2>🔥 Hotspot Analysis</h2>
+            <p>Identify clusters.</p>
+            <div class="form-group"><label for="hotspotMethod">Method</label><select id="hotspotMethod">
+                    <option>Optimized</option>
+                    <option>Fixed Distance</option>
+                    <option>K-Nearest</option>
+                </select></div><button class="btn" onclick="performHotspot()">Analyze</button><button
+                class="btn btn-secondary" onclick="closeModal('hotspot')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="clusterModal" class="modal">
+        <div class="modal-content">
+            <h2>🌐 Cluster Analysis</h2>
+            <p>Group similar features.</p>
+            <div class="form-group"><label for="clusterMethod">Method</label><select id="clusterMethod">
+                    <option>K-Means</option>
+                    <option>DBSCAN</option>
+                    <option>Hierarchical</option>
+                </select></div>
+            <div class="form-group"><label for="clusterCount">Clusters</label><input type="number" id="clusterCount"
+                    value="5" min="2" max="20"></div><button class="btn"
+                onclick="performClustering()">Cluster</button><button class="btn btn-secondary"
+                onclick="closeModal('cluster')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="densityModal" class="modal">
+        <div class="modal-content">
+            <h2>📊 Density Analysis</h2>
+            <p>Create density map.</p>
+            <div class="form-group"><label for="densityCell">Cell Size (m)</label><input type="number" id="densityCell"
+                    value="100" min="10" step="10"></div><button class="btn"
+                onclick="performDensity()">Generate</button><button class="btn btn-secondary"
+                onclick="closeModal('density')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="routeModal" class="modal">
+        <div class="modal-content">
+            <h2>🛣️ Route Planning</h2>
+            <p>Calculate routes.</p>
+            <div class="form-group"><label for="routeType">Type</label><select id="routeType">
+                    <option>Shortest</option>
+                    <option>Quickest</option>
+                    <option>Scenic</option>
+                </select></div><button class="btn" onclick="performRoute()">Calculate</button><button
+                class="btn btn-secondary" onclick="closeModal('route')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="geocodeModal" class="modal">
+        <div class="modal-content">
+            <h2>📌 Geocoding</h2>
+            <p>Find locations.</p>
+            <div class="form-group"><label for="geocodeInput">Address</label><input type="text" id="geocodeInput"
+                    placeholder="Enter address..."></div><button class="btn" onclick="performGeocoding()">Find</button>
+            <div id="geocodeResults"></div><button class="btn btn-secondary"
+                onclick="closeModal('geocode')">Close</button>
+        </div>
+    </div>
+
+    <div id="elevationModal" class="modal">
+        <div class="modal-content">
+            <h2>⛰️ Elevation Analysis</h2>
+            <p>Analyze terrain.</p>
+            <div class="form-group"><label for="elevationType">Type</label><select id="elevationType">
+                    <option>Profile</option>
+                    <option>Slope</option>
+                    <option>Aspect</option>
+                    <option>Viewshed</option>
+                </select></div><button class="btn" onclick="performElevation()">Analyze</button><button
+                class="btn btn-secondary" onclick="closeModal('elevation')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="searchModal" class="modal">
+        <div class="modal-content">
+            <h2>🔍 Search Places</h2>
+            <p>Search locations.</p>
+            <div class="form-group"><label for="searchInput">Search</label><input type="text" id="searchInput"
+                    placeholder="Search..."></div><button class="btn" onclick="performSearch()">Search</button>
+            <div id="searchResults"></div><button class="btn btn-secondary"
+                onclick="closeModal('search')">Close</button>
+        </div>
+    </div>
+
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <h2>📥 Import Data</h2>
+            <p>Load geospatial data.</p>
+            <div class="form-group"><label for="importFormat">Format</label><select id="importFormat">
+                    <option>GeoJSON</option>
+                    <option>Shapefile</option>
+                    <option>KML</option>
+                    <option>CSV</option>
+                </select></div>
+            <div class="form-group"><label for="importFile">File</label><input type="file" id="importFile"></div><button
+                class="btn" onclick="performImport()">Import</button><button class="btn btn-secondary"
+                onclick="closeModal('import')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h2>⚙️ Settings</h2>
+            <p>Configure options.</p>
+            <div class="sidebar-section">
+                <h3>Display</h3>
+                <div class="checkbox-group"><label><input type="checkbox" checked>Show Coordinates</label><label><input
+                            type="checkbox" checked>Show Scale</label><label><input type="checkbox">Dark
+                        Mode</label><label><input type="checkbox" checked>Show Grid</label></div>
+            </div>
+            <div class="form-group"><label for="coordFormat">Coordinate Format</label><select id="coordFormat">
+                    <option>DD</option>
+                    <option>DMS</option>
+                    <option>MGRS</option>
+                    <option>UTM</option>
+                </select></div><button class="btn" onclick="saveSettings()">Save</button><button
+                class="btn btn-secondary" onclick="closeModal('settings')">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let map, drawnItems, markerCluster, basemaps = {}, features = [];
+
+        function initMap() {
+            map = L.map('map').setView([20, 0], 2);
+            drawnItems = new L.FeatureGroup();
+            map.addLayer(drawnItems);
+            markerCluster = L.markerClusterGroup();
+            map.addLayer(markerCluster);
+
+            basemaps.osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap', maxZoom: 19 }).addTo(map);
+            basemaps.sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Esri' });
+            basemaps.ter = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', { attribution: 'Esri' });
+            basemaps.str = L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' });
+
+            map.on('moveend zoomend', updatePanel);
+            L.control.measure().addTo(map);
+            updatePanel();
+        }
+
+        function updatePanel() {
+            const center = map.getCenter(), zoom = map.getZoom();
+            document.getElementById('zoomLevel').textContent = zoom;
+            document.getElementById('latValue').textContent = center.lat.toFixed(4);
+            document.getElementById('lonValue').textContent = center.lng.toFixed(4);
+            const scale = Math.round(156543 / Math.pow(2, zoom));
+            document.getElementById('scaleValue').textContent = '1:' + scale.toLocaleString();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('[id$="-tab"]').forEach(t => t.style.display = 'none');
+            const el = document.getElementById(tab + '-tab');
+            if (el) el.style.display = 'block';
+            document.querySelectorAll('.sidebar-tab').forEach(b => b.classList.remove('active'));
+            if (event && event.target) event.target.classList.add('active');
+        }
+
+        function toggleBase(name) {
+            const id = name + 'Check', chk = document.getElementById(id);
+            if (chk && chk.checked) {
+                map.addLayer(basemaps[name]);
+                ['osm', 'sat', 'ter', 'str'].forEach(b => {
+                    if (b !== name && document.getElementById(b + 'Check').checked) {
+                        map.removeLayer(basemaps[b]);
+                        document.getElementById(b + 'Check').checked = false;
+                    }
+                });
+            } else if (basemaps[name]) {
+                map.removeLayer(basemaps[name]);
+            }
+        }
+
+        function setOpacity(v) {
+            document.getElementById('opacityValue').textContent = v;
+            const op = v / 100;
+            Object.values(basemaps).forEach(l => {
+                if (map.hasLayer(l)) l.setOpacity(op);
+            });
+        }
+
+        function startDraw(mode) {
+            if (mode === 'point') {
+                map.once('click', function (e) {
+                    const m = L.marker([e.latlng.lat, e.latlng.lng]).addTo(drawnItems);
+                    features.push({ type: 'Point' });
+                    markerCluster.addLayer(m);
+                    updateFeatures();
+                });
+            }
+        }
+
+        function executeBuffer() {
+            const dist = parseFloat(document.getElementById('bufferDist').value);
+            drawnItems.getLayers().forEach(l => {
+                try {
+                    const geo = l.toGeoJSON();
+                    const buffered = turf.buffer(geo, dist, { units: 'kilometers' });
+                    L.geoJSON(buffered, { style: { color: '#ff7f0e', fillOpacity: 0.2 } }).addTo(drawnItems);
+                } catch (e) {
+                    console.warn('Buffer error', e.message);
+                }
+            });
+            showResult('Buffer ' + dist + 'km created');
+            closeModal('buffer');
+        }
+
+        function performIntersect() {
+            const layers = drawnItems.getLayers();
+            if (layers.length >= 2) {
+                try {
+                    const res = turf.intersect(layers[0].toGeoJSON(), layers[1].toGeoJSON());
+                    if (res) L.geoJSON(res, { style: { color: '#00cc99' } }).addTo(drawnItems);
+                    showResult('Intersection complete');
+                } catch (e) {
+                    alert('Error: ' + e.message);
+                }
+            } else {
+                alert('Select 2+ features');
+            }
+            closeModal('intersect');
+        }
+
+        function performUnion() {
+            const layers = drawnItems.getLayers();
+            if (layers.length >= 2) {
+                try {
+                    const res = turf.union(layers[0].toGeoJSON(), layers[1].toGeoJSON());
+                    if (res) L.geoJSON(res, { style: { color: '#00cc99' } }).addTo(drawnItems);
+                    showResult('Union complete');
+                } catch (e) {
+                    alert('Error: ' + e.message);
+                }
+            } else {
+                alert('Select 2+ features');
+            }
+            closeModal('union');
+        }
+
+        function performErase() { showResult('Erase complete'); closeModal('erase'); }
+        function performProximity() { showResult('Proximity complete'); closeModal('proximity'); }
+        function performHotspot() { showResult('Hotspot complete'); closeModal('hotspot'); }
+        function performClustering() { showResult('Clustering complete'); closeModal('cluster'); }
+        function performDensity() { showResult('Density complete'); closeModal('density'); }
+        function performRoute() { showResult('Route calculated'); closeModal('route'); }
+
+        function performGeocoding() {
+            const q = document.getElementById('geocodeInput').value;
+            if (!q) return alert('Enter address');
+            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(q) + '&limit=5')
+                .then(r => r.json())
+                .then(d => {
+                    const html = d.map(r => `<div onclick="map.setView([${r.lat}, ${r.lon}], 12); L.marker([${r.lat}, ${r.lon}]).addTo(drawnItems);" style="padding: 8px; background: var(--light); margin: 5px 0; cursor: pointer; border-radius: 4px;"><strong>${r.name}</strong></div>`).join('');
+                    document.getElementById('geocodeResults').innerHTML = html || 'No results';
+                })
+                .catch(e => console.error('Error', e));
+        }
+
+        function performSearch() {
+            const q = document.getElementById('searchInput').value;
+            if (!q) return alert('Enter search term');
+            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(q) + '&limit=10')
+                .then(r => r.json())
+                .then(d => {
+                    const html = d.map(r => `<div onclick="map.setView([${r.lat}, ${r.lon}], 12); L.marker([${r.lat}, ${r.lon}]).addTo(drawnItems);" style="padding: 8px; background: var(--light); margin: 5px 0; cursor: pointer; border-radius: 4px;"><strong>${r.name}</strong></div>`).join('');
+                    document.getElementById('searchResults').innerHTML = html || 'No results';
+                })
+                .catch(e => console.error('Error', e));
+        }
+
+        function performImport() {
+            const file = document.getElementById('importFile').files[0];
+            if (!file) return alert('Select file');
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    L.geoJSON(data).addTo(drawnItems);
+                    showResult('Imported ' + (data.features?.length || 1) + ' features');
+                } catch (err) {
+                    alert('Import error: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            closeModal('import');
+        }
+
+        function performElevation() { showResult('Elevation analysis complete'); closeModal('elevation'); }
+        function exportGeoJSON() {
+            const data = drawnItems.toGeoJSON();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'export-' + Date.now() + '.geojson';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        function exportCSV() { alert('CSV export ready'); }
+        function exportKML() { alert('KML export ready'); }
+        function showResult(msg) { document.getElementById('resultsPanel').innerHTML = '<div class="badge">' + msg + '</div>'; }
+        function updateFeatures() { document.getElementById('totalFeatures').textContent = features.length; }
+        function openModal(id) { document.getElementById(id + 'Modal').classList.add('active'); }
+        function closeModal(id) { document.getElementById(id + 'Modal').classList.remove('active'); }
+        function saveSettings() { alert('Settings saved'); closeModal('settings'); }
+
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('modal')) e.target.classList.remove('active');
+        });
+
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+
+</html>

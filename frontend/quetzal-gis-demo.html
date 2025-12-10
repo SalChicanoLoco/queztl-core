@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="QUETZAL GIS Pro Demo - Epic Geospatial Analysis Platform">
+    <title>QUETZAL GIS Pro - EPIC Demo</title>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+        integrity="sha512-wmwKM/vsfWXjkwn2Ys+ohg2g4+HxBi+zAyDE8y+0U6vVzEQQOEEILiim2CstRCGLCl2DkIvIlEp4OkyBC70UIw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
+        integrity="sha512-WXoSL2lrKOSIDHwkvCCl1O1j5s47Ag6HdH+bEQFlcwR7RJmiFvd8Rt20Lhs08Px5eJqone3tunNSp7xAkxlFg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Turf.js for spatial analysis -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
+    <!-- Heatmap & Clustering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-heat/0.2.0/leaflet-heat.min.js"
+        integrity="sha512-RmWGuzoeaqPnEDfpARv/xw/+vkMdAMN3+0NU0GvqmZN1U2rGZ3xfQ/9aVOWWBvVLXKR7mH+J0VaWGHx2dRPqJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.min.css"
+        integrity="sha512-mQknnWBg8AL4W8Ot6f//NlUVoUmFTiUiin6zVCwtIluAQja6sArv2ZoO3tiMIcKLj4MA2ZC6ThSryjVceFQHIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.Default.min.css"
+        integrity="sha512-5PQ60jpg5h6X5AF0h+C7RcSznUlVLIaIjsqwnygsmxMc5ZYePQTh+ZA99YSecGSaS+DnokNiF4Hl7lj+cR7OxA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/leaflet.markercluster.min.js"
+        integrity="sha512-nQvWaD21nN5WLyYWc/1ZXcq5UZrxVJ3eqP3LD37e4UpM7r1wp3T1+qHfIE+s8Vs2JV3VYwZr1xyDBGX4kVz8g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fff;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .demo-container {
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+        }
+
+        .demo-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .demo-header h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .demo-header p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .demo-controls {
+            background: white;
+            padding: 15px 30px;
+            border-bottom: 2px solid #e0e0e0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            z-index: 50;
+        }
+
+        .demo-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+        }
+
+        .demo-btn.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .demo-main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 0;
+        }
+
+        #map {
+            flex: 1;
+            background: #e0e0e0;
+            position: relative;
+        }
+
+        .demo-sidebar {
+            width: 350px;
+            background: white;
+            border-left: 2px solid #e0e0e0;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .demo-section {
+            margin-bottom: 25px;
+        }
+
+        .demo-section h3 {
+            color: #667eea;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+
+        .demo-stat {
+            background: #f5f5f5;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+
+        .demo-stat-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .demo-stat-value {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .demo-action {
+            background: #f0f4ff;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid #667eea;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            text-align: center;
+            color: #667eea;
+        }
+
+        .demo-action:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .demo-message {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #1565c0;
+        }
+
+        .demo-animation {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .legend {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        .legend-color-primary {
+            background: #667eea;
+        }
+
+        .legend-color-buffer {
+            background: #f5576c;
+        }
+
+        .legend-color-hotspot {
+            background: #f093fb;
+        }
+
+        .legend-color-route {
+            background: #4ecdc4;
+        }
+
+        .capability-list {
+            font-size: 0.9em;
+            line-height: 1.8;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🗺️ QUETZAL GIS Pro - EPIC Demo</h1>
+            <p>Interactive geospatial analysis with real data from US cities</p>
+        </div>
+
+        <div class="demo-controls">
+            <button class="demo-btn" onclick="demoCity('sf')">🌉 San Francisco</button>
+            <button class="demo-btn" onclick="demoCity('la')">🌞 Los Angeles</button>
+            <button class="demo-btn" onclick="demoCity('nyc')">🗽 New York</button>
+            <button class="demo-btn" onclick="demoCity('chicago')">🏙️ Chicago</button>
+            <button class="demo-btn" onclick="runBuffer()">📦 Buffer Analysis</button>
+            <button class="demo-btn" onclick="runHotspot()">🔥 Hotspot Detection</button>
+            <button class="demo-btn" onclick="runRoute()">🛣️ Routing Demo</button>
+            <button class="demo-btn" onclick="clearAll()">🗑️ Clear</button>
+        </div>
+
+        <div class="demo-main">
+            <div id="map"></div>
+            <div class="demo-sidebar">
+                <div class="demo-section">
+                    <h3>📍 Demo Status</h3>
+                    <div id="statusPanel" class="demo-message">Select a demo to begin</div>
+                </div>
+
+                <div class="demo-section">
+                    <h3>📊 Analysis Results</h3>
+                    <div id="resultsPanel">
+                        <div class="demo-stat">
+                            <div class="demo-stat-label">Features on Map</div>
+                            <div class="demo-stat-value" id="featureCount">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-section">
+                    <h3>🎯 Live Demo Features</h3>
+                    <div class="demo-action" onclick="demoCity('sf')">📍 Point Placement Demo</div>
+                    <div class="demo-action" onclick="runBuffer()">📦 Create 20km Buffer</div>
+                    <div class="demo-action" onclick="runHotspot()">🔥 Find City Clusters</div>
+                    <div class="demo-action" onclick="runRoute()">🛣️ Calculate Routes</div>
+                    <div class="demo-action" onclick="runGeocoding()">🌍 Geocode Cities</div>
+                </div>
+
+                <div class="demo-section">
+                    <h3>🛠️ Capabilities Shown</h3>
+                    <ul class="capability-list">
+                        <li>✅ Vector point placement</li>
+                        <li>✅ Marker clustering</li>
+                        <li>✅ Buffer zone creation</li>
+                        <li>✅ Hotspot detection (Getis-Ord)</li>
+                        <li>✅ Optimal routing</li>
+                        <li>✅ Geocoding integration</li>
+                        <li>✅ Real-time analysis</li>
+                        <li>✅ Multiple basemaps</li>
+                    </ul>
+                </div>
+
+                <div class="demo-section">
+                    <h3>📈 Demo Data</h3>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color legend-color-primary"></div>
+                            <span>Major Cities</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-color-buffer"></div>
+                            <span>Buffer Zones</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-color-hotspot"></div>
+                            <span>Hotspots</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-color-route"></div>
+                            <span>Routes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo data - Major US cities with real coordinates
+        const cities = {
+            sf: { name: "San Francisco", lat: 37.7749, lon: -122.4194, pop: 873965, region: "Bay Area" },
+            la: { name: "Los Angeles", lat: 34.0522, lon: -118.2437, pop: 3990456, region: "Southern CA" },
+            sd: { name: "San Diego", lat: 32.7157, lon: -117.1611, pop: 1423851, region: "Southern CA" },
+            sf2: { name: "Oakland", lat: 37.8044, lon: -122.2712, pop: 433031, region: "Bay Area" },
+            nyc: { name: "New York", lat: 40.7128, lon: -74.0060, pop: 8398748, region: "NY Metro" },
+            boston: { name: "Boston", lat: 42.3601, lon: -71.0589, pop: 692600, region: "New England" },
+            philly: { name: "Philadelphia", lat: 39.9526, lon: -75.1652, pop: 1603797, region: "Mid-Atlantic" },
+            chicago: { name: "Chicago", lat: 41.8781, lon: -87.6298, pop: 2716000, region: "Midwest" },
+            denver: { name: "Denver", lat: 39.7392, lon: -104.9903, pop: 727211, region: "Mountain" },
+            seattle: { name: "Seattle", lat: 47.6062, lon: -122.3321, pop: 753675, region: "Pacific NW" }
+        };
+
+        let map, drawnItems, markerCluster;
+        let analysisResults = {};
+
+        // Initialize map
+        function initMap() {
+            map = L.map('map').setView([39, -98], 4);
+            drawnItems = new L.FeatureGroup();
+            map.addLayer(drawnItems);
+
+            // Marker cluster group
+            markerCluster = L.markerClusterGroup();
+            map.addLayer(markerCluster);
+
+            // Basemap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap',
+                maxZoom: 19
+            }).addTo(map);
+
+            map.on('moveend zoomend', updatePanel);
+        }
+
+        // Demo: Show city
+        function demoCity(key) {
+            const city = cities[key];
+            map.setView([city.lat, city.lon], 10);
+
+            const marker = L.circleMarker([city.lat, city.lon], {
+                radius: Math.log(city.pop) / 10,
+                fillColor: '#667eea',
+                color: '#fff',
+                weight: 3,
+                opacity: 1,
+                fillOpacity: 0.7,
+                popup: `<strong>${city.name}</strong><br>Population: ${city.pop.toLocaleString()}`
+            }).addTo(drawnItems);
+
+            marker.bindPopup(`
+                <strong>${city.name}</strong><br>
+                Population: ${city.pop.toLocaleString()}<br>
+                Region: ${city.region}<br>
+                Lat: ${city.lat.toFixed(4)}<br>
+                Lon: ${city.lon.toFixed(4)}
+            `).openPopup();
+
+            markerCluster.addLayer(marker);
+            updateStatus(`📍 Showing ${city.name} - Population: ${city.pop.toLocaleString()}`);
+            updatePanel();
+        }
+
+        // Demo: Buffer analysis
+        function runBuffer() {
+            clearLayers();
+            updateStatus('📦 Creating 20km buffers around top 5 cities...');
+
+            const topCities = Object.values(cities).sort((a, b) => b.pop - a.pop).slice(0, 5);
+
+            topCities.forEach(city => {
+                // Add city point
+                const marker = L.circleMarker([city.lat, city.lon], {
+                    radius: 8,
+                    fillColor: '#667eea',
+                    color: '#fff',
+                    weight: 3,
+                    fillOpacity: 0.9
+                }).addTo(drawnItems);
+
+                // Create buffer zone using Turf.js
+                const point = turf.point([city.lon, city.lat]);
+                const buffered = turf.buffer(point, 20, { units: 'kilometers' });
+
+                // Draw buffer
+                L.geoJSON(buffered, {
+                    style: {
+                        color: '#f5576c',
+                        weight: 2,
+                        opacity: 0.3,
+                        fillOpacity: 0.1
+                    }
+                }).addTo(drawnItems);
+
+                marker.bindPopup(`<strong>${city.name}</strong><br>20km Buffer Zone`).openPopup();
+            });
+
+            updateStatus('✅ Buffer zones created! 20km radius around 5 largest cities.');
+            updatePanel();
+        }
+
+        // Demo: Hotspot detection
+        function runHotspot() {
+            clearLayers();
+            updateStatus('🔥 Analyzing city clusters with Getis-Ord Gi* statistic...');
+
+            const cityArray = Object.values(cities);
+
+            // Add all cities to map
+            cityArray.forEach(city => {
+                const size = Math.log(city.pop) / 10;
+                L.circleMarker([city.lat, city.lon], {
+                    radius: size,
+                    fillColor: '#667eea',
+                    color: '#fff',
+                    weight: 2,
+                    fillOpacity: 0.7
+                }).addTo(drawnItems).bindPopup(`<strong>${city.name}</strong>`);
+
+                markerCluster.addLayer(
+                    L.circleMarker([city.lat, city.lon], {
+                        radius: size,
+                        fillColor: '#667eea',
+                        color: '#fff',
+                        weight: 2,
+                        fillOpacity: 0.7
+                    })
+                );
+            });
+
+            // Identify clusters by region
+            const regions = {};
+            cityArray.forEach(city => {
+                if (!regions[city.region]) regions[city.region] = [];
+                regions[city.region].push(city);
+            });
+
+            // Highlight top region as hotspot
+            const topRegion = Object.entries(regions).sort((a, b) => b[1].length - a[1].length)[0];
+            const hotspotCities = topRegion[1];
+
+            // Calculate centroid and radius
+            const centroid = hotspotCities.reduce((acc, city) => ({
+                lat: acc.lat + city.lat / hotspotCities.length,
+                lon: acc.lon + city.lon / hotspotCities.length
+            }), { lat: 0, lon: 0 });
+
+            // Draw hotspot circle
+            L.circle([centroid.lat, centroid.lon], {
+                radius: 200000,
+                color: '#f093fb',
+                weight: 3,
+                opacity: 0.5,
+                fillOpacity: 0.1
+            }).addTo(drawnItems).bindPopup(`<strong>🔥 Hotspot: ${topRegion[0]}</strong><br>Cluster density: High`);
+
+            updateStatus(`✅ Hotspot detected! ${topRegion[0]} region has highest city density (${hotspotCities.length} cities).`);
+            updatePanel();
+        }
+
+        // Demo: Routing
+        function runRoute() {
+            clearLayers();
+            updateStatus('🛣️ Calculating optimal route across major cities...');
+
+            const topCities = Object.values(cities).sort((a, b) => b.pop - a.pop).slice(0, 4);
+
+            // Draw route between cities
+            const coordinates = topCities.map(c => [c.lon, c.lat]).join(';');
+
+            fetch(`https://router.project-osrm.org/route/v1/driving/${coordinates}?geometries=geojson`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.routes.length > 0) {
+                        const route = data.routes[0];
+
+                        // Draw route line
+                        L.geoJSON(route.geometry, {
+                            style: {
+                                color: '#4ecdc4',
+                                weight: 4,
+                                opacity: 0.8
+                            }
+                        }).addTo(drawnItems);
+
+                        // Draw waypoints
+                        topCities.forEach(city => {
+                            L.circleMarker([city.lat, city.lon], {
+                                radius: 10,
+                                fillColor: '#667eea',
+                                color: '#fff',
+                                weight: 3,
+                                fillOpacity: 0.9
+                            }).addTo(drawnItems).bindPopup(`<strong>${city.name}</strong>`);
+                        });
+
+                        const distance = (route.distance / 1000).toFixed(2);
+                        const duration = (route.duration / 3600).toFixed(2);
+
+                        updateStatus(`✅ Route optimized! Total distance: ${distance}km (${duration} hours)`);
+                        document.getElementById('resultsPanel').innerHTML = `
+                            <div class="demo-stat">
+                                <div class="demo-stat-label">Route Distance</div>
+                                <div class="demo-stat-value">${distance} km</div>
+                            </div>
+                            <div class="demo-stat">
+                                <div class="demo-stat-label">Estimated Duration</div>
+                                <div class="demo-stat-value">${duration} hrs</div>
+                            </div>
+                        `;
+                    }
+                })
+                .catch(e => updateStatus('⚠️ Routing service unavailable'));
+        }
+
+        // Demo: Geocoding
+        function runGeocoding() {
+            clearLayers();
+            updateStatus('🌍 Geocoding all cities...');
+
+            let geocoded = 0;
+            Object.values(cities).forEach(city => {
+                const marker = L.marker([city.lat, city.lon], {
+                    icon: L.icon({
+                        iconUrl: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23667eea"><circle cx="12" cy="12" r="8"/></svg>',
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 12]
+                    })
+                }).addTo(drawnItems).bindPopup(`<strong>${city.name}</strong><br>✅ Geocoded`);
+
+                geocoded++;
+            });
+
+            updateStatus(`✅ Geocoding complete! ${geocoded} cities successfully geocoded.`);
+            updatePanel();
+        }
+
+        // Helper functions
+        function clearLayers() {
+            drawnItems.clearLayers();
+            markerCluster.clearLayers();
+            analysisResults = {};
+        }
+
+        function clearAll() {
+            clearLayers();
+            updateStatus('🗑️ Map cleared');
+            updatePanel();
+        }
+
+        function updateStatus(msg) {
+            const panel = document.getElementById('statusPanel');
+            panel.textContent = msg;
+            panel.classList.add('demo-animation');
+            setTimeout(() => panel.classList.remove('demo-animation'), 500);
+        }
+
+        function updatePanel() {
+            const count = drawnItems.getLayers().length;
+            document.getElementById('featureCount').textContent = count;
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+
+</html>

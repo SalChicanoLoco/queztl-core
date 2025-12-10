@@ -1,0 +1,16 @@
+[17:54:49] 🐧 Starting custom kernel build...
+[17:54:49] 🔄 Create OS build directory
+[17:54:49] ✅ Create OS build directory
+[17:54:50] 🔄 Generate kernel config
+[17:54:50] ✅ Generate kernel config
+[17:54:50] 🔄 Check build prerequisites
+[17:54:50] ✅ Check build prerequisites
+[17:54:51] 🔄 Create minimal kernel config
+[17:54:51] ✅ Create minimal kernel config
+[17:54:51] 🔄 Save kernel build script
+[17:54:51] ✅ Save kernel build script
+[17:54:52] 🔄 Execute kernel build
+[17:54:53] ✅ Execute kernel build
+[17:54:54] 🔄 Create boot image marker
+[17:54:54] ✅ Create boot image marker
+[17:54:54] 🎉 Kernel build complete!

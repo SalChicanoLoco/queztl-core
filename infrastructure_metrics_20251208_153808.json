@@ -1,0 +1,110 @@
+{
+  "system": {
+    "timestamp": "2025-12-08T15:38:08.696830",
+    "cpu_percent": 15.2,
+    "cpu_count": 10,
+    "memory_percent": 82.6,
+    "memory_gb": 16.0,
+    "memory_available_gb": 2.781280517578125,
+    "disk_percent": 12.4,
+    "disk_gb": 228.27386474609375,
+    "disk_available_gb": 80.12673950195312,
+    "processes_count": 672,
+    "threads_count": 2219,
+    "boot_time": "2025-12-05 17:25:36",
+    "uptime_hours": 70.20908245219125
+  },
+  "top_processes": [
+    {
+      "pid": 94392,
+      "name": "Google Chrome Helper (Renderer)",
+      "cpu_percent": 155.6,
+      "memory_percent": 1.534271240234375,
+      "memory_mb": 251.40625,
+      "status": "running",
+      "num_threads": 26
+    },
+    {
+      "pid": 93399,
+      "name": "Python",
+      "cpu_percent": 79.4,
+      "memory_percent": 0.12035369873046875,
+      "memory_mb": 19.71875,
+      "status": "running",
+      "num_threads": 1
+    },
+    {
+      "pid": 38104,
+      "name": "com.apple.Virtualization.VirtualMachine",
+      "cpu_percent": 0,
+      "memory_percent": 5.568408966064453,
+      "memory_mb": 912.328125,
+      "status": "running",
+      "num_threads": 26
+    },
+    {
+      "pid": 62618,
+      "name": "Code Helper (Renderer)",
+      "cpu_percent": 0,
+      "memory_percent": 4.187583923339844,
+      "memory_mb": 686.09375,
+      "status": "running",
+      "num_threads": 25
+    },
+    {
+      "pid": 62633,
+      "name": "Code Helper (Plugin)",
+      "cpu_percent": 0,
+      "memory_percent": 2.682781219482422,
+      "memory_mb": 439.546875,
+      "status": "running",
+      "num_threads": 26
+    },
+    {
+      "pid": 90367,
+      "name": "Google Chrome Helper (Renderer)",
+      "cpu_percent": 0,
+      "memory_percent": 2.5650978088378906,
+      "memory_mb": 420.265625,
+      "status": "running",
+      "num_threads": 27
+    },
+    {
+      "pid": 914,
+      "name": "Google Chrome",
+      "cpu_percent": 0,
+      "memory_percent": 1.8490791320800781,
+      "memory_mb": 302.953125,
+      "status": "running",
+      "num_threads": 49
+    },
+    {
+      "pid": 1512,
+      "name": "Electron",
+      "cpu_percent": 0,
+      "memory_percent": 1.1981010437011719,
+      "memory_mb": 196.296875,
+      "status": "running",
+      "num_threads": 51
+    },
+    {
+      "pid": 11907,
+      "name": "Google Chrome Helper (Renderer)",
+      "cpu_percent": 0,
+      "memory_percent": 0.9051322937011719,
+      "memory_mb": 148.296875,
+      "status": "running",
+      "num_threads": 22
+    },
+    {
+      "pid": 38060,
+      "name": "com.docker.backend",
+      "cpu_percent": 0,
+      "memory_percent": 0.7390975952148438,
+      "memory_mb": 121.09375,
+      "status": "running",
+      "num_threads": 37
+    }
+  ],
+  "exported_at": "2025-12-08T15:38:08.800393"
+}

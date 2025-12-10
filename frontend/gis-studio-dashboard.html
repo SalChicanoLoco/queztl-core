@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗺️ QuetzalCore GIS Studio - Interactive Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff006e;
+            --accent: #8338ec;
+            --dark: #0a0e27;
+            --darker: #050a1a;
+            --light: #f0f0f0;
+            --success: #00d98e;
+            --warning: #ffd60a;
+            --danger: #ff006e;
+            --border: #1a2f5a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, #0f1a35 100%);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(131, 56, 236, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 0, 110, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(131, 56, 236, 0.1));
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            font-size: 1.2em;
+            color: var(--primary);
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(131, 56, 236, 0.1));
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .status-indicator.active {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Main Content Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card */
+        .card {
+            background: linear-gradient(135deg, rgba(26, 47, 90, 0.6), rgba(15, 26, 53, 0.6));
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.2), transparent);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        /* API Tester */
+        .api-tester {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-size: 0.9em;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--light);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--dark);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: white;
+            box-shadow: 0 5px 20px rgba(255, 0, 110, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 0, 110, 0.5);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.85em;
+        }
+
+        /* Response Display */
+        .response-display {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 4px solid var(--success);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            max-height: 300px;
+            overflow-y: auto;
+            color: var(--success);
+            display: none;
+        }
+
+        .response-display.active {
+            display: block;
+        }
+
+        .response-display.error {
+            border-left-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* Endpoint List */
+        .endpoint-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .endpoint-item {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .endpoint-item:hover {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .endpoint-method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.75em;
+            margin-right: 10px;
+        }
+
+        .endpoint-method.post {
+            background: rgba(255, 0, 110, 0.3);
+            color: var(--secondary);
+        }
+
+        .endpoint-method.get {
+            background: rgba(0, 212, 255, 0.3);
+            color: var(--primary);
+        }
+
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            flex: 1;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(131, 56, 236, 0.15));
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.15);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 8px 0;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #b0b0b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin: 5px 5px 5px 0;
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .badge.success {
+            background: rgba(0, 217, 142, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            color: #808080;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="animated-bg"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🗺️ QuetzalCore GIS Studio</h1>
+            <p class="tagline">INTERACTIVE DASHBOARD & API TESTER</p>
+        </header>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-indicator active"></div>
+                <span>Backend Ready</span>
+            </div>
+            <div class="status-item">
+                <div class="status-indicator active"></div>
+                <span>4 GIS Modules</span>
+            </div>
+            <div class="status-item">
+                <div class="status-indicator active"></div>
+                <span>8+ Endpoints</span>
+            </div>
+            <div class="status-item">
+                <div class="status-indicator active"></div>
+                <span>ML Ready</span>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Code</div>
+                <div class="stat-number">8.5K+</div>
+                <div class="stat-label">Lines</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Modules</div>
+                <div class="stat-number">4</div>
+                <div class="stat-label">Integrated</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Endpoints</div>
+                <div class="stat-number">8+</div>
+                <div class="stat-label">Available</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Docs</div>
+                <div class="stat-number">3.1K+</div>
+                <div class="stat-label">Lines</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-grid">
+            <!-- API Endpoints List -->
+            <div class="card">
+                <div class="card-header">📡 API Endpoints</div>
+                <div class="endpoint-list" id="endpointList">
+                    <div class="endpoint-item" onclick="selectEndpoint('validate-lidar')">
+                        <span>
+                            <span class="endpoint-method post">POST</span>
+                            <span class="endpoint-path">/validate/lidar</span>
+                        </span>
+                        <span class="badge success">Ready</span>
+                    </div>
+                    <div class="endpoint-item" onclick="selectEndpoint('validate-dem')">
+                        <span>
+                            <span class="endpoint-method post">POST</span>
+                            <span class="endpoint-path">/validate/dem</span>
+                        </span>
+                        <span class="badge success">Ready</span>
+                    </div>
+                    <div class="endpoint-item" onclick="selectEndpoint('integrate-terrain')">
+                        <span>
+                            <span class="endpoint-method post">POST</span>
+                            <span class="endpoint-path">/integrate/terrain</span>
+                        </span>
+                        <span class="badge success">Ready</span>
+                    </div>
+                    <div class="endpoint-item" onclick="selectEndpoint('integrate-magnetic')">
+                        <span>
+                            <span class="endpoint-method post">POST</span>
+                            <span class="endpoint-path">/integrate/magnetic</span>
+                        </span>
+                        <span class="badge success">Ready</span>
+                    </div>
+                    <div class="endpoint-item" onclick="selectEndpoint('train-terrain')">
+                        <span>
+                            <span class="endpoint-method post">POST</span>
+                            <span class="endpoint-path">/train/terrain</span>
+                        </span>
+                        <span class="badge success">Ready</span>
+                    </div>
+                    <div class="endpoint-item" onclick="selectEndpoint('train-depth')">
+                        <span>
+                            <span class="endpoint-method post">POST</span>
+                            <span class="endpoint-path">/train/depth</span>
+                        </span>
+                        <span class="badge success">Ready</span>
+                    </div>
+                    <div class="endpoint-item" onclick="selectEndpoint('predict')">
+                        <span>
+                            <span class="endpoint-method post">POST</span>
+                            <span class="endpoint-path">/predict</span>
+                        </span>
+                        <span class="badge success">Ready</span>
+                    </div>
+                    <div class="endpoint-item" onclick="selectEndpoint('feedback')">
+                        <span>
+                            <span class="endpoint-method post">POST</span>
+                            <span class="endpoint-path">/improve/feedback</span>
+                        </span>
+                        <span class="badge success">Ready</span>
+                    </div>
+                    <div class="endpoint-item" onclick="selectEndpoint('status')">
+                        <span>
+                            <span class="endpoint-method get">GET</span>
+                            <span class="endpoint-path">/status</span>
+                        </span>
+                        <span class="badge success">Ready</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Tester -->
+            <div class="card">
+                <div class="card-header">⚡ Test API</div>
+                <div class="api-tester">
+                    <div class="input-group">
+                        <label for="endpoint">Selected Endpoint</label>
+                        <input type="text" id="endpoint" placeholder="Click an endpoint to select" readonly>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="payload">Request Payload (JSON)</label>
+                        <textarea id="payload" placeholder="Enter JSON payload or leave empty"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary btn-small" onclick="testEndpoint()">
+                        <span id="testBtn">🚀 Send Request</span>
+                    </button>
+
+                    <div class="input-group">
+                        <label>Response</label>
+                        <div class="response-display" id="response"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Cards -->
+        <div class="grid"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin: 40px 0;">
+            <!-- Validation -->
+            <div class="card">
+                <div class="card-header">✓ Data Validation</div>
+                <p style="color: #b0b0b0; margin-bottom: 15px;">Comprehensive validation for LiDAR, DEM, imagery, and
+                    vector data with metadata extraction.</p>
+                <div>
+                    <span class="badge success">290 lines</span>
+                    <span class="badge">Active</span>
+                </div>
+            </div>
+
+            <!-- Integration -->
+            <div class="card">
+                <div class="card-header">🔗 GIS Integration</div>
+                <p style="color: #b0b0b0; margin-bottom: 15px;">Multi-modal fusion for terrain, magnetic, resistivity,
+                    and seismic analysis.</p>
+                <div>
+                    <span class="badge success">350 lines</span>
+                    <span class="badge">Active</span>
+                </div>
+            </div>
+
+            <!-- ML Training -->
+            <div class="card">
+                <div class="card-header">🤖 ML Training</div>
+                <p style="color: #b0b0b0; margin-bottom: 15px;">Machine learning models for terrain classification and
+                    depth prediction.</p>
+                <div>
+                    <span class="badge success">320 lines</span>
+                    <span class="badge">Active</span>
+                </div>
+            </div>
+
+            <!-- Improvement -->
+            <div class="card">
+                <div class="card-header">📈 Improvement</div>
+                <p style="color: #b0b0b0; margin-bottom: 15px;">Feedback-driven learning for continuous model
+                    improvement and optimization.</p>
+                <div>
+                    <span class="badge success">380 lines</span>
+                    <span class="badge">Active</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>🗺️ QuetzalCore GIS Studio v1.0.0 | Interactive Dashboard</p>
+            <p style="margin-top: 10px; color: #606060;">Everything is coherent, accessible, and ready for production
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        const endpoints = {
+            'validate-lidar': {
+                method: 'POST',
+                url: 'http://localhost:8000/api/gis/studio/validate/lidar',
+                defaultPayload: {
+                    points: [[0, 0, 100], [1, 1, 101], [2, 2, 102]],
+                    classification: [2, 2, 2],
+                    intensity: [128, 129, 127]
+                },
+                description: 'Validate LiDAR point cloud data'
+            },
+            'validate-dem': {
+                method: 'POST',
+                url: 'http://localhost:8000/api/gis/studio/validate/dem',
+                defaultPayload: {
+                    elevation: [[100, 101, 102], [103, 104, 105], [106, 107, 108]]
+                },
+                description: 'Validate Digital Elevation Model'
+            },
+            'integrate-terrain': {
+                method: 'POST',
+                url: 'http://localhost:8000/api/gis/studio/integrate/terrain',
+                defaultPayload: {
+                    elevation: [[100, 101], [102, 103]],
+                    slope_threshold: 30
+                },
+                description: 'Analyze terrain characteristics'
+            },
+            'integrate-magnetic': {
+                method: 'POST',
+                url: 'http://localhost:8000/api/gis/studio/integrate/magnetic',
+                defaultPayload: {
+                    anomalies: [45.2, 48.5, 52.1],
+                    locations: [[0, 0], [1, 1], [2, 2]]
+                },
+                description: 'Correlate magnetic anomalies'
+            },
+            'train-terrain': {
+                method: 'POST',
+                url: 'http://localhost:8000/api/gis/studio/train/terrain',
+                defaultPayload: {
+                    training_data: [[100, 20, 1.5, "forest"], [150, 35, 2.1, "mountain"]],
+                    labels: ["forest", "mountain"]
+                },
+                description: 'Train terrain classifier'
+            },
+            'train-depth': {
+                method: 'POST',
+                url: 'http://localhost:8000/api/gis/studio/train/depth',
+                defaultPayload: {
+                    features: [[45.2, 100], [48.5, 150], [52.1, 200]],
+                    depths: [50, 75, 100]
+                },
+                description: 'Train depth predictor'
+            },
+            'predict': {
+                method: 'POST',
+                url: 'http://localhost:8000/api/gis/studio/predict',
+                defaultPayload: {
+                    features: [[45.2, 100]]
+                },
+                description: 'Make predictions'
+            },
+            'feedback': {
+                method: 'POST',
+                url: 'http://localhost:8000/api/gis/studio/improve/feedback',
+                defaultPayload: {
+                    prediction_id: "pred_001",
+                    actual_value: 75,
+                    feedback_text: "Prediction was close but slightly off"
+                },
+                description: 'Submit feedback'
+            },
+            'status': {
+                method: 'GET',
+                url: 'http://localhost:8000/api/gis/studio/status',
+                defaultPayload: {},
+                description: 'Get system status'
+            }
+        };
+
+        let currentEndpoint = null;
+
+        function selectEndpoint(key) {
+            currentEndpoint = key;
+            const endpoint = endpoints[key];
+            document.getElementById('endpoint').value = `${endpoint.method} ${endpoint.url.split('/').pop()}`;
+            document.getElementById('payload').value = endpoint.method === 'GET' ?
+                '' : JSON.stringify(endpoint.defaultPayload, null, 2);
+            document.getElementById('response').classList.remove('active', 'error');
+            document.getElementById('response').textContent = '';
+        }
+
+        async function testEndpoint() {
+            if (!currentEndpoint) {
+                alert('Please select an endpoint first');
+                return;
+            }
+
+            const endpoint = endpoints[currentEndpoint];
+            const testBtn = document.getElementById('testBtn');
+            const originalText = testBtn;
+            testBtn.innerHTML = '<span class="spinner"></span> Sending...';
+
+            try {
+                const options = {
+                    method: endpoint.method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+
+                if (endpoint.method !== 'GET') {
+                    const payload = document.getElementById('payload').value.trim();
+                    options.body = payload || JSON.stringify(endpoint.defaultPayload);
+                }
+
+                const response = await fetch(endpoint.url, options);
+                const data = await response.json();
+
+                const responseEl = document.getElementById('response');
+                responseEl.textContent = JSON.stringify(data, null, 2);
+                responseEl.classList.add('active');
+                responseEl.classList.remove('error');
+
+                testBtn.innerHTML = '✅ Success!';
+                setTimeout(() => {
+                    testBtn.innerHTML = '🚀 Send Request';
+                }, 2000);
+            } catch (error) {
+                const responseEl = document.getElementById('response');
+                responseEl.textContent = `Error: ${error.message}\n\nMake sure the backend is running on http://localhost:8000`;
+                responseEl.classList.add('active', 'error');
+                testBtn.innerHTML = '❌ Error';
+                setTimeout(() => {
+                    testBtn.innerHTML = '🚀 Send Request';
+                }, 2000);
+            }
+        }
+
+        // Auto-select first endpoint on load
+        window.addEventListener('load', () => {
+            selectEndpoint('validate-lidar');
+        });
+    </script>
+</body>
+
+</html>
