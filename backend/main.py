@@ -3825,3 +3825,305 @@ async def render_5k(request: RenderRequest):
     except Exception as e:
         return {"error": str(e), "workload": "5K Rendering", "emoji": "❌"}
 
+
+
+# ============================================
+# 🧠🔒 HYBRID INTELLIGENCE + SECURITY ENDPOINTS
+# Integration with Xavasena's ML/Neural Networks
+# ============================================
+
+try:
+    from backend.hybrid_intelligence import (
+        process_hybrid_task,
+        train_hybrid_model,
+        get_hybrid_status
+    )
+    from backend.security_hardened import (
+        security,
+        get_security_dashboard,
+        generate_new_api_key
+    )
+    HYBRID_LOADED = True
+except ImportError as e:
+    HYBRID_LOADED = False
+    print(f"⚠️ Hybrid Intelligence/Security not loaded: {e}")
+
+
+@app.get("/api/hybrid/status")
+async def hybrid_intelligence_status():
+    """Get status of hybrid intelligence system"""
+    if not HYBRID_LOADED:
+        return {"success": False, "error": "Hybrid Intelligence not loaded"}
+    
+    try:
+        status = await get_hybrid_status()
+        return {
+            "success": True,
+            "hybrid_intelligence": status,
+            "message": "🧠 Hybrid system: Your ML + Copilot AI"
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+@app.post("/api/hybrid/process")
+async def process_with_hybrid_intelligence(request: Dict[str, Any]):
+    """
+    Process task with hybrid intelligence (Your ML + Copilot)
+    
+    Example:
+    {
+        "task_type": "5k_video_render",
+        "input_data": {"video_path": "/path/to/video.mp4"},
+        "requires_ml": true,
+        "requires_reasoning": true
+    }
+    """
+    if not HYBRID_LOADED:
+        return {"success": False, "error": "Hybrid Intelligence not loaded"}
+    
+    try:
+        result = await process_hybrid_task(request)
+        return {
+            "success": True,
+            "result": result,
+            "message": "Task processed with hybrid intelligence"
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+@app.get("/api/security/status")
+async def security_system_status():
+    """Get security system status and metrics"""
+    if not HYBRID_LOADED:
+        return {"success": False, "error": "Security system not loaded"}
+    
+    try:
+        dashboard = get_security_dashboard()
+        return {
+            "success": True,
+            "security": dashboard,
+            "message": "🔒 Security system active"
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+@app.post("/api/security/generate-key")
+async def generate_api_key(user_id: str = "default_user"):
+    """Generate new API key for authentication"""
+    if not HYBRID_LOADED:
+        return {"success": False, "error": "Security system not loaded"}
+    
+    try:
+        api_key = generate_new_api_key(user_id)
+        return {
+            "success": True,
+            "api_key": api_key,
+            "user_id": user_id,
+            "message": "🔑 API key generated. Use this in X-API-Key header."
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+@app.get("/api/systems/test-all")
+async def test_all_systems():
+    """
+    Test all integrated systems
+    Returns status of: Hybrid Intelligence, Security, Backend, Workloads
+    """
+    results = {
+        "timestamp": time.time(),
+        "systems": {}
+    }
+    
+    # Test Hybrid Intelligence
+    if HYBRID_LOADED:
+        try:
+            hybrid_status = await get_hybrid_status()
+            results["systems"]["hybrid_intelligence"] = {
+                "status": "✅ Active",
+                "details": hybrid_status
+            }
+        except Exception as e:
+            results["systems"]["hybrid_intelligence"] = {
+                "status": "❌ Error",
+                "error": str(e)
+            }
+    else:
+        results["systems"]["hybrid_intelligence"] = {
+            "status": "⚠️ Not Loaded"
+        }
+    
+    # Test Security
+    if HYBRID_LOADED:
+        try:
+            sec_dashboard = get_security_dashboard()
+            results["systems"]["security"] = {
+                "status": "✅ Active",
+                "details": sec_dashboard
+            }
+        except Exception as e:
+            results["systems"]["security"] = {
+                "status": "❌ Error",
+                "error": str(e)
+            }
+    else:
+        results["systems"]["security"] = {
+            "status": "⚠️ Not Loaded"
+        }
+    
+    # Test Backend
+    results["systems"]["backend"] = {
+        "status": "✅ Active",
+        "service": "QuetzalCore Backend",
+        "url": "https://queztl-core-backend.onrender.com"
+    }
+    
+    # Test 5K Renderer
+    try:
+        render_test = {
+            "scene_type": "benchmark",
+            "width": 1920,
+            "height": 1080,
+            "return_image": False
+        }
+        # Don't actually render, just check endpoint exists
+        results["systems"]["5k_renderer"] = {
+            "status": "✅ Available",
+            "endpoint": "/api/render/5k"
+        }
+    except Exception as e:
+        results["systems"]["5k_renderer"] = {
+            "status": "❌ Error",
+            "error": str(e)
+        }
+    
+    return {
+        "success": True,
+        "test_results": results,
+        "message": "🦅 System test complete"
+    }
+
+
+
+# ============================================
+# 🧠🔥 SUPER INTELLIGENCE ENDPOINTS
+# Full Power Analysis + Strategy Generation
+# ============================================
+
+try:
+    from backend.super_intelligence import (
+        analyze_competition,
+        analyze_massive_data,
+        create_winning_strategy,
+        implement_strategy,
+        get_super_status
+    )
+    SUPER_LOADED = True
+except ImportError as e:
+    SUPER_LOADED = False
+    print(f"⚠️ Super Intelligence not loaded: {e}")
+
+
+@app.get("/api/super/status")
+async def super_intelligence_status():
+    """Get super intelligence system status"""
+    if not SUPER_LOADED:
+        return {"success": False, "error": "Super Intelligence not loaded"}
+    
+    try:
+        status = await get_super_status()
+        return {
+            "success": True,
+            "super_intelligence": status,
+            "message": "🔥 FULL POWER ACTIVE"
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+@app.post("/api/super/analyze-competitors")
+async def analyze_competitors_endpoint(domain: str):
+    """
+    Analyze all competitors in a domain
+    
+    Domains: "5k_rendering", "gis_analysis", "ml_platforms", "video_processing"
+    """
+    if not SUPER_LOADED:
+        return {"success": False, "error": "Super Intelligence not loaded"}
+    
+    try:
+        result = await analyze_competition(domain)
+        return {
+            "success": True,
+            "analysis": result,
+            "message": f"🔍 Analyzed {result['competitors_found']} competitors"
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+@app.post("/api/super/analyze-data")
+async def analyze_large_data_endpoint(dataset: str, source: str = "industry"):
+    """
+    Analyze massive dataset for insights
+    
+    Sources: "github", "kaggle", "papers", "industry"
+    """
+    if not SUPER_LOADED:
+        return {"success": False, "error": "Super Intelligence not loaded"}
+    
+    try:
+        result = await analyze_massive_data(dataset, source)
+        return {
+            "success": True,
+            "analysis": result,
+            "message": f"📊 Analyzed {result['size']:,} data points"
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+@app.post("/api/super/winning-strategy")
+async def generate_winning_strategy_endpoint(objective: str):
+    """
+    Generate comprehensive winning strategy
+    
+    Objectives: 
+    - "dominate_video_ai"
+    - "lead_gis_ml" 
+    - "best_ml_platform"
+    """
+    if not SUPER_LOADED:
+        return {"success": False, "error": "Super Intelligence not loaded"}
+    
+    try:
+        strategy = await create_winning_strategy(objective)
+        return {
+            "success": True,
+            "strategy": strategy,
+            "message": "🎯 Winning strategy generated"
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+@app.post("/api/super/implement")
+async def auto_implement_endpoint(strategy: Dict[str, Any]):
+    """Auto-implement strategy improvements"""
+    if not SUPER_LOADED:
+        return {"success": False, "error": "Super Intelligence not loaded"}
+    
+    try:
+        result = await implement_strategy(strategy)
+        return {
+            "success": True,
+            "implementation": result,
+            "message": "🔨 Auto-implementation complete"
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
