@@ -6,7 +6,7 @@
   publish = "dashboard/out"
 
 [build.environment]
-  NEXT_PUBLIC_API_URL = "http://localhost:8000"
+  NEXT_PUBLIC_API_URL = "https://queztl-core-backend.onrender.com"
   NODE_VERSION = "20"
 
 # Redirect all requests to Next.js
