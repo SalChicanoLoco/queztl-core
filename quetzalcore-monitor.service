@@ -1,0 +1,14 @@
+[Unit]
+Description=QuetzalCore 24/7 Health Monitor
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/queztl-core
+ExecStart=/usr/bin/python3 /home/ubuntu/queztl-core/health_monitor_24_7.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

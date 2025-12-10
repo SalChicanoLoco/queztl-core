@@ -1,0 +1,20 @@
+{
+  "backend": {
+    "platform": "render.com",
+    "url": "https://queztl-core-backend.onrender.com",
+    "service_id": "srv-d4sbha3e5dus73ahjkd0",
+    "auto_deploy": true,
+    "health_check": "/api/health"
+  },
+  "frontend": {
+    "platform": "netlify.com",
+    "url": "https://lapotenciacann.com",
+    "auto_deploy": true,
+    "health_check": "/"
+  },
+  "hypervisor": {
+    "platform": "digitalocean/aws/gcp",
+    "note": "Need cloud VM to build and run QuetzalCore HV",
+    "status": "pending_vm_setup"
+  }
+}
